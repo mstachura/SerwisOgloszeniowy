@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ 'serwis_ogloszeniowy_strona_glowna'|trans}}
+{% endblock %}
+
+{% block content %}
+    <p>Strona główna</p>
+
+    <a href ="{{ url ('home_search') }}">
+        <button class="btn btn-info">Szukaj</button>
+    </a>
+
+    <H1>{{ 'kategorie'|trans}}</H1>
+    {% for category in categories %}
+        <p>{{ 'nr_ogloszenia'|trans}}: {{ category.id }}</p>
+        <p>{{ 'nazwa_kategorii'|trans}}: {{ category.name }}</p>
+    {% endfor %}
+
+
+    <H1>{{ 'lista_ogloszen'|trans}}</H1>
+   {% for advertisement in advertisements %}
+       <p>{{ 'nazwa_ogloszenia'|trans}}: {{ advertisement.name}}</p>
+       <p>{{ 'dodane_przez_uzytkownika_nr'|trans}}: {{ advertisement.user_id }}</p>
+       <a href ="{{ url ('ads_view', {'id': advertisement.id}) }}">
+           {{ advertisement.name }}
+           {#<img src="{{  asset('uploads/photos/' ~ advertisement.photo) }}" alt="{{ advertisement.photo }}">#}
+       </a>
+     {% endfor %}
+
+
+
+<a href ="{{ url ('user_registration') }}">
+    <button class="btn btn-info">Zarejestruj</button>
+</a>
+
+
+    {#{% for user in users %}#}
+
+        {#<H1>Lista użytkowników</H1>#}
+        {#<p>{{ user.login}}</p>#}
+        {#<p>{{ user.email}}</p>#}
+    {#{% endfor %}#}
+
+
+{% endblock %}

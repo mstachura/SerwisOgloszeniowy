@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="lista_ogloszen">
+                <source>lista_ogloszen</source>
+                <target>Lista ogłoszeń</target>
+            </trans-unit>
+
+            <trans-unit id="edytuj_ogloszenie">
+                 <source>edytuj_ogloszenie</source>
+                 <target>Edytuj ogłoszenie</target>
+             </trans-unit>
+
+             <trans-unit id="usun_ogloszenie">
+                 <source>usun_ogloszenie</source>
+                 <target>Usuń ogłoszenie</target>
+             </trans-unit>
+
+             <trans-unit id="komentarze">
+                  <source>komentarze</source>
+                  <target>Komentarze</target>
+             </trans-unit>
+
+             <trans-unit id="dane_autora_ogloszenia">
+                  <source>dane_autora_ogloszenia</source>
+                  <target>Dane autora ogłoszenia</target>
+             </trans-unit>
+
+             <trans-unit id="ad">
+                  <source>ad</source>
+                  <target>Ogłoszenie</target>
+             </trans-unit>
+
+             <trans-unit id="nie_ma_takiego_ogloszenia">
+                  <source>nie_ma_takiego_ogloszenia</source>
+                  <target>Nie ma takiego ogłoszenia</target>
+             </trans-unit>
+
+             <trans-unit id="data_dodania">
+                  <source>data_dodania</source>
+                  <target>Data dodania</target>
+             </trans-unit>
+
+             <trans-unit id="label.name">
+                  <source>label.name</source>
+                  <target>Nazwa</target>
+             </trans-unit>
+
+             <trans-unit id="label.photo">
+                  <source>label.photo</source>
+                  <target>Zdjęcie</target>
+             </trans-unit>
+
+             <trans-unit id="label.description">
+                  <source>label.description</source>
+                  <target>Opis</target>
+             </trans-unit>
+
+             <trans-unit id="label.price">
+                  <source>label.price</source>
+                  <target>Cena</target>
+             </trans-unit>
+
+             <trans-unit id="action.delete">
+                  <source>action.delete</source>
+                  <target>Usuń</target>
+             </trans-unit>
+
+             <trans-unit id="label.back_to_list">
+                  <source>label.back_to_list</source>
+                  <target>Wróć do listy ogłoszeń</target>
+             </trans-unit>
+
+             <trans-unit id="action.save">
+                  <source>action.save</source>
+                  <target>Dodaj</target>
+             </trans-unit>
+
+             <trans-unit id="dodawanie_ogloszenia">
+                  <source>dodawanie_ogloszenia</source>
+                  <target>Dodawanie ogłoszenia</target>
+             </trans-unit>
+
+             <trans-unit id="message.element_successfully_added">
+                  <source>message.element_successfully_added</source>
+                  <target>Element został pomyślnie dodany</target>
+             </trans-unit>
+
+             <trans-unit id="serwis_ogloszeniowy_strona_glowna">
+                  <source>serwis_ogloszeniowy_strona_glowna</source>
+                  <target>Serwis ogłoszeniowy - strona główna</target>
+             </trans-unit>
+
+             <trans-unit id="kategorie">
+                  <source>kategorie</source>
+                  <target>Kategorie</target>
+             </trans-unit>
+
+             <trans-unit id="nr_ogloszenia">
+                  <source>nr_ogloszenia</source>
+                  <target>Nr ogłoszenia</target>
+             </trans-unit>
+
+             <trans-unit id="nazwa_kategorii">
+                  <source>nazwa_kategorii</source>
+                  <target>Nazwa kategorii</target>
+             </trans-unit>
+
+             <trans-unit id="nazwa_ogloszenia">
+                  <source>nazwa_ogloszenia</source>
+                  <target>Nazwa ogłoszenia</target>
+             </trans-unit>
+
+             <trans-unit id="dodane_przez_uzytkownika_nr">
+                  <source>dodane_przez_uzytkownika_nr</source>
+                  <target>Dodane przez użytkownika nr</target>
+             </trans-unit>
+
+             <trans-unit id="label.province">
+                  <source>label.province</source>
+                  <target>Województwo</target>
+             </trans-unit>
+
+             <trans-unit id="label.location">
+                  <source>label.location</source>
+                  <target>Miejscowość</target>
+             </trans-unit>
+
+             <trans-unit id="label.type">
+                  <source>label.type</source>
+                  <target>Typ ogłoszenia</target>
+             </trans-unit>
+
+             <trans-unit id="label.categories">
+                   <source>label.categories</source>
+                   <target>Kategoria</target>
+             </trans-unit>
+
+             <trans-unit id="label.none">
+                   <source>label.none</source>
+                   <target>Wybierz</target>
+             </trans-unit>
+
+
+
+
+        </body>
+    </file>
+</xliff>

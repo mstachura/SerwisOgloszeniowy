@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block content %}
+
+    {# ... #}
+    {% include 'default/_paginator.html.twig' with {
+        paginator: advertisements,
+        route_name: 'ads_index',
+    } %}
+    {# ... #}
+
+    <H1>{{ 'lista_ogloszen'|trans}}</H1>
+    {% for advertisement in advertisements.data %}
+        <p> Id: {{ advertisement.id }}</p>
+    {% endfor %}
+{% endblock %}

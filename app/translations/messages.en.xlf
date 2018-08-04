@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="lista_ogloszen">
+                <source>lista_ogloszen</source>
+                <target>List of ads</target>
+            </trans-unit>
+
+            <trans-unit id="edytuj_ogloszenie">
+                <source>edytuj_ogloszenie</source>
+                <target>Edit ad</target>
+            </trans-unit>
+
+            <trans-unit id="usun_ogloszenie">
+                <source>usun_ogloszenie</source>
+                <target>Delete ad</target>
+            </trans-unit>
+
+            <trans-unit id="komentarze">
+                <source>komentarze</source>
+                <target>Comments</target>
+            </trans-unit>
+
+            <trans-unit id="dane_autora_ogloszenia">
+                <source>dane_autora_ogloszenia</source>
+                <target>Data of ad's author</target>
+            </trans-unit>
+
+            <trans-unit id="ad">
+                <source>ad</source>
+                <target>Advertisement</target>
+            </trans-unit>
+
+            <trans-unit id="nie_ma_takiego_ogloszenia">
+                <source>nie_ma_takiego_ogloszenia</source>
+                <target>There is no such advertisement</target>
+            </trans-unit>
+
+            <trans-unit id="data_dodania">
+                <source>data_dodania</source>
+                <target>Date of addition</target>
+            </trans-unit>
+
+            <trans-unit id="label.name">
+                <source>label.name</source>
+                <target>Name:</target>
+            </trans-unit>
+
+            <trans-unit id="label.photo">
+                <source>label.photo</source>
+                <target>Photo:</target>
+            </trans-unit>
+
+            <trans-unit id="label.description">
+                <source>label.description</source>
+                <target>Description:</target>
+            </trans-unit>
+
+            <trans-unit id="label.price">
+                <source>label.price</source>
+                <target>Price:</target>
+            </trans-unit>
+
+            <trans-unit id="action.delete">
+                <source>action.delete</source>
+                <target>Delete</target>
+            </trans-unit>
+
+            <trans-unit id="label.back_to_list">
+                <source>label.back_to_list</source>
+                <target>Back to list of ads</target>
+            </trans-unit>
+
+            <trans-unit id="action.save">
+                <source>action.save</source>
+                <target>Add</target>
+            </trans-unit>
+
+            <trans-unit id="dodawanie_ogloszenia">
+                <source>dodawanie_ogloszenia</source>
+                <target>Add your advertisement</target>
+            </trans-unit>
+
+            <trans-unit id="serwis_ogloszeniowy_strona_glowna">
+                 <source>serwis_ogloszeniowy_strona_glowna</source>
+                 <target>Advertisement website - home page</target>
+            </trans-unit>
+
+            <trans-unit id="kategorie">
+                 <source>kategorie</source>
+                 <target>Categories</target>
+            </trans-unit>
+
+            <trans-unit id="nr_ogloszenia">
+                 <source>nr_ogloszenia</source>
+                 <target>Number of ad</target>
+            </trans-unit>
+
+            <trans-unit id="nazwa_kategorii">
+                 <source>nazwa_kategorii</source>
+                 <target>Name of category</target>
+            </trans-unit>
+
+            <trans-unit id="nazwa_ogloszenia">
+                 <source>nazwa_ogloszenia</source>
+                 <target>Name of ad</target>
+            </trans-unit>
+
+            <trans-unit id="dodane_przez_uzytkownika_nr">
+                 <source>dodane_przez_uzytkownika_nr</source>
+                 <target>Added by user number</target>
+            </trans-unit>
+
+            <trans-unit id="label.province">
+                 <source>label.province</source>
+                 <target>Province</target>
+            </trans-unit>
+
+            <trans-unit id="label.type">
+                 <source>label.type</source>
+                 <target>Type of ad</target>
+            </trans-unit>
+
+            <trans-unit id="label.categories">
+                 <source>label.categories</source>
+                 <target>Category</target>
+            </trans-unit>
+
+            <trans-unit id="label.none">
+                 <source>label.none</source>
+                 <target>Choose</target>
+            </trans-unit>
+
+
+
+
+        </body>
+    </file>
+</xliff>

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'edytuj_ogloszenie'|trans({'%id%': ad.id}) }}{% endblock %}
+
+{% block body %}
+    <h1>{{ 'edytuj_ogloszenie'|trans({'%id%': ad.id}) }}</h1>
+    {{ form_start(form, { method: 'post', action: url('ads_edit', {'id': ad.id}) }) }}
+    {{ form_widget(form) }}
+    <input type="submit" value="{{ 'action.save'|trans }}" class="btn btn-success" />
+    {{ form_end(form) }}
+{% endblock %}
