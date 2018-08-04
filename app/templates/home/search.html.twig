@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'wyszukiwarka'|trans }}{% endblock %}
+
+{% block body %}
+    <h1>{{ 'wyszukiwarka'|trans }}</h1>
+
+
+
+    <a href ="{{ url ('category_index') }}">
+        {{ "lista_kategorii" |trans}}
+    </a>
+
+    <a href ="{{ url ('user_index') }}">
+        {{ "lista_uzytkownikow" |trans}}
+    </a>
+{% endblock %}

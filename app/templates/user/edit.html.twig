@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'edytuj_uzytkownika'|trans({'%id%': user.id}) }}{% endblock %}
+
+{% block body %}
+    <h1>{{ 'edytuj_uzytkownika'|trans({'%id%': user.id}) }}</h1>
+    {{ form_start(form, { method: 'post', action: url('user_edit', {'id': user.id}) }) }}
+    {{ form_widget(form) }}
+    <input type="submit" value="{{ 'action.save'|trans }}" class="btn btn-success" />
+    {{ form_end(form) }}
+
+
+{% endblock %}

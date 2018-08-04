@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'wyszukiwarka'|trans }}{% endblock %}
+
+{% block body %}
+    <h1>{{ 'wyszukiwarka'|trans }}</h1>
+
+
+    {% for category in categories %}
+        <a href ="{{ url ('category_view', {'id': category.id}) }}">
+            {{ category.name }}
+        </a>
+    {% endfor %}
+
+{% endblock %}

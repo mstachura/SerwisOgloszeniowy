@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'rejestracja'|trans }}{% endblock %}
+
+{% block body %}
+    <h1>{{ 'lista_uzytkownikow'|trans }}</h1>
+
+    {% for user in users %}
+    <a href ="{{ url ('user_view', {'id': user.id}) }}">
+        <button class="btn">
+            {{ user.login}}
+        </button>
+    </a>
+    {% endfor %}
+
+{% endblock %}
