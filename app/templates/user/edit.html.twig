@@ -3,6 +3,18 @@
 {% block title %}{{ 'edytuj_uzytkownika'|trans({'%id%': user.id}) }}{% endblock %}
 
 {% block body %}
+
+    {% form_theme form with ['bootstrap_3_horizontal_layout.html.twig', 'form/form_errors.html.twig'] %}
+
+    <div class="col-md-3">
+        <a href="{{ global.request.headers.get('referer') }}" title="{{ 'label.back'|trans }}" class="btn btn-default">
+            <span class="fa fa-mail-reply" aria-hidden="true"></span>
+            <i class="glyphicon glyphicon-arrow-left"></i>
+            {{ 'label.back'|trans }}
+        </a>
+    </div>
+
+
     <h1>{{ 'edytuj_uzytkownika'|trans({'%id%': user.id}) }}</h1>
     {{ form_start(form, { method: 'post', action: url('user_edit', {'id': user.id}) }) }}
     {{ form_widget(form) }}

@@ -3,6 +3,15 @@
 {% block title %}{{ 'usun_ogloszenie'|trans({'%id%': ad.id}) }}{% endblock %}
 
 {% block body %}
+
+    <div class="col-md-3">
+        <a href="{{ global.request.headers.get('referer') }}" title="{{ 'label.back'|trans }}" class="btn btn-default">
+            <span class="fa fa-mail-reply" aria-hidden="true"></span>
+            <i class="glyphicon glyphicon-arrow-left"></i>
+            {{ 'label.back'|trans }}
+        </a>
+    </div>
+
     <h1>{{ 'usun_ogloszenie'|trans({'%id%': ad.id}) }}</h1>
     {{ form_start(form, { method: 'post', action: url('ads_delete', {'id': ad.id}) }) }}
     {{ form_widget(form) }}

@@ -3,6 +3,7 @@
 {% block title %}{{ 'rejestracja'|trans }}{% endblock %}
 
 {% block body %}
+    {% form_theme form with ['bootstrap_3_horizontal_layout.html.twig', 'form/form_errors.html.twig'] %}
     <h1>{{ 'rejestracja'|trans }}</h1>
     {#{% form_theme form with ['bootstrap_3_horizontal_layout.html.twig', 'form/form_errors.html.twig'] %}#}
     {{ form_start(form, { method: 'post', action: url('user_registration') }) }}

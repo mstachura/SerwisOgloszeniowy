@@ -5,15 +5,23 @@
 
 {% block content %}
 
-    <H1>Informacje o użytkowniku</H1>
-    <p>{{ user.login}}</p>
-    <p>{{ user.email}}</p>
-    <p>{{ userData.firstname}}</p>
-    <p>{{ userData.lastname}}</p>
-    <p>{{ userData.phone_number}}</p>
+    <div class="col-md-3">
+        <a href="{{ global.request.headers.get('referer') }}" title="{{ 'label.back'|trans }}" class="btn btn-default">
+            <span class="fa fa-mail-reply" aria-hidden="true"></span>
+            <i class="glyphicon glyphicon-arrow-left"></i>
+            {{ 'label.back'|trans }}
+        </a>
+    </div>
+
+    <H1>{{ "dane_autora_ogloszenia" |trans}}</H1>
+    <p>{{ "label.login" |trans}}: {{ user.login}}</p>
+    <p>{{ "label.email" |trans}}: {{ user.email}}</p>
+    <p>{{ "label.firstname" |trans}}: {{ userData.firstname}}</p>
+    <p>{{ "label.lastname" |trans}}: {{ userData.lastname}}</p>
+    <p>{{ "label.phone_number" |trans}}: {{ userData.phone_number}}</p>
 
 
-    <H1>lista ogłoszeń</H1>
+    <H1>{{ "lista_ogloszen" |trans}}</H1>
     {% for advertisement in advertisements %}
         <p>{{ advertisement.name}}</p>
         <p>{{ advertisement.user_id }}</p>
@@ -23,7 +31,7 @@
         </a>
     {% endfor %}
 
-    <H1>Dodaj ogłoszenie</H1>
+    <H1>{{ "dodaj_ogloszenie" |trans}}</H1>
     <a href ="{{ url ('ads_add') }}">
         <button class="btn btn-success">
             {{ "dodaj_ogloszenie" |trans}}

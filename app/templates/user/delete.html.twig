@@ -3,6 +3,15 @@
 {% block title %}{{ 'usun_uzytkownika'|trans({'%id%': user.id}) }}{% endblock %}
 
 {% block body %}
+
+    <div class="col-md-3">
+        <a href="{{ global.request.headers.get('referer') }}" title="{{ 'label.back'|trans }}" class="btn btn-default">
+            <span class="fa fa-mail-reply" aria-hidden="true"></span>
+            <i class="glyphicon glyphicon-arrow-left"></i>
+            {{ 'label.back'|trans }}
+        </a>
+    </div>
+
     <h1>{{ 'usun_uzytkownika'|trans({'%id%': user.id}) }}</h1>
     {{ form_start(form, { method: 'post', action: url('user_delete', {'id': user.id}) }) }}
     {{ form_widget(form) }}

@@ -142,6 +142,101 @@
                    <target>Wybierz</target>
              </trans-unit>
 
+             <trans-unit id="action.login">
+                   <source>action.login</source>
+                   <target>Zaloguj</target>
+             </trans-unit>
+
+             <trans-unit id="title.auth_login">
+                   <source>title.auth_login</source>
+                   <target>Logowanie</target>
+             </trans-unit>
+
+             <trans-unit id="label.login">
+                   <source>label.login</source>
+                   <target>Login</target>
+             </trans-unit>
+
+             <trans-unit id="label.password">
+                   <source>label.password</source>
+                   <target>Hasło</target>
+             </trans-unit>
+
+             <trans-unit id="auth.login.label">
+                   <source>auth.login.label</source>
+                   <target>Zaloguj</target>
+             </trans-unit>
+
+             <trans-unit id="label.repeat.password">
+                   <source>label.repeat.password</source>
+                   <target>Powtórz hasło</target>
+             </trans-unit>
+
+             <trans-unit id="label.email">
+                   <source>label.email</source>
+                   <target>E-mail</target>
+             </trans-unit>
+
+             <trans-unit id="label.firstname">
+                   <source>label.firstname</source>
+                   <target>Imię</target>
+             </trans-unit>
+
+             <trans-unit id="label.lastname">
+                   <source>label.lastname</source>
+                   <target>Nazwisko</target>
+             </trans-unit>
+
+             <trans-unit id="label.phone_number">
+                   <source>label.phone_number</source>
+                   <target>Nr telefonu</target>
+             </trans-unit>
+
+             <trans-unit id="rejestracja">
+                   <source>rejestracja</source>
+                   <target>Rejestracja</target>
+             </trans-unit>
+
+             <trans-unit id="label.back">
+                   <source>label.back</source>
+                   <target>Wróć</target>
+             </trans-unit>
+
+             <trans-unit id="nr_id_uzytkownika">
+                   <source>nr_id_uzytkownika</source>
+                   <target>Nr id użytkownika</target>
+             </trans-unit>
+
+             <trans-unit id="message.element_successfully_deleted">
+                   <source>message.element_successfully_deleted</source>
+                   <target>Element został pomyślnie usunięty</target>
+             </trans-unit>
+
+             <trans-unit id="message.record_not_found">
+                   <source>message.record_not_found</source>
+                   <target>Element nie został odnaleziony</target>
+             </trans-unit>
+
+             <trans-unit id="message.element_successfully_edited">
+                   <source>message.element_successfully_edited</source>
+                   <target>Element został pomyślnie zedytowany</target>
+             </trans-unit>
+
+             <trans-unit id="dodaj_ogloszenie">
+                   <source>dodaj_ogloszenie</source>
+                   <target>Dodaj ogłoszenie</target>
+             </trans-unit>
+
+             <trans-unit id="edytuj_uzytkownika">
+                   <source>edytuj_uzytkownika</source>
+                   <target>Edytuj użytkownika</target>
+             </trans-unit>
+
+             <trans-unit id="usun_uzytkownika">
+                   <source>usun_uzytkownika</source>
+                   <target>Usuń użytkownika</target>
+             </trans-unit>
+
 
 
 
