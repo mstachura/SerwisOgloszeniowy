@@ -23,7 +23,9 @@
                 </a>
             {% else %}
                 <a class="btn btn-default" href="{{ url('auth_login') }}" title="{{ 'auth.login.label'|trans }}">
-                    {{ 'auth.login.label'|trans }}
+                    <button class="btn btn-info">
+                        {{ 'auth.login.label'|trans }}
+                    </button>
                 </a>
             {% endif %}
         </div>
