@@ -3,7 +3,16 @@
 {% block title %}{{ 'wyszukiwarka'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>{{ 'ogłoszenia_kategorii'|trans }} {{ name_category }}</h1>
+
+    <div class="col-md-3">
+        <a href="{{ global.request.headers.get('referer') }}" title="{{ 'label.back'|trans }}" class="btn btn-default">
+            <span class="fa fa-mail-reply" aria-hidden="true"></span>
+            <i class="glyphicon glyphicon-arrow-left"></i>
+            {{ 'label.back'|trans }}
+        </a>
+    </div>
+
+    <h1>{{ 'ogloszenia_kategorii'|trans }}: {{ name_category }}</h1>
 
 
     {% for advertisement in advertisements %}

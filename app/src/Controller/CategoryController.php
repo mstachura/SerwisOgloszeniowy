@@ -73,7 +73,7 @@ class CategoryController implements ControllerProviderInterface
 
 
         return $app['twig']->render(
-            'category/menu.html.twig',
+            'category/index.html.twig',
             [
                 'categories' => $categories,
                 'loggedUser' => $loggedUser,

@@ -257,6 +257,11 @@
                   <target>Name of photo</target>
             </trans-unit>
 
+            <trans-unit id="ogloszenia_kategorii">
+                  <source>ogloszenia_kategorii</source>
+                  <target>Category's ads</target>
+            </trans-unit>
+
 
 
 

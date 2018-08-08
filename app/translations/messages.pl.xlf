@@ -272,6 +272,11 @@
                    <target>Nazwa zdjęcia</target>
              </trans-unit>
 
+             <trans-unit id="ogloszenia_kategorii">
+                   <source>ogloszenia_kategorii</source>
+                   <target>Ogłoszenia kategorii</target>
+             </trans-unit>
+
 
 
 
