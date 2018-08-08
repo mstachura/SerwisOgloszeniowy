@@ -60,7 +60,7 @@ class HomeController implements ControllerProviderInterface
       $categories = $categoryRepository-> findAll();
 
         return $app['twig']->render(
-            'home/menu.html.twig',
+            'home/index.html.twig',
             [
                 'advertisements'=> $advertisements,
                 'users' => $users,
