@@ -7,9 +7,6 @@
 {% block content %}
     <p>Strona główna</p>
 
-    <a href ="{{ url ('home_search') }}">
-        <button class="btn btn-info">Szukaj</button>
-    </a>
 
     <H1>{{ 'kategorie'|trans}}</H1>
     {% for category in categories %}

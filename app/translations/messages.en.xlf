@@ -222,6 +222,41 @@
                  <target>Edit user</target>
             </trans-unit>
 
+            <trans-unit id="wyszukiwarka">
+                 <source>wyszukiwarka</source>
+                 <target>Search</target>
+            </trans-unit>
+
+            <trans-unit id="action.edit">
+                 <source>action.edit</source>
+                 <target>Edit</target>
+            </trans-unit>
+
+            <trans-unit id="lista_kategorii">
+                  <source>lista_kategorii</source>
+                  <target>List of categories</target>
+            </trans-unit>
+
+            <trans-unit id="lista_uzytkownikow">
+                  <source>lista_uzytkownikow</source>
+                  <target>List of users</target>
+            </trans-unit>
+
+            <trans-unit id="action.search">
+                  <source>action.search</source>
+                  <target>Search</target>
+            </trans-unit>
+
+            <trans-unit id="czy_na_pewno_chcesz_usunac_uzytkownika">
+                  <source>czy_na_pewno_chcesz_usunac_uzytkownika</source>
+                  <target>Do you really want to delete this user?</target>
+            </trans-unit>
+
+            <trans-unit id="label.photo_title">
+                  <source>label.photo_title</source>
+                  <target>Name of photo</target>
+            </trans-unit>
+
 
 
 

@@ -23,4 +23,16 @@
     <a href ="{{ url ('user_index') }}">
         {{ "lista_uzytkownikow" |trans}}
     </a>
+
+    {{ form_start(form, { method: 'post', action: url('home_search') }) }}
+    {{ form_widget(form) }}
+    <input type="submit" value="{{ 'action.search'|trans }}" class="btn btn-success" />
+    {{ form_end(form) }}
+
+    {% for advertisement in advertisements %}
+        <a href ="{{ url ('ads_view', {'id': advertisement.id}) }}">
+            {{ advertisement.name }}
+        </a>
+    {% endfor %}
+
 {% endblock %}

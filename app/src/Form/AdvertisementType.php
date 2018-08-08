@@ -44,31 +44,50 @@ class AdvertisementType extends AbstractType
             ]
         );
 
-//        if (!isset($options['data']) || !isset($options['data']['id'])) {
-//            $builder->add(
-//                'photo',
-//                FileType::class,
-//                [
-//                    'label' => 'label.photo',
-//                    'required' => true,
-//                    'constraints' => [
-//                        new Assert\NotBlank(),
-//                        new Assert\Image(
-//                            [
-//                                'maxSize' => '1024k',
-//                                'mimeTypes' => [
-//                                    'image/png',
-//                                    'image/jpeg',
-//                                    'image/pjpeg',
-//                                    'image/jpeg',
-//                                    'image/pjpeg',
-//                                ],
-//                            ]
-//                        ),
-//                    ],
-//                ]
-//            );
-//        }
+        if (!isset($options['data']) || !isset($options['data']['id'])) {
+            $builder->add(
+                'photo',
+                FileType::class,
+                [
+                    'label' => 'label.photo',
+                    'required' => true,
+                    'constraints' => [
+                        new Assert\NotBlank(),
+                        new Assert\Image(
+                            [
+                                'maxSize' => '1024k',
+                                'mimeTypes' => [
+                                    'image/png',
+                                    'image/jpeg',
+                                    'image/pjpeg',
+                                    'image/jpeg',
+                                    'image/pjpeg',
+                                ],
+                            ]
+                        ),
+                    ],
+                ]
+            );
+        }
+
+        $builder->add(
+            'photo_title',
+            TextareaType::class,
+            [
+                'label' => 'label.photo_title',
+                'required'   => true,
+                'attr' => [
+                    'min_length' => 10,
+                    'max_length' => 128,
+                    'class' => 'form-control',
+                ],
+                'constraints' => [
+                    new Assert\NotBlank(
+                        ['groups' => ['ads-default']]
+                    ),
+                ],
+            ]
+        );
 
         $builder->add(
             'description',

@@ -18,8 +18,8 @@ use Form\CommentType;
 
 use Repository\AdvertisementRepository;
 use Repository\UserRepository;
-use Repository\CommentRepository;
 use Repository\CategoryRepository;
+use Repository\PhotoRepository;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
@@ -87,7 +87,7 @@ class AdvertisementController implements ControllerProviderInterface
         $advertisements = $advertisementRepository->findAllPaginated($page);
 //        dump($advertisements);
         return $app['twig']->render(
-            'advertisement/index.html.twig',
+            'advertisement/menu.html.twig',
             ['advertisements' => $advertisements]
         );
     }
@@ -104,6 +104,8 @@ class AdvertisementController implements ControllerProviderInterface
     public function addAction(Application $app, Request $request)
     {
         $categoryRepository = new CategoryRepository($app['db']);
+        $userRepository = new UserRepository($app['db']);
+        $loggedUser = $userRepository->getLoggedUser($app);
         $ad = [];
         $form = $app['form.factory']->createBuilder(
             AdvertisementType::class,
@@ -113,25 +115,21 @@ class AdvertisementController implements ControllerProviderInterface
         $form->handleRequest($request);
 
 
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $ad = $form->getData();
-//            dump($ad);
-//        }
-
         if ($form->isSubmitted() && $form->isValid()) {
             $advertisementRepository = new AdvertisementRepository($app['db']);
-            $ad = $form->getData();
+            $data = $form->getData(); //dane advertisement i photo
 
-//            $fileUploader = new FileUploader($app['config.photos_directory']);
-//            $photo= [];
-//            $fileName = $fileUploader->upload($ad['photo']);
-      //      $photo['source'] = $fileName;
+            $fileUploader = new FileUploader($app['config.photos_directory']);
+//            var_dump($photo_title);
+            $fileName = $fileUploader->upload($data['photo']);
+            $data['source'] = $fileName;
 
             $loggedUser['id'] = 1;
-            $ad['user_id'] = $loggedUser['id'];
+            $data['user_id'] = $loggedUser['id'];
            // dump($result);
-          $id = $advertisementRepository->save($ad);
-      //      $photo['ad_id'] = $id;
+            $id = $advertisementRepository->save($data);
+
+
 
             $app['session']->getFlashBag()->add(
                 'messages',
@@ -149,6 +147,8 @@ class AdvertisementController implements ControllerProviderInterface
             'advertisement/add.html.twig',
             [
                 'ad' => $ad,
+                'loggedUser' => $loggedUser,
+                'categoriesMenu' => $categoryRepository->findAll(),
                 'form' => $form->createView(),
             ]
         );
@@ -159,6 +159,9 @@ class AdvertisementController implements ControllerProviderInterface
     public function editAction(Application $app, Request $request, $id){
         $advertisementRepository = new AdvertisementRepository($app['db']);
         $ad = $advertisementRepository->findOneById($id);
+        $userRepository = new UserRepository($app['db']);
+        $categoryRepository = new CategoryRepository($app['db']);
+        $loggedUser = $userRepository->getLoggedUser($app);
 
         if (!$ad) {
             $app['session']->getFlashBag()->add(
@@ -198,6 +201,8 @@ class AdvertisementController implements ControllerProviderInterface
             [
                 'ad' => $ad,
                 'form' => $form->createView(),
+                'loggedUser' => $loggedUser,
+                'categoriesMenu' => $categoryRepository->findAll()
             ]
         );
     }
@@ -214,6 +219,9 @@ class AdvertisementController implements ControllerProviderInterface
     {
         $advertisementRepository = new AdvertisementRepository($app['db']);
         $ad = $advertisementRepository->findOneById($id);
+        $userRepository = new UserRepository($app['db']);
+        $categoryRepository = new CategoryRepository($app['db']);
+        $loggedUser = $userRepository->getLoggedUser($app);
 
         if (!$ad) {
             $app['session']->getFlashBag()->add(
@@ -252,6 +260,8 @@ class AdvertisementController implements ControllerProviderInterface
             [
                 'ad' => $ad,
                 'form' => $form->createView(),
+                'loggedUser' => $loggedUser,
+                'categoriesMenu' => $categoryRepository->findAll()
             ]
         );
     }
@@ -260,7 +270,12 @@ class AdvertisementController implements ControllerProviderInterface
     public function viewAction(Application $app, $id, Request $request)
     {
         $advertisementRepository = new AdvertisementRepository($app['db']);
+        $photoRepository = new PhotoRepository($app['db']);
         $advertisement = $advertisementRepository->findOneById($id);
+        $userRepository = new UserRepository($app['db']);
+        $user = $userRepository->findOneById($id);
+        $categoryRepository = new CategoryRepository($app['db']);
+        $loggedUser = $userRepository->getLoggedUser($app);
 
         if ($advertisement) {
             $userRepository = new UserRepository($app['db']);
@@ -269,9 +284,19 @@ class AdvertisementController implements ControllerProviderInterface
 
 
             $author = $userRepository->findOneById($advertisement['user_id']);
-
+            $photo = $photoRepository->findOneByAdvertisementId($id);
             $advertisement['author'] = $author['login'];
-           //    dump($comments);
+
+            if($photo) {
+
+                $advertisement['photo'] = $photo['source'];
+            }
+            else{
+                $advertisement['photo'] = '/../../web/images/logo.jpg';
+            }
+
+
+//               dump($advertisement);
 
             // $categoryRepository = new CategoryRepository($app['db']);
 //            $comment = [];
@@ -311,6 +336,8 @@ class AdvertisementController implements ControllerProviderInterface
                 'advertisement/view.html.twig',
                 [
                     'advertisement' => $advertisement,
+                    'loggedUser' => $loggedUser,
+                    'categoriesMenu' => $categoryRepository->findAll()
 //                    'comments' => $comments,
 //                    'form' => $form->createView(),
                 ]

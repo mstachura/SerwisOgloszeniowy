@@ -48,7 +48,7 @@ class HelloController implements ControllerProviderInterface
         $baza_danych['ilosc_tabel'] = 1;
         $baza_danych['ilosc_zdjec'] = 5;
 
-        return $app['twig']->render('hello/index.html.twig', ['name' => $name, 'bd' => $baza_danych]);
+        return $app['twig']->render('hello/menu.html.twig', ['name' => $name, 'bd' => $baza_danych]);
     }
     /**
      * add action.

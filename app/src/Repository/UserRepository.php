@@ -132,6 +132,29 @@ class UserRepository
     }
 
     /**
+     * Gets logged user.
+     * @param Application $app
+     *
+     * @return array Result
+     */
+    public function getLoggedUser($app)
+    {
+        $loggedUser = [];
+        $token = $app['security.token_storage']->getToken();
+        if (null !== $token) {
+            $user = $token->getUser();
+            $user = $this->getUserByLogin($user);
+            $loggedUser = $user;
+            if ($loggedUser) {
+                $loggedUser['id'] = $user['id'];
+                $loggedRole = $this->getUserRoles($loggedUser['id']);
+                $loggedUser['role'] = $loggedRole[0];
+            }
+        }
+        return $loggedUser;
+    }
+
+    /**
      * Gets user roles by User ID.
      *
      * @param integer $userId User ID
@@ -172,7 +195,7 @@ class UserRepository
             unset($user['firstname']);
             unset($user['lastname']);
             unset($user['phone_number']);
-            $user['password'] = $app['security.encoder.bcrypt']->encodePassword($user['password'], '');
+
 
         if (isset($user['id']) && ctype_digit((string) $user['id'])) {
             // update record
@@ -187,7 +210,7 @@ class UserRepository
 //            dump($user);
 
             $user['role_id'] = 2;
-
+            $user['password'] = $app['security.encoder.bcrypt']->encodePassword($user['password'], '');
 
  //           dump($user);
             $this->db->insert('user', $user);

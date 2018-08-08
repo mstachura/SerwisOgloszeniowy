@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 
 use Repository\CategoryRepository;
+use Repository\UserRepository;
 use Repository\AdvertisementRepository;
 
 
@@ -44,7 +45,9 @@ class CategoryController implements ControllerProviderInterface
     }
 
     public function viewAction(Application $app, $id){
+        $userRepository = new UserRepository($app['db']);
         $categoryRepository = new CategoryRepository($app['db']);
+        $loggedUser = $userRepository->getLoggedUser($app);
         $advertisementRepository = new AdvertisementRepository($app['db']);
 
         $advertisements = $advertisementRepository->findAllByCategory($id);
@@ -55,20 +58,28 @@ class CategoryController implements ControllerProviderInterface
         return $app['twig']->render(
             'category/view.html.twig', [
             'advertisements' => $advertisements,
-            'name_category' => $name_category
+            'name_category' => $name_category,
+            'loggedUser' => $loggedUser,
+            'categoriesMenu' => $categoryRepository->findAll()
         ]);
     }
 
     public function indexAction(Application $app){
+        $userRepository = new UserRepository($app['db']);
         $categoryRepository = new CategoryRepository($app['db']);
+        $loggedUser = $userRepository->getLoggedUser($app);
         $categories = $categoryRepository-> findAll();
 
 
 
         return $app['twig']->render(
-            'category/index.html.twig', [
-            'categories' => $categories,
-        ]);
+            'category/menu.html.twig',
+            [
+                'categories' => $categories,
+                'loggedUser' => $loggedUser,
+                'categoriesMenu' => $categoryRepository->findAll()
+            ]
+        );
     }
 
 

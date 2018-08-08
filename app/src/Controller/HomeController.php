@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Repository\AdvertisementRepository;
 use Repository\UserRepository;
 use Repository\CategoryRepository;
+use Form\SearchType;
 
 /**
  * Class HomeController.
@@ -33,6 +34,7 @@ class HomeController implements ControllerProviderInterface
         ->bind('home_index');
 
         $controller->get('/search', [$this, 'searchAction'])
+            ->method('GET|POST')
             ->bind('home_search');
         return $controller;
     }
@@ -52,29 +54,54 @@ class HomeController implements ControllerProviderInterface
 
       $userRepository = new UserRepository($app['db']);
       $users = $userRepository-> findAll();
+      $loggedUser = $userRepository->getLoggedUser($app);
 
       $categoryRepository = new CategoryRepository($app['db']);
       $categories = $categoryRepository-> findAll();
-//      dump($advertisements);
-//      dump($categories);
+
         return $app['twig']->render(
-            'home/index.html.twig', [
+            'home/menu.html.twig',
+            [
                 'advertisements'=> $advertisements,
                 'users' => $users,
-                'categories' => $categories
-            ]);
+                'categories' => $categories,
+                'categoriesMenu' => $categoryRepository->findAll(),
+                'loggedUser' => $loggedUser
+            ]
+        );
     }
 
 
     public function searchAction(Application $app, Request $request){
-//        $categoryRepository = new CategoryRepository($app['db']);
-//        $categories = $categoryRepository-> findAll();
+        $categoryRepository = new CategoryRepository($app['db']);
+        $userRepository = new UserRepository($app['db']);
+        $loggedUser = $userRepository->getLoggedUser($app);
 
+        $phrase =[];
+
+        $form = $app['form.factory']->createBuilder(
+            SearchType::class,
+            $phrase
+        )->getForm();
+        $form->handleRequest($request);
+
+        $advertisements = [];
+
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $advertisementRepository = new AdvertisementRepository($app['db']);
+            $result = $form->getData();
+
+            $advertisements = $advertisementRepository -> findAllByPhraseOfName($result['search_name']);
+        }
 
 
         return $app['twig']->render(
             'home/search.html.twig', [
-//            'categories' => $categories,
+            'loggedUser' => $loggedUser,
+            'advertisements' => $advertisements,
+            'categoriesMenu' => $categoryRepository->findAll(),
+            'form' => $form->createView()
         ]);
     }
 }

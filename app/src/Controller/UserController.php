@@ -13,6 +13,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 
 use Repository\UserRepository;
+use Repository\CategoryRepository;
 use Repository\AdvertisementRepository;
 use Repository\DataRepository;
 use Form\UserType;
@@ -68,10 +69,16 @@ class UserController implements ControllerProviderInterface
     public function indexAction(Application $app)
     {
         $userRepository = new UserRepository($app['db']);
+        $categoryRepository = new CategoryRepository($app['db']);
+        $loggedUser = $userRepository->getLoggedUser($app);
 
         return $app['twig']->render(
-            'user/index.html.twig',
-            ['users' => $userRepository->findAll()]
+            'user/menu.html.twig',
+            [
+                'users' => $userRepository->findAll(),
+                'loggedUser' => $loggedUser,
+                'categoriesMenu' => $categoryRepository->findAll()
+            ]
         );
     }
 
@@ -85,6 +92,10 @@ class UserController implements ControllerProviderInterface
      */
     public function addAction(Application $app, Request $request)
     {
+
+        $categoryRepository = new CategoryRepository($app['db']);
+        $userRepository = new UserRepository($app['db']);
+        $loggedUser = $userRepository->getLoggedUser($app);
 
         $user = [];
         $form = $app['form.factory']->createBuilder(
@@ -101,7 +112,7 @@ class UserController implements ControllerProviderInterface
 
 
 //             dump($user);
-            $userRepository->save($user);
+            $userRepository->save($user, $app);
 
             $app['session']->getFlashBag()->add(
                 'messages',
@@ -119,6 +130,8 @@ class UserController implements ControllerProviderInterface
             [
                 'user' => $user,
                 'form' => $form->createView(),
+                'loggedUser' => $loggedUser,
+                'categoriesMenu' => $categoryRepository->findAll()
             ]
         );
 //        return $app['twig']->render('user/add.html.twig', ['error' => $error]);
@@ -127,6 +140,8 @@ class UserController implements ControllerProviderInterface
 
     public function editAction(Application $app, Request $request, $id){
         $userRepository = new UserRepository($app['db']);
+        $categoryRepository = new CategoryRepository($app['db']);
+        $loggedUser = $userRepository->getLoggedUser($app);
         $userDataRepository = new DataRepository($app['db']);
         $user = $userRepository->findOneById($id); //tu ma być findOneByIdWithUserId
         $user_data = $userDataRepository ->findOneByUserId($id);
@@ -141,6 +156,7 @@ class UserController implements ControllerProviderInterface
                 [
                     'type' => 'warning',
                     'message' => 'message.record_not_found',
+
                 ]
             );
 
@@ -171,6 +187,8 @@ class UserController implements ControllerProviderInterface
             [
                 'user' => $user,
                 'form' => $form->createView(),
+                'loggedUser' => $loggedUser,
+                'categoriesMenu' => $categoryRepository->findAll()
             ]
         );
     }
@@ -186,6 +204,8 @@ class UserController implements ControllerProviderInterface
     {
         $userRepository = new UserRepository($app['db']);
         $user = $userRepository->findOneById($id);
+        $categoryRepository = new CategoryRepository($app['db']);
+        $loggedUser = $userRepository->getLoggedUser($app);
 
         if (!$user) {
             $app['session']->getFlashBag()->add(
@@ -224,6 +244,8 @@ class UserController implements ControllerProviderInterface
             [
                 'user' => $user,
                 'form' => $form->createView(),
+                'loggedUser' => $loggedUser,
+                'categoriesMenu' => $categoryRepository->findAll()
             ]
         );
     }
@@ -232,8 +254,12 @@ class UserController implements ControllerProviderInterface
     {
         $advertisementRepository = new AdvertisementRepository($app['db']);
         $advertisements = $advertisementRepository->findAllByUser($id);
-
         $userRepository = new UserRepository($app['db']);
+
+        $categoryRepository = new CategoryRepository($app['db']);
+        $loggedUser = $userRepository->getLoggedUser($app);
+
+
         $user = $userRepository->findOneById($id);
 
         if ($user) {
@@ -248,7 +274,9 @@ class UserController implements ControllerProviderInterface
                 [
                     'advertisements' => $advertisements,
                     'user' => $user,
-                    'userData' => $userData
+                    'userData' => $userData,
+                    'loggedUser' => $loggedUser,
+                    'categoriesMenu' => $categoryRepository->findAll()
                 ]
             );
         } else {

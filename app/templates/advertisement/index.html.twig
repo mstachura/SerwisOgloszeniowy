@@ -13,6 +13,7 @@
 
     <H1>{{ 'lista_ogloszen'|trans}}</H1>
     {% for advertisement in advertisements.data %}
+
         <p> Id: {{ advertisement.id }}</p>
     {% endfor %}
 {% endblock %}

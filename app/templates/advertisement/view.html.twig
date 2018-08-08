@@ -15,10 +15,11 @@
         </a>
     </div>
 
-    {#<img src="{{  asset('uploads/photos/' ~ advertisement.photo) }}" alt="{{ advertisement.photo }}">#}
+
 
     {% if advertisement %}
-        {#<p>{{ advertisement.photo}}</p>#}
+        <img src="{{  asset('uploads/photos/' ~ advertisement.photo) }}" alt="{{ advertisement.photo }}">
+        <p>{{ advertisement.author}}</p>
         <p>{{ 'nr_ogloszenia'|trans}}: {{ advertisement.id}}</p>
         <p>{{ 'nazwa_ogloszenia'|trans}}: {{ advertisement.name}}</p>
         <p>{{ 'label.price'|trans}}: {{ advertisement.price}}</p>

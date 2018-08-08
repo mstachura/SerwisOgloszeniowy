@@ -124,6 +124,16 @@ class AdvertisementRepository
         return !$result ? [] : $result;
     }
 
+    public function findAllByPhraseOfName($phrase){
+        $queryBuilder = $this->queryAll();
+        $queryBuilder
+            ->where('ad.name = :phrase')
+            ->setParameter(':phrase', $phrase);
+        $result = $queryBuilder->execute()->fetchAll();
+
+        return !$result ? [] : $result;
+    }
+
     /**
      * Save record.
      *
@@ -142,14 +152,25 @@ class AdvertisementRepository
             // add new record
 
             unset($ad['photo']);
+            $photo = [];
+            $photo['name'] = $ad['photo_title'];
+            $photo['source'] = $ad['source'];
+            unset($ad['source']);
+            unset($ad['photo_title']);
             $this->db->insert('ad', $ad);
             $id = $this->db->lastInsertId();
+
+            $photo['ad_id'] = $id;
+            $this->db->insert('photo', $photo);
           }            return $id;
 
     }
 
     public function delete($ad)
     {
+
         return $this->db->delete('ad', ['id' => $ad['id']]);
     }
+
+
 }
