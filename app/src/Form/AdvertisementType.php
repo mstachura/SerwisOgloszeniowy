@@ -50,7 +50,7 @@ class AdvertisementType extends AbstractType
                 FileType::class,
                 [
                     'label' => 'label.photo',
-                    'required' => true,
+                    'required' => false,
                     'constraints' => [
                         new Assert\NotBlank(),
                         new Assert\Image(
@@ -226,7 +226,7 @@ class AdvertisementType extends AbstractType
     protected function prepareProvinceForChoices()
     {
 
-        $provinces = ['malopolskie', 'wielkopolskie', 'dolnośląskie', 'kujawsko-pomorskie', 'lubelskie', 'lubuskie', 'łódzkie', 'mazowieckie', 'opolskie', 'podkarpackie', 'podlaskie', 'pomorskie', 'śląskie', 'świętokrzyskie', 'warmińsko-mazurskie', 'zachodniopomorskie'];
+        $provinces = ['małopolskie', 'wielkopolskie', 'dolnośląskie', 'kujawsko-pomorskie', 'lubelskie', 'lubuskie', 'łódzkie', 'mazowieckie', 'opolskie', 'podkarpackie', 'podlaskie', 'pomorskie', 'śląskie', 'świętokrzyskie', 'warmińsko-mazurskie', 'zachodniopomorskie'];
         $choices=[];
 
         foreach ($provinces as $province){

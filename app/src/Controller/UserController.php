@@ -36,8 +36,8 @@ class UserController implements ControllerProviderInterface
     public function connect(Application $app)
     {
         $controller = $app['controllers_factory'];
-        $controller->match('/', [$this, 'indexAction'])
-            ->bind('user_index');
+//        $controller->match('/', [$this, 'indexAction'])
+//            ->bind('user_index');
         $controller->match('/{id}', [$this, 'viewAction'])
             ->assert('id', '[1-9]\d*')
             ->method('POST|GET')
@@ -53,6 +53,9 @@ class UserController implements ControllerProviderInterface
             ->assert('id', '[1-9]\d*')
             ->method('POST|GET')
             ->bind('user_delete');
+        $controller->get('/page/{page}', [$this, 'indexAction'])
+            ->value('page', 1)
+            ->bind('user_index');
 
 
         return $controller;
@@ -66,16 +69,18 @@ class UserController implements ControllerProviderInterface
      *
      * @return string Response
      */
-    public function indexAction(Application $app)
+    public function indexAction(Application $app, $page = 1)
     {
         $userRepository = new UserRepository($app['db']);
+        $users = $userRepository->findAllPaginated($page);
+
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
 
         return $app['twig']->render(
-            'user/menu.html.twig',
+            'user/index.html.twig',
             [
-                'users' => $userRepository->findAll(),
+                'users' => $users,
                 'loggedUser' => $loggedUser,
                 'categoriesMenu' => $categoryRepository->findAll()
             ]

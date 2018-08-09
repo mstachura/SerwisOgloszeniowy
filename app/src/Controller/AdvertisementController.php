@@ -38,8 +38,8 @@ class AdvertisementController implements ControllerProviderInterface
     public function connect(Application $app)
     {
         $controller = $app['controllers_factory'];
-        $controller->match('/', [$this, 'indexAction'])
-            ->bind('ads_index');
+//        $controller->match('/', [$this, 'indexAction'])
+//            ->bind('ads_index');
         $controller->get('/{name}/add', [$this, 'addAction']);
         $controller->match('/{id}', [$this, 'viewAction'])
             ->assert('id', '[1-9]\d*')
@@ -85,10 +85,20 @@ class AdvertisementController implements ControllerProviderInterface
     {
         $advertisementRepository = new AdvertisementRepository($app['db']);
         $advertisements = $advertisementRepository->findAllPaginated($page);
+
+        $categoryRepository = new CategoryRepository($app['db']);
+        $userRepository = new UserRepository($app['db']);
+        $users = $userRepository-> findAll();
+        $loggedUser = $userRepository->getLoggedUser($app);
+
 //        dump($advertisements);
         return $app['twig']->render(
-            'advertisement/menu.html.twig',
-            ['advertisements' => $advertisements]
+            'advertisement/index.html.twig',
+            [
+                'advertisements' => $advertisements,
+                'categoriesMenu' => $categoryRepository->findAll(),
+                'loggedUser' => $loggedUser
+            ]
         );
     }
 
@@ -106,6 +116,7 @@ class AdvertisementController implements ControllerProviderInterface
         $categoryRepository = new CategoryRepository($app['db']);
         $userRepository = new UserRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
+
         $ad = [];
         $form = $app['form.factory']->createBuilder(
             AdvertisementType::class,
@@ -119,10 +130,12 @@ class AdvertisementController implements ControllerProviderInterface
             $advertisementRepository = new AdvertisementRepository($app['db']);
             $data = $form->getData(); //dane advertisement i photo
 
-            $fileUploader = new FileUploader($app['config.photos_directory']);
+            if ($data['photo']) {
+                $fileUploader = new FileUploader($app['config.photos_directory']);
 //            var_dump($photo_title);
-            $fileName = $fileUploader->upload($data['photo']);
-            $data['source'] = $fileName;
+                $fileName = $fileUploader->upload($data['photo']);
+                $data['source'] = $fileName;
+            }
 
             $loggedUser['id'] = 1;
             $data['user_id'] = $loggedUser['id'];
@@ -246,6 +259,8 @@ class AdvertisementController implements ControllerProviderInterface
                 [
                     'type' => 'success',
                     'message' => 'message.element_successfully_deleted',
+                    'loggedUser' => $loggedUser,
+                    'categoriesMenu' => $categoryRepository->findAll()
                 ]
             );
 
@@ -292,43 +307,8 @@ class AdvertisementController implements ControllerProviderInterface
                 $advertisement['photo'] = $photo['source'];
             }
             else{
-                $advertisement['photo'] = '/../../web/images/logo.jpg';
+                $advertisement['photo'] = '';
             }
-
-
-//               dump($advertisement);
-
-            // $categoryRepository = new CategoryRepository($app['db']);
-//            $comment = [];
-//            $form = $app['form.factory']->createBuilder(
-//                CommentType::class,
-//                $comment,
-//                ['comment_repository' => new CommentRepository($app['db'])]
-//            )->getForm();
-//            $form->handleRequest($request);
-//            dump($comment);
-
-
-
-//            if ($form->isSubmitted() && $form->isValid()) {
-//                $commentRepository = new CommentRepository($app['db']);
-//                $comment = $form->getData();
-//
-//                $loggedUser['id'] = 1;
-////                $comment['user_id'] = $loggedUser['id'];
-////                $comment['ad_id'] = $id;
-//
-////               $commentRepository->save($comment);
-//
-//                $app['session']->getFlashBag()->add(
-//                    'messages',
-//                    [
-//                        'type' => 'success',
-//                        'message' => 'message.element_successfully_added',
-//                    ]
-//                );
-//                return $app->redirect($app['url_generator']->generate('ads_view', ['id' => $id], 301));
-//            }
 
 
             return $app['twig']->render(

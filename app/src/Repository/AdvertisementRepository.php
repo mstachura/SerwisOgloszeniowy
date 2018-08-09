@@ -6,6 +6,7 @@ namespace Repository;
 
 use Doctrine\DBAL\Connection;
 use Utils\Paginator;
+use Silex\Application;
 
 /**
  * Class AdvertisementRepository.
@@ -127,12 +128,14 @@ class AdvertisementRepository
     public function findAllByPhraseOfName($phrase){
         $queryBuilder = $this->queryAll();
         $queryBuilder
-            ->where('ad.name = :phrase')
-            ->setParameter(':phrase', $phrase);
+            ->where('ad.name LIKE :phrase')
+            ->setParameter(':phrase', '%'.$phrase.'%');
         $result = $queryBuilder->execute()->fetchAll();
 
         return !$result ? [] : $result;
     }
+
+
 
     /**
      * Save record.
@@ -142,34 +145,61 @@ class AdvertisementRepository
      */
     public function save($ad)
     {
-        if (isset($ad['id']) && ctype_digit((string) $ad['id'])) {
-            // update record
-            $id = $ad['id'];
-            unset($ad['id']);
+        $this->db->beginTransaction();
+        try {
+            if (isset($ad['id']) && ctype_digit((string)$ad['id'])) {
+                // update record
+                $id = $ad['id'];
+                unset($ad['id']);
 
-            return $this->db->update('ad', $ad, ['id' => $id]);
-        } else {
-            // add new record
+                return $this->db->update('ad', $ad, ['id' => $id]);
+            } else {
+                // add new record
 
-            unset($ad['photo']);
-            $photo = [];
-            $photo['name'] = $ad['photo_title'];
-            $photo['source'] = $ad['source'];
-            unset($ad['source']);
-            unset($ad['photo_title']);
-            $this->db->insert('ad', $ad);
-            $id = $this->db->lastInsertId();
 
-            $photo['ad_id'] = $id;
-            $this->db->insert('photo', $photo);
-          }            return $id;
+                unset($ad['photo']);
+                $photo = [];
+                $photo['name'] = $ad['photo_title'];
+                $photo['source'] = $ad['source'];
+                unset($ad['source']);
+                unset($ad['photo_title']);
+                $this->db->insert('ad', $ad);
+                $id = $this->db->lastInsertId();
 
+
+                if ($photo['source']) {
+                    $photo['ad_id'] = $id;
+                    $this->db->insert('photo', $photo);
+                }
+            }
+            return $id;
+            $this->db->commit();
+
+        } catch (DBALException $e) {
+            $this->db->rollBack();
+            throw $e;
+}
     }
-
+    /*
+     *
+     */
     public function delete($ad)
     {
+        $this->db->beginTransaction();
+        try {
+            if (isset($ad['id']) && ctype_digit((string)$ad['id'])) {
+                $this->db->delete('ad', ['id' => $ad['id']]);
 
-        return $this->db->delete('ad', ['id' => $ad['id']]);
+
+            } else {
+                throw new \InvalidArgumentException('Invalid parameter type');
+            }
+            $this->db->commit();
+        } catch (DBALException $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
+
     }
 
 

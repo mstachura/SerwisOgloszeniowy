@@ -7,12 +7,21 @@ namespace Repository;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Utils\Paginator;
 
 /**
  * Class UserRepository.
  */
 class UserRepository
 {
+
+    /**
+     * Number of items per page.
+     *
+     * const int NUM_ITEMS
+     */
+    const NUM_ITEMS = 3;
+
     /**
      * Doctrine DBAL connection.
      *
@@ -185,6 +194,15 @@ class UserRepository
         }
     }
 
+    public function findAllByUsername($login){
+        $queryBuilder = $this->queryAll();
+        $queryBuilder->where('user.login LIKE :login')
+            ->setParameter(':login', '%'.$login.'%');
+        $result = $queryBuilder->execute()->fetchAll();
+
+        return !$result ? [] : $result;
+    }
+
 
     public function save($user, $app){
 
@@ -260,6 +278,26 @@ class UserRepository
 
 //        dump($queryBuilder->execute()->fetchAll());
         return $queryBuilder->execute()->fetchAll();
+    }
+
+    /**
+     * Get records paginated.
+     *
+     * @param int $page Current page number
+     *
+     * @return array Result
+     */
+    public function findAllPaginated($page = 1)
+    {
+        $countQueryBuilder = $this->queryAll()
+            ->select('COUNT(DISTINCT user.id) AS total_results')
+            ->setMaxResults(1);
+
+        $paginator = new Paginator($this->queryAll(), $countQueryBuilder);
+        $paginator->setCurrentPage($page);
+        $paginator->setMaxPerPage(static::NUM_ITEMS);
+
+        return $paginator->getCurrentPageResults();
     }
 }
 

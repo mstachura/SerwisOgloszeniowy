@@ -77,31 +77,47 @@ class HomeController implements ControllerProviderInterface
         $userRepository = new UserRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
 
-        $phrase =[];
+        $search =[];
 
         $form = $app['form.factory']->createBuilder(
             SearchType::class,
-            $phrase
+            $search
         )->getForm();
         $form->handleRequest($request);
 
-        $advertisements = [];
 
+        $results = [];
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $advertisementRepository = new AdvertisementRepository($app['db']);
-            $result = $form->getData();
+            $search = $form->getData();
 
-            $advertisements = $advertisementRepository -> findAllByPhraseOfName($result['search_name']);
+            if($search['category_search'] == 'user'){
+                $userRepository = new UserRepository($app['db']);
+                $results = $userRepository->findAllByUsername($search['phrase']);
+            }elseif($search['category_search'] == 'advertisement'){
+                $advertisementRepository = new AdvertisementRepository($app['db']);
+                $results = $advertisementRepository -> findAllByPhraseOfName($search['phrase']);
+            }
+            else{
+                $app['session']->getFlashBag()->add(
+                    'messages',
+                    [
+                        'type' => 'warning',
+                        'message' => 'message.record_not_found',
+                    ]
+                );
+                return $app->redirect($app['url_generator']->generate('home_index', 301));
+            }
         }
 
 
         return $app['twig']->render(
             'home/search.html.twig', [
             'loggedUser' => $loggedUser,
-            'advertisements' => $advertisements,
+            'results' => $results,
             'categoriesMenu' => $categoryRepository->findAll(),
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'category_result' => $search['category_search']
         ]);
     }
 }

@@ -18,7 +18,11 @@
 
 
     {% if advertisement %}
+        {% if advertisement.photo %}
         <img src="{{  asset('uploads/photos/' ~ advertisement.photo) }}" alt="{{ advertisement.photo }}">
+        {% else %}
+            <img src="{{ asset('images/logo.jpg')}}">
+        {% endif %}
         <p>{{ advertisement.author}}</p>
         <p>{{ 'nr_ogloszenia'|trans}}: {{ advertisement.id}}</p>
         <p>{{ 'nazwa_ogloszenia'|trans}}: {{ advertisement.name}}</p>

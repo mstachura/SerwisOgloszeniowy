@@ -277,6 +277,16 @@
                    <target>Ogłoszenia kategorii</target>
              </trans-unit>
 
+             <trans-unit id="label.nav.next">
+                   <source>label.nav.next</source>
+                   <target>Następna strona</target>
+             </trans-unit>
+
+             <trans-unit id="labels.nav.prev">
+                   <source>labels.nav.prev</source>
+                   <target>Poprzednia strona</target>
+             </trans-unit>
+
 
 
 
