@@ -17,6 +17,7 @@ use Repository\CategoryRepository;
 use Repository\AdvertisementRepository;
 use Repository\DataRepository;
 use Form\UserType;
+use Repository\LocationRepository;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
@@ -100,13 +101,17 @@ class UserController implements ControllerProviderInterface
 
         $categoryRepository = new CategoryRepository($app['db']);
         $userRepository = new UserRepository($app['db']);
+        $locationRepository = new LocationRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
 
         $user = [];
         $form = $app['form.factory']->createBuilder(
             UserType::class,
             $user,
-            ['user_repository' => new UserRepository($app['db'])]
+            [
+                'user_repository' => new UserRepository($app['db']),
+                'location_repository' => new LocationRepository($app['db'])
+            ]
         )->getForm();
         $form->handleRequest($request);
 

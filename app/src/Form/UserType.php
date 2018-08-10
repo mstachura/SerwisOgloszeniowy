@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Validator\Constraints as CustomAssert;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 /**
  * Class CommentType.
  *
@@ -130,6 +131,17 @@ class UserType extends AbstractType
         );
 
         $builder->add(
+            'location_id',
+            ChoiceType::class,
+            [
+                'label' => 'label.locations',
+                'required' => true,
+                'placeholder' => 'label.none',
+                'choices' => $this->prepareLocationsForChoices($options['location_repository']),
+            ]
+        );
+
+        $builder->add(
             'phone_number',
             NumberType::class,
             [
@@ -161,9 +173,25 @@ class UserType extends AbstractType
         $resolver->setDefaults(
             [
                 'validation_groups' => ['user-default'],
-                'user_repository' => null
+                'user_repository' => null,
+                'location_repository' => null
             ]
         );
+    }
+
+    /**
+     * Prepare Locations For Choices
+     * @param $locationRepository
+     * @return array
+     */
+    protected function prepareLocationsForChoices($locationRepository)
+    {
+        $locations = $locationRepository->findAll();
+        $choices = [];
+        foreach ($locations as $location) {
+            $choices[$location['name']] = $location['id'];
+        }
+        return $choices;
     }
 
 

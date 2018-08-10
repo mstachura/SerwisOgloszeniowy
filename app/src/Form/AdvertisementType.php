@@ -26,6 +26,7 @@ class AdvertisementType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
         $builder->add(
             'name',
             TextType::class,
@@ -137,30 +138,6 @@ class AdvertisementType extends AbstractType
         );
 
         $builder->add(
-            'type',
-            ChoiceType::class,
-            [
-                'label' => 'label.type',
-                'required' => true,
-                'placeholder' => 'label.none',
-                'choices' => $this->prepareTypesForChoices()
-            ]
-        );
-
-        $builder->add(
-            'location',
-            TextType::class,
-            [
-                'label' => 'label.location',
-                'required' => false,
-                'attr' => [
-                    'max_length' => 100,
-                    'min_length' => 3
-                ],
-            ]
-        );
-
-        $builder->add(
             'province',
             ChoiceType::class,
             [
@@ -168,6 +145,28 @@ class AdvertisementType extends AbstractType
                 'required' => true,
                 'placeholder' => 'label.none',
                 'choices' => $this->prepareProvinceForChoices(),
+            ]
+        );
+
+        $builder->add(
+            'type_id',
+            ChoiceType::class,
+            [
+                'label' => 'label.type',
+                'required' => true,
+                'placeholder' => 'label.none',
+                'choices' => $this->prepareTypesForChoices($options['type_repository']),
+            ]
+        );
+
+        $builder->add(
+            'location_id',
+            ChoiceType::class,
+            [
+                'label' => 'label.locations',
+                'required' => false,
+                'placeholder' => 'label.none',
+                'choices' => $this->prepareLocationsForChoices($options['location_repository']),
             ]
         );
 
@@ -186,6 +185,8 @@ class AdvertisementType extends AbstractType
             [
                 'validation_groups' => ['ads-default'],
                 'category_repository' => null,
+                'location_repository' => null,
+                'type_repository' => null
             ]
         );
     }
@@ -213,15 +214,43 @@ class AdvertisementType extends AbstractType
         return $choices;
     }
 
-    protected function prepareTypesForChoices()
+    /**
+     * @param $locationRepository
+     * @return array
+     */
+    protected function prepareLocationsForChoices($locationRepository)
     {
-
-        $choices = ['kupno' => 'kupno', 'wymiana' => 'wymiana', 'sprzedaż' => 'sprzedaż'];
-
-
-
+        $locations = $locationRepository->findAll();
+        $choices = [];
+        foreach ($locations as $location) {
+            $choices[$location['name']] = $location['id'];
+        }
         return $choices;
     }
+
+    /**
+     * @param $typeRepository
+     * @return array
+     */
+    protected function prepareTypesForChoices($typeRepository)
+    {
+        $types = $typeRepository->findAll();
+        $choices = [];
+        foreach ($types as $type) {
+            $choices[$type['name']] = $type['id'];
+        }
+        return $choices;
+    }
+
+//    protected function prepareTypesForChoices()
+//    {
+//
+//        $choices = ['kupno' => 'kupno', 'wymiana' => 'wymiana', 'sprzedaż' => 'sprzedaż'];
+//
+//
+//
+//        return $choices;
+//    }
 
     protected function prepareProvinceForChoices()
     {

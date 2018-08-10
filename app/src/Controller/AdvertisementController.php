@@ -13,7 +13,8 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Form\AdvertisementType;
 use Service\FileUploader;
-use Form\CommentType;
+use Repository\LocationRepository;
+use Repository\TypeRepository;
 
 
 use Repository\AdvertisementRepository;
@@ -121,7 +122,11 @@ class AdvertisementController implements ControllerProviderInterface
         $form = $app['form.factory']->createBuilder(
             AdvertisementType::class,
             $ad,
-            ['category_repository' => new CategoryRepository($app['db'])]
+            [
+                'category_repository' => new CategoryRepository($app['db']),
+                'location_repository' => new LocationRepository($app['db']),
+                'type_repository' => new TypeRepository($app['db'])
+            ]
         )->getForm();
         $form->handleRequest($request);
 
@@ -139,7 +144,7 @@ class AdvertisementController implements ControllerProviderInterface
 
             $loggedUser['id'] = 1;
             $data['user_id'] = $loggedUser['id'];
-           // dump($result);
+            dump($data);
             $id = $advertisementRepository->save($data);
 
 

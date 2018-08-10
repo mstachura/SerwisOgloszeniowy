@@ -70,7 +70,7 @@ class UserRepository
     protected function queryAll()
     {
         $queryBuilder = $this->db->createQueryBuilder();
-        return $queryBuilder->select('id', 'login', 'password', 'email', 'role_id')
+        return $queryBuilder->select('id', 'login', 'password', 'email', 'role_id', 'location_id')
             ->from('user');
     }
 

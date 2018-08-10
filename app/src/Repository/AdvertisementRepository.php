@@ -73,7 +73,7 @@ class AdvertisementRepository
     protected function queryAll()
     {
         $queryBuilder = $this->db->createQueryBuilder();
-        return $queryBuilder->select('id', 'name', 'price', 'description', 'user_id', 'type', 'location', 'province')
+        return $queryBuilder->select('id', 'name', 'price', 'description', 'user_id', 'type_id', 'location_id', 'province')
             ->from('ad');
     }
     /**
@@ -146,7 +146,7 @@ class AdvertisementRepository
     public function save($ad)
     {
         $this->db->beginTransaction();
-        try {
+//        try {
             if (isset($ad['id']) && ctype_digit((string)$ad['id'])) {
                 // update record
                 $id = $ad['id'];
@@ -163,6 +163,7 @@ class AdvertisementRepository
                 $photo['source'] = $ad['source'];
                 unset($ad['source']);
                 unset($ad['photo_title']);
+                dump($ad);
                 $this->db->insert('ad', $ad);
                 $id = $this->db->lastInsertId();
 
@@ -175,10 +176,10 @@ class AdvertisementRepository
             return $id;
             $this->db->commit();
 
-        } catch (DBALException $e) {
-            $this->db->rollBack();
-            throw $e;
-}
+//        } catch (DBALException $e) {
+//            $this->db->rollBack();
+//            throw $e;
+//}
     }
     /*
      *
