@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'edytuj_zdjecie'|trans({'%id%': photo.id}) }}{% endblock %}
+
+{% block body %}
+
+    {% form_theme form with ['bootstrap_3_horizontal_layout.html.twig', 'form/form_errors.html.twig'] %}
+
+    <div class="col-md-3">
+        <a href="{{ global.request.headers.get('referer') }}" title="{{ 'label.back'|trans }}" class="btn btn-default">
+            <span class="fa fa-mail-reply" aria-hidden="true"></span>
+            <i class="glyphicon glyphicon-arrow-left"></i>
+            {{ 'label.back'|trans }}
+        </a>
+    </div>
+
+
+    <h1>{{ 'edytuj_zdjecie'|trans({'%id%': photo.id}) }}</h1>
+    {{ form_start(form, { method: 'post', action: url('photo_edit', {'id': photo.id}) }) }}
+    {{ form_widget(form) }}
+    <input type="submit" value="{{ 'action.edit'|trans }}" class="btn btn-success" />
+    {{ form_end(form) }}
+
+
+{% endblock %}

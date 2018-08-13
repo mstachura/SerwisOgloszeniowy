@@ -16,24 +16,25 @@
     </div>
 
 
-
+<div class="">
     {% if advertisement %}
         {% if advertisement.photo %}
         <img src="{{  asset('uploads/photos/' ~ advertisement.photo) }}" alt="{{ advertisement.photo }}">
         {% else %}
             <img src="{{ asset('images/logo.jpg')}}">
         {% endif %}
-        <p>{{ advertisement.author}}</p>
-        <p>{{ 'nr_ogloszenia'|trans}}: {{ advertisement.id}}</p>
+        <p>{{ 'label.login'|trans}}: {{ advertisement.author}}</p>
         <p>{{ 'nazwa_ogloszenia'|trans}}: {{ advertisement.name}}</p>
-        <p>{{ 'label.price'|trans}}: {{ advertisement.price}}</p>
-        <p>{{ 'label.description'|trans}}: {{ advertisement.description}}</p>
-        <p>{{ 'label.type'|trans}}: {{ advertisement.type}}</p>
-        <p>{{ 'label.location'|trans}}: {{ advertisement.location}}</p>
-        <p>{{ 'label.province'|trans}}: {{ advertisement.province}}</p>
+        <p>{{ 'dodane_przez_uzytkownika_nr'|trans}}: {{ advertisement.user_id }}</p>
+        <p>{{ 'label.price'|trans}}: {{ advertisement.price }}</p>
+        <p>{{ 'label.description'|trans}}: {{ advertisement.description }}</p>
+        <p>{{ 'label.province'|trans}}: {{ advertisement.province }}</p>
+        <p>{{ 'label.location'|trans}}: {{ advertisement.location_id }}</p>
+        {#<p>{{ 'nazwa_kategorii'|trans}}: {{ advertisement.category_id }}</p>#}
+        <p>{{ 'label.type'|trans}}: {{ advertisement.type_id }}</p>
 
         {#<p>{{ advertisement.photo}}</p>#}
-
+        </div>
         {#<H2>Edytuj ogłoszenie</H2>#}
         <a href ="{{ url ('ads_edit', {'id': advertisement.id}) }}">
             <button class="btn btn-warning">
@@ -51,6 +52,7 @@
         <H1>{{ "dane_autora_ogloszenia" |trans}}</H1>
         <p>{{ 'nr_id_uzytkownika'|trans}}: {{ advertisement.user_id}}</p>
         <p>{{ 'label.login'|trans}}: {{ advertisement.author }}</p>
+
     {% else %}
         <p>{{ "nie_ma_takiego_ogloszenia" |trans}}.</p>
     {% endif %}

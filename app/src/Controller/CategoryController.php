@@ -2,8 +2,6 @@
 /**
  * Category controller.
  *
- * @copyright (c) 2016 Tomasz Chojna
- * @link http://epi.chojna.info.pl
  */
 
 namespace Controller;
@@ -11,10 +9,6 @@ namespace Controller;
 use Silex\Api\ControllerProviderInterface;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-
-
-
-
 use Repository\CategoryRepository;
 use Repository\UserRepository;
 use Repository\AdvertisementRepository;
@@ -44,6 +38,13 @@ class CategoryController implements ControllerProviderInterface
 
     }
 
+    /**
+     * View action
+     * @param Application $app
+     * @param $id
+     * @return mixed
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public function viewAction(Application $app, $id){
         $userRepository = new UserRepository($app['db']);
         $categoryRepository = new CategoryRepository($app['db']);
@@ -64,6 +65,12 @@ class CategoryController implements ControllerProviderInterface
         ]);
     }
 
+    /**
+     * Index action
+     * @param Application $app
+     * @return mixed
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public function indexAction(Application $app){
         $userRepository = new UserRepository($app['db']);
         $categoryRepository = new CategoryRepository($app['db']);
@@ -81,6 +88,4 @@ class CategoryController implements ControllerProviderInterface
             ]
         );
     }
-
-
 }

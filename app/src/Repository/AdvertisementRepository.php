@@ -69,13 +69,17 @@ class AdvertisementRepository
         return $paginator->getCurrentPageResults();
     }
 
-
+    /**
+     * Query all
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
     protected function queryAll()
     {
         $queryBuilder = $this->db->createQueryBuilder();
         return $queryBuilder->select('id', 'name', 'price', 'description', 'user_id', 'type_id', 'location_id', 'province')
             ->from('ad');
     }
+
     /**
      * Find one record.
      *
@@ -83,7 +87,6 @@ class AdvertisementRepository
      *
      * @return array|mixed Result
      */
-
     public function findOneById($id)
     {
         $queryBuilder = $this->queryAll();
@@ -102,7 +105,6 @@ class AdvertisementRepository
      *
      * @return array|mixed Result
      */
-
     public function findAllByUser($user_id)
     {
         $queryBuilder = $this->queryAll();
@@ -114,7 +116,11 @@ class AdvertisementRepository
         return !$result ? [] : $result;
     }
 
-
+    /**
+     * Find all by category
+     * @param $category_id
+     * @return array
+     */
     public function findAllByCategory($category_id){
         $queryBuilder = $this->queryAll();
         $queryBuilder
@@ -125,6 +131,11 @@ class AdvertisementRepository
         return !$result ? [] : $result;
     }
 
+    /**
+     * Find all by phrase of name
+     * @param $phrase
+     * @return array
+     */
     public function findAllByPhraseOfName($phrase){
         $queryBuilder = $this->queryAll();
         $queryBuilder
@@ -184,6 +195,14 @@ class AdvertisementRepository
     /*
      *
      */
+
+    /**
+     * Delete
+     * @param $ad
+     * @throws \Doctrine\DBAL\ConnectionException
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception\InvalidArgumentException
+     */
     public function delete($ad)
     {
         $this->db->beginTransaction();
@@ -200,8 +219,5 @@ class AdvertisementRepository
             $this->db->rollBack();
             throw $e;
         }
-
     }
-
-
 }

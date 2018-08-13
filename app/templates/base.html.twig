@@ -16,7 +16,7 @@
 
 
 
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default container-fluid" id="nawigacja">
     {% include 'menu.html.twig' %}
     <div class="container-fluid">
         <div class="btn-group pull-right" role="group" aria-label="{{ 'label.actions'|trans }}">
@@ -59,7 +59,7 @@
 {% endblock %}
 
 {% block footer %}
-    {#<footer class="card-footer" id="stopka">System interakcyjny - projekt</footer>#}
+    <footer class="card-footer" id="stopka">System interakcyjny - projekt</footer>
 {% endblock %}
 
 </body>

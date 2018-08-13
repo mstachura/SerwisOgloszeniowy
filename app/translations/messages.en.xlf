@@ -272,6 +272,16 @@
                   <target>Previous page</target>
             </trans-unit>
 
+            <trans-unit id="message.password_not_repeated">
+                  <source>message.password_not_repeated</source>
+                  <target>Password wasn't repeated</target>
+            </trans-unit>
+
+            <trans-unit id="label.phrase">
+                  <source>label.phrase</source>
+                  <target>Type phrase</target>
+            </trans-unit>
+
 
 
 

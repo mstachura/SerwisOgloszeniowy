@@ -1,6 +1,6 @@
 <?php
 /**
- * Comment type.
+ * User data type.
  */
 namespace Form;
 use Symfony\Component\Form\AbstractType;
@@ -9,8 +9,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 /**
- * Class CommentType.
+ * Class UserDataType.
  *
  * @package Form
  */
@@ -76,9 +77,6 @@ class UserDataType extends AbstractType
                 ],
             ]
         );
-
-
-
     }
 
 
@@ -94,6 +92,4 @@ class UserDataType extends AbstractType
             ]
         );
     }
-
-
 }

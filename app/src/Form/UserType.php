@@ -1,6 +1,6 @@
 <?php
 /**
- * Comment type.
+ * User type.
  */
 namespace Form;
 use Symfony\Component\Form\AbstractType;
@@ -14,8 +14,9 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Validator\Constraints as CustomAssert;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
 /**
- * Class CommentType.
+ * Class UserType.
  *
  * @package Form
  */
@@ -159,8 +160,6 @@ class UserType extends AbstractType
                 ],
             ]
         );
-
-
     }
 
 
@@ -193,6 +192,4 @@ class UserType extends AbstractType
         }
         return $choices;
     }
-
-
 }

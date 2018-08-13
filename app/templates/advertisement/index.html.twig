@@ -4,6 +4,37 @@
 
 {% block content %}
 
+
+
+    <H1>{{ 'lista_ogloszen'|trans}}</H1>
+    {% for advertisement in advertisements.data %}
+
+        <p> Id: {{ advertisement.id }}</p>
+
+        {#{% for advertisement in advertisements %}#}
+            <p>{{ 'nazwa_ogloszenia'|trans}}: {{ advertisement.name}}</p>
+            <p>{{ 'dodane_przez_uzytkownika_nr'|trans}}: {{ advertisement.user_id }}</p>
+            <p>{{ 'label.price'|trans}}: {{ advertisement.price }}</p>
+            <p>{{ 'label.description'|trans}}: {{ advertisement.description }}</p>
+            <p>{{ 'label.province'|trans}}: {{ advertisement.province }}</p>
+            <p>{{ 'label.location'|trans}}: {{ advertisement.location_id }}</p>
+            {#<p>{{ 'nazwa_kategorii'|trans}}: {{ advertisement.category_id }}</p>#}
+            <p>{{ 'label.type'|trans}}: {{ advertisement.type_id }}</p>
+            {#<p>Dodane przez: {{ user.login }}</p>#}
+            <a href ="{{ url ('ads_view', {'id': advertisement.id}) }}">
+                {{ advertisement.name }}
+                {#<img src="{{  asset('uploads/photos/' ~ advertisement.photo) }}" alt="{{ advertisement.photo }}">#}
+            </a>
+
+            <a href ="{{ url ('ads_delete', {'id': advertisement.id}) }}">
+                <button class="btn btn-danger"> {{ "usun_ogloszenie" |trans}}</button>
+            </a>
+
+            <a href ="{{ url ('ads_edit', {'id': advertisement.id}) }}">
+                <button class="btn btn-warning"> {{ "edytuj_ogloszenie" |trans}}</button>
+            </a>
+        {% endfor %}
+
     {# ... #}
     {% include 'default/_paginator.html.twig' with {
         paginator: advertisements,
@@ -11,9 +42,4 @@
     } %}
     {# ... #}
 
-    <H1>{{ 'lista_ogloszen'|trans}}</H1>
-    {% for advertisement in advertisements.data %}
-
-        <p> Id: {{ advertisement.id }}</p>
-    {% endfor %}
 {% endblock %}

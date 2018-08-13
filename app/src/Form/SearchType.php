@@ -1,6 +1,6 @@
 <?php
 /**
- * Search form.
+ * Search type.
  */
 
 namespace Form;
@@ -12,12 +12,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
- * Class LoginType.
+ * Class SearchType.
  */
 class SearchType extends AbstractType
 {
     /**
-     * {@inheritdoc}
+     * Build form
+     * @param FormBuilderInterface $builder
+     * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -59,17 +61,21 @@ class SearchType extends AbstractType
                 ],
             ]
         );
-
     }
 
     /**
-     * {@inheritdoc}
+     * Get block prefix
+     * @return null|string
      */
     public function getBlockPrefix()
     {
         return 'search_type';
     }
 
+    /**
+     * Prepare categories for choices
+     * @return array
+     */
     protected function prepareCategoriesForChoices()
     {
         $categories = ['advertisement', 'user'];

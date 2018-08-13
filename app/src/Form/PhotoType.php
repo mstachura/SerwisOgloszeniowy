@@ -1,6 +1,6 @@
 <?php
 /**
- * Comment type.
+ * Photo type.
  */
 namespace Form;
 use Symfony\Component\Form\AbstractType;
@@ -12,12 +12,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 /**
- * Class CommentType.
+ * Class PhotoType.
  *
  * @package Form
  */
-class AdvertisementType extends AbstractType
+class PhotoType extends AbstractType
 {
     /**
      * Build Form
@@ -70,28 +71,5 @@ class AdvertisementType extends AbstractType
                 ],
             ]
         );
-
-    }
-
-
-    /**
-     * Configure Options
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults(
-            [
-                'validation_groups' => ['photo-default'],
-            ]
-        );
-    }
-    /**
-     * Get Block Prefix
-     * @return string
-     */
-    public function getBlockPrefix()
-    {
-        return 'photo_type';
     }
 }

@@ -18,7 +18,11 @@ use Repository\UserRepository;
 class AuthController implements ControllerProviderInterface
 {
     /**
-     * {@inheritdoc}
+     * Routing settings.
+     *
+     * @param \Silex\Application $app Silex application
+     *
+     * @return \Silex\ControllerCollection Result
      */
     public function connect(Application $app)
     {
@@ -33,12 +37,11 @@ class AuthController implements ControllerProviderInterface
     }
 
     /**
-     * Login action.
-     *
-     * @param \Silex\Application                        $app     Silex application
-     * @param \Symfony\Component\HttpFoundation\Request $request HTTP Request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP Response
+     * Login action
+     * @param Application $app
+     * @param Request $request
+     * @return mixed
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function loginAction(Application $app, Request $request)
     {

@@ -2,8 +2,6 @@
 /**
  * User controller.
  *
- * @copyright (c) 2016 Tomasz Chojna
- * @link http://epi.chojna.info.pl
  */
 
 namespace Controller;
@@ -11,7 +9,6 @@ namespace Controller;
 use Silex\Api\ControllerProviderInterface;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-
 use Repository\UserRepository;
 use Repository\CategoryRepository;
 use Repository\AdvertisementRepository;
@@ -63,12 +60,11 @@ class UserController implements ControllerProviderInterface
     }
 
     /**
-     * Index action.
-     *
-     * @param \Silex\Application $app Silex application
-     * @param \Symfony\Component\HttpFoundation\Request $request Request object
-     *
-     * @return string Response
+     * Index action
+     * @param Application $app
+     * @param int $page
+     * @return mixed
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function indexAction(Application $app, $page = 1)
     {
@@ -89,12 +85,11 @@ class UserController implements ControllerProviderInterface
     }
 
     /**
-     * add action.
-     *
-     * @param \Silex\Application $app Silex application
-     * @param \Symfony\Component\HttpFoundation\Request $request Request object
-     *
-     * @return string Response
+     * Add action
+     * @param Application $app
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function addAction(Application $app, Request $request)
     {
@@ -148,6 +143,14 @@ class UserController implements ControllerProviderInterface
 
     }
 
+    /**
+     * Edit action
+     * @param Application $app
+     * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public function editAction(Application $app, Request $request, $id){
         $userRepository = new UserRepository($app['db']);
         $categoryRepository = new CategoryRepository($app['db']);
@@ -204,11 +207,13 @@ class UserController implements ControllerProviderInterface
     }
 
     /**
-     * Remove record.
-     *
-     * @param array $ad Tag
-     *
-     *
+     * Delete action
+     * @param Application $app
+     * @param $id
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception\InvalidArgumentException
      */
     public function deleteAction(Application $app, $id, Request $request)
     {
@@ -260,6 +265,13 @@ class UserController implements ControllerProviderInterface
         );
     }
 
+    /**
+     * View action
+     * @param Application $app
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public function viewAction(Application $app, $id)
     {
         $advertisementRepository = new AdvertisementRepository($app['db']);
@@ -299,6 +311,5 @@ class UserController implements ControllerProviderInterface
             );
             return $app->redirect($app['url_generator']->generate('home_index', 301));
         }
-
     }
 }

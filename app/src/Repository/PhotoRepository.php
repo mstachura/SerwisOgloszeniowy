@@ -28,7 +28,10 @@ class PhotoRepository
         $this->db = $db;
     }
 
-
+    /**
+     * Query all
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
     protected function queryAll()
     {
         $queryBuilder = $this->db->createQueryBuilder();
@@ -43,7 +46,6 @@ class PhotoRepository
      *
      * @return array|mixed Result
      */
-
     public function findOneById($id)
     {
         $queryBuilder = $this->queryAll();
@@ -55,6 +57,11 @@ class PhotoRepository
         return !$result ? [] : $result;
     }
 
+    /**
+     * Find one by advertisement id
+     * @param $ad_id
+     * @return array|mixed
+     */
     public function findOneByAdvertisementId($ad_id)
     {
         $queryBuilder = $this->queryAll();

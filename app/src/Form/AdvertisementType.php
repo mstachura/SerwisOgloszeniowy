@@ -1,6 +1,6 @@
 <?php
 /**
- * Comment type.
+ * Advertisement type.
  */
 namespace Form;
 use Symfony\Component\Form\AbstractType;
@@ -12,8 +12,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 /**
- * Class CommentType.
+ * Class AdvertisementType.
  *
  * @package Form
  */
@@ -125,7 +126,6 @@ class AdvertisementType extends AbstractType
             ]
         );
 
-
         $builder->add(
             'category_id',
             ChoiceType::class,
@@ -163,15 +163,12 @@ class AdvertisementType extends AbstractType
             'location_id',
             ChoiceType::class,
             [
-                'label' => 'label.locations',
+                'label' => 'label.location',
                 'required' => false,
                 'placeholder' => 'label.none',
                 'choices' => $this->prepareLocationsForChoices($options['location_repository']),
             ]
         );
-
-
-
     }
 
 
@@ -190,6 +187,7 @@ class AdvertisementType extends AbstractType
             ]
         );
     }
+
     /**
      * Get Block Prefix
      * @return string
@@ -215,6 +213,7 @@ class AdvertisementType extends AbstractType
     }
 
     /**
+     * Prepare Locations For Choices
      * @param $locationRepository
      * @return array
      */
@@ -229,6 +228,7 @@ class AdvertisementType extends AbstractType
     }
 
     /**
+     * Prepare Types For Choices
      * @param $typeRepository
      * @return array
      */
@@ -252,6 +252,10 @@ class AdvertisementType extends AbstractType
 //        return $choices;
 //    }
 
+    /**
+     * Prepare Province For Choices
+     * @return array
+     */
     protected function prepareProvinceForChoices()
     {
 
@@ -263,7 +267,4 @@ class AdvertisementType extends AbstractType
         }
         return $choices;
     }
-
-
-
 }

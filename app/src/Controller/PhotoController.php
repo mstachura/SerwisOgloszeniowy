@@ -2,8 +2,6 @@
 /**
  * Photo controller.
  *
- * @copyright (c) 2016 Tomasz Chojna
- * @link http://epi.chojna.info.pl
  */
 
 namespace Controller;
@@ -11,13 +9,10 @@ namespace Controller;
 use Silex\Api\ControllerProviderInterface;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-
 use Repository\PhotoRepository;
 use Repository\CategoryRepository;
-use Repository\AdvertisementRepository;
-use Repository\DataRepository;
+use Repository\UserRepository;
 use Form\PhotoType;
-use Repository\LocationRepository;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
@@ -48,20 +43,16 @@ class PhotoController implements ControllerProviderInterface
             ->assert('id', '[1-9]\d*')
             ->method('POST|GET')
             ->bind('photo_delete');
-
-
-
         return $controller;
     }
 
 
     /**
-     * add action.
-     *
-     * @param \Silex\Application $app Silex application
-     * @param \Symfony\Component\HttpFoundation\Request $request Request object
-     *
-     * @return string Response
+     * Add action
+     * @param Application $app
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function addAction(Application $app, Request $request)
     {
@@ -76,8 +67,7 @@ class PhotoController implements ControllerProviderInterface
             PhotoType::class,
             $photo,
             [
-                'photo_repository' => new PhotoRepository($app['db']),
-                'location_repository' => new LocationRepository($app['db'])
+                'photo_repository' => new PhotoRepository($app['db'])
             ]
         )->getForm();
         $form->handleRequest($request);
@@ -98,7 +88,7 @@ class PhotoController implements ControllerProviderInterface
                     'message' => 'message.element_successfully_added',
                 ]
             );
-            return $app->redirect($app['url_generator']->generate('home_index', 301));
+            return $app->redirect($app['url_generator']->generate('ads_index', 301));
         }
 
 
@@ -115,16 +105,20 @@ class PhotoController implements ControllerProviderInterface
 
     }
 
+    /**
+     * Edit action
+     * @param Application $app
+     * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public function editAction(Application $app, Request $request, $id){
         $photoRepository = new PhotoRepository($app['db']);
         $categoryRepository = new CategoryRepository($app['db']);
-        $loggedPhoto = $photoRepository->getLoggedPhoto($app);
-        $photoDataRepository = new DataRepository($app['db']);
+        $userRepository = new UserRepository($app['db']);
+        $loggedUser = $userRepository->getLoggedUser($app);
         $photo = $photoRepository->findOneById($id); //tu ma być findOneByIdWithPhotoId
-        $photo_data = $photoDataRepository ->findOneByPhotoId($id);
-        $photo['firstname'] = $photo_data['firstname'];
-        $photo['lastname'] = $photo_data['lastname'];
-        $photo['phone_number'] = $photo_data['phone_number'];
 
 //        dump($photo);
         if (!$photo) {
@@ -137,7 +131,7 @@ class PhotoController implements ControllerProviderInterface
                 ]
             );
 
-            return $app->redirect($app['url_generator']->generate('photo_index'));
+            return $app->redirect($app['url_generator']->generate('ads_index'));
         }
 //        dump($photo);
 
@@ -156,7 +150,7 @@ class PhotoController implements ControllerProviderInterface
                 ]
             );
 
-            return $app->redirect($app['url_generator']->generate('photo_view', ['id' => $id], 301));
+            return $app->redirect($app['url_generator']->generate('ads_view', ['id' => $id], 301));
         }
 
         return $app['twig']->render(
@@ -164,25 +158,27 @@ class PhotoController implements ControllerProviderInterface
             [
                 'photo' => $photo,
                 'form' => $form->createView(),
-                'loggedPhoto' => $loggedPhoto,
+                'loggedPhoto' => $loggedUser,
                 'categoriesMenu' => $categoryRepository->findAll()
             ]
         );
     }
 
     /**
-     * Remove record.
-     *
-     * @param array $ad Tag
-     *
-     *
+     * Delete action
+     * @param Application $app
+     * @param $id
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function deleteAction(Application $app, $id, Request $request)
     {
         $photoRepository = new PhotoRepository($app['db']);
         $photo = $photoRepository->findOneById($id);
+        $userRepository = new UserRepository($app['db']);
         $categoryRepository = new CategoryRepository($app['db']);
-        $loggedPhoto = $photoRepository->getLoggedPhoto($app);
+        $loggedUser = $userRepository->getLoggedUser($app);
 
         if (!$photo) {
             $app['session']->getFlashBag()->add(
@@ -193,7 +189,7 @@ class PhotoController implements ControllerProviderInterface
                 ]
             );
 
-            return $app->redirect($app['url_generator']->generate('photo_index'));
+            return $app->redirect($app['url_generator']->generate('ads_index'));
         }
 
         $form = $app['form.factory']->createBuilder(FormType::class, $photo)->add('id', HiddenType::class)->getForm();
@@ -211,7 +207,7 @@ class PhotoController implements ControllerProviderInterface
             );
 
             return $app->redirect(
-                $app['url_generator']->generate('photo_index'),
+                $app['url_generator']->generate('ads_index'),
                 301
             );
         }
@@ -221,11 +217,9 @@ class PhotoController implements ControllerProviderInterface
             [
                 'photo' => $photo,
                 'form' => $form->createView(),
-                'loggedPhoto' => $loggedPhoto,
+                'loggedUser' => $loggedUser,
                 'categoriesMenu' => $categoryRepository->findAll()
             ]
         );
     }
-
-
 }

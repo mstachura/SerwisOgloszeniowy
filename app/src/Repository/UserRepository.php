@@ -67,6 +67,10 @@ class UserRepository
         return !$result ? [] : $result;
     }
 
+    /**
+     * Query all
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
     protected function queryAll()
     {
         $queryBuilder = $this->db->createQueryBuilder();
@@ -141,10 +145,10 @@ class UserRepository
     }
 
     /**
-     * Gets logged user.
-     * @param Application $app
-     *
-     * @return array Result
+     * Get logged user
+     * @param $app
+     * @return array
+     * @throws DBALException
      */
     public function getLoggedUser($app)
     {
@@ -194,6 +198,11 @@ class UserRepository
         }
     }
 
+    /**
+     * Find all by username
+     * @param $login
+     * @return array
+     */
     public function findAllByUsername($login){
         $queryBuilder = $this->queryAll();
         $queryBuilder->where('user.login LIKE :login')
@@ -203,7 +212,13 @@ class UserRepository
         return !$result ? [] : $result;
     }
 
-
+    /**
+     * Save
+     * @param $user
+     * @param $app
+     * @return int
+     * @throws DBALException
+     */
     public function save($user, $app){
 
         $user_data= [];
@@ -238,11 +253,22 @@ class UserRepository
         }
     }
 
+    /**
+     * Delete
+     * @param $user
+     * @return int
+     * @throws DBALException
+     * @throws \Doctrine\DBAL\Exception\InvalidArgumentException
+     */
     public function delete($user)
     {
         return $this->db->delete('user', ['id' => $user['id']]);
     }
 
+    /**
+     * Query all extra
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
     protected function queryAllExtra()
     {
         $queryBuilder = $this->db->createQueryBuilder();
@@ -255,6 +281,11 @@ class UserRepository
 //            ->innerJoin('u', 'userdata', 'ud', 'u.id = ud.userId');
     }
 
+    /**
+     * Find one by id with user data
+     * @param $id
+     * @return array|mixed
+     */
     public function findOneByIdWithUserData($id){
         $queryBuilder = $this->queryAllExtra();
         $queryBuilder->where('id = :id')
@@ -264,6 +295,12 @@ class UserRepository
         return !$result ? [] : $result;
     }
 
+    /**
+     * Find for uniqueness
+     * @param $login
+     * @param null $id
+     * @return array
+     */
     public function findForUniqueness($login, $id = null)
     {
         $queryBuilder = $this->db->createQueryBuilder();

@@ -1,28 +1,23 @@
 <?php
 /**
  * Advertisement controller.
- *
- * @copyright (c) 2016 Tomasz Chojna
- * @link http://epi.chojna.info.pl
  */
 
 namespace Controller;
 
 use Silex\Api\ControllerProviderInterface;
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
 use Form\AdvertisementType;
 use Service\FileUploader;
 use Repository\LocationRepository;
 use Repository\TypeRepository;
-
-
 use Repository\AdvertisementRepository;
 use Repository\UserRepository;
 use Repository\CategoryRepository;
 use Repository\PhotoRepository;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class AdvertisementController.
@@ -56,9 +51,9 @@ class AdvertisementController implements ControllerProviderInterface
             ->method('GET|POST')
             ->assert('id', '[1-9]\d*')
             ->bind('ads_delete');
-        $controller->match('/add', [$this, 'addAction'])
-            ->method('POST|GET')
-            ->bind('comment_add');
+//        $controller->match('/add', [$this, 'addAction'])
+//            ->method('POST|GET')
+//            ->bind('comment_add');
         $controller->get('/page/{page}', [$this, 'indexAction'])
             ->value('page', 1)
             ->bind('ads_index');
@@ -75,12 +70,11 @@ class AdvertisementController implements ControllerProviderInterface
     }
 
     /**
-     * Index action.
-     *
-     * @param \Silex\Application $app Silex application
-     * @param \Symfony\Component\HttpFoundation\Request $request Request object
-     *
-     * @return string Response
+     * Index action
+     * @param Application $app
+     * @param int $page
+     * @return mixed
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function indexAction(Application $app, $page = 1)
     {
@@ -103,15 +97,14 @@ class AdvertisementController implements ControllerProviderInterface
         );
     }
 
-    /**
-     * add action.
-     *
-     * @param \Silex\Application $app Silex application
-     * @param \Symfony\Component\HttpFoundation\Request $request Request object
-     *
-     * @return string Response
-     */
 
+    /**
+     * Add action
+     * @param Application $app
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public function addAction(Application $app, Request $request)
     {
         $categoryRepository = new CategoryRepository($app['db']);
@@ -174,6 +167,14 @@ class AdvertisementController implements ControllerProviderInterface
 
     }
 
+    /**
+     * Edit action
+     * @param Application $app
+     * @param Request $request
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public function editAction(Application $app, Request $request, $id){
         $advertisementRepository = new AdvertisementRepository($app['db']);
         $ad = $advertisementRepository->findOneById($id);
@@ -227,11 +228,14 @@ class AdvertisementController implements ControllerProviderInterface
 
 
     /**
-     * Remove record.
-     *
-     * @param array $ad Tag
-     *
-     *
+     * Delete action
+     * @param Application $app
+     * @param $id
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Doctrine\DBAL\ConnectionException
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception\InvalidArgumentException
      */
     public function deleteAction(Application $app, $id, Request $request)
     {
@@ -286,7 +290,14 @@ class AdvertisementController implements ControllerProviderInterface
         );
     }
 
-
+    /**
+     * View action
+     * @param Application $app
+     * @param $id
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public function viewAction(Application $app, $id, Request $request)
     {
         $advertisementRepository = new AdvertisementRepository($app['db']);
@@ -331,6 +342,4 @@ class AdvertisementController implements ControllerProviderInterface
             return $app->redirect($app['url_generator']->generate('home_index', 301));
         }
     }
-
-
 }

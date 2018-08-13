@@ -2,8 +2,6 @@
 /**
  * Home controller.
  *
- * @copyright (c) 2016 Tomasz Chojna
- * @link http://epi.chojna.info.pl
  */
 namespace Controller;
 
@@ -40,12 +38,11 @@ class HomeController implements ControllerProviderInterface
     }
 
     /**
-     * Index action.
-     *
-     * @param \Silex\Application                        $app     Silex application
-     * @param \Symfony\Component\HttpFoundation\Request $request Request object
-     *
-     * @return string Response
+     * Index action
+     * @param Application $app
+     * @param Request $request
+     * @return mixed
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function indexAction(Application $app, Request $request)
     {
@@ -71,7 +68,13 @@ class HomeController implements ControllerProviderInterface
         );
     }
 
-
+    /**
+     * Search action
+     * @param Application $app
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public function searchAction(Application $app, Request $request){
         $categoryRepository = new CategoryRepository($app['db']);
         $userRepository = new UserRepository($app['db']);

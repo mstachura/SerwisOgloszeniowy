@@ -287,6 +287,16 @@
                    <target>Poprzednia strona</target>
              </trans-unit>
 
+             <trans-unit id="message.password_not_repeated">
+                   <source>message.password_not_repeated</source>
+                   <target>Hasło nie zostało powtórzone</target>
+             </trans-unit>
+
+             <trans-unit id="label.phrase">
+                    <source>label.phrase</source>
+                    <target>Wpisz szukaną frazę</target>
+             </trans-unit>
+
 
 
 

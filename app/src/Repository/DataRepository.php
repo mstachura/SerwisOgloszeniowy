@@ -1,13 +1,13 @@
 <?php
 /**
- * User repository.
+ * Data repository.
  */
 namespace Repository;
 
 use Doctrine\DBAL\Connection;
 
 /**
- * Class UserDataRepository
+ * Class DataRepository
  */
 class DataRepository
 {
@@ -35,7 +35,6 @@ class DataRepository
      *
      * @return array|mixed Result
      */
-
     public function findOneByUserId($user_id)
     {
         $queryBuilder = $this->queryAll();
@@ -46,12 +45,14 @@ class DataRepository
         return !$result ? [] : $result;
     }
 
+    /**
+     * Query all
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
     protected function queryAll()
     {
         $queryBuilder = $this->db->createQueryBuilder();
         return $queryBuilder->select('id', 'firstname', 'lastname', 'user_id', 'phone_number')
             ->from('user_data');
     }
-
-
 }

@@ -57,11 +57,14 @@ class TypeRepository
         return !$result ? [] : $result;
     }
 
+    /**
+     * Query all
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
     protected function queryAll()
     {
         $queryBuilder = $this->db->createQueryBuilder();
         return $queryBuilder->select('id', 'name')
             ->from('type');
     }
-
 }
