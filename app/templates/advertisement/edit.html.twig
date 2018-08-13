@@ -15,7 +15,18 @@
     </div>
 
     <h1>{{ 'edytuj_ogloszenie'|trans({'%id%': ad.id}) }}</h1>
+
+
+
     {{ form_start(form, { method: 'post', action: url('ads_edit', {'id': ad.id}) }) }}
+
+    {{ form_row(form.name) }}
+    {% if ad.photo_source %}
+        <img src="{{  asset('uploads/photos/' ~ ad.photo_source) }}" alt="{{ ad.photo_source }}">
+        <a href ="{{ url ('photo_delete', {'id': photo.id}) }}">
+            <p class="btn btn-danger"> {{ 'action.delete'|trans }}</p>
+        </a>
+    {% endif %}
     {{ form_widget(form) }}
     <input type="submit" value="{{ 'action.save'|trans }}" class="btn btn-success" />
     {{ form_end(form) }}

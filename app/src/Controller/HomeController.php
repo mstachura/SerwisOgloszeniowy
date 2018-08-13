@@ -50,7 +50,7 @@ class HomeController implements ControllerProviderInterface
       $advertisements = $advertisementRepository-> findAll();
 
       $userRepository = new UserRepository($app['db']);
-      $users = $userRepository-> findAll();
+      $users = $userRepository-> findAllExtra();
       $loggedUser = $userRepository->getLoggedUser($app);
 
       $categoryRepository = new CategoryRepository($app['db']);

@@ -72,4 +72,9 @@ class PhotoRepository
 
         return !$result ? [] : $result;
     }
+
+    public function delete($photo)
+    {
+        return $this->db->delete('photo', ['id' => $photo['id']]);
+    }
 }

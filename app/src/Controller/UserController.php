@@ -117,7 +117,7 @@ class UserController implements ControllerProviderInterface
 
 
 //             dump($user);
-            $userRepository->save($user, $app);
+            $userRepository->save($app, $user);
 
             $app['session']->getFlashBag()->add(
                 'messages',
@@ -282,7 +282,7 @@ class UserController implements ControllerProviderInterface
         $loggedUser = $userRepository->getLoggedUser($app);
 
 
-        $user = $userRepository->findOneById($id);
+        $user = $userRepository->findOneByIdWithUserData($id);
 
         if ($user) {
 

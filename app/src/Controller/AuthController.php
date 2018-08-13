@@ -51,8 +51,7 @@ class AuthController implements ControllerProviderInterface
 
         $user = ['login' => $app['session']->get('_security.last_username')];
         $form = $app['form.factory']->createBuilder(LoginType::class, $user)->getForm();
-//        dump($app['security.encoder.bcrypt']->encodePassword('qwertyuiop', ''));
-//        dump($form);
+
         return $app['twig']->render(
             'auth/login.html.twig',
             [

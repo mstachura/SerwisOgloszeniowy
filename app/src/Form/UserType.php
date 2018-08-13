@@ -133,12 +133,13 @@ class UserType extends AbstractType
 
         $builder->add(
             'location_id',
-            ChoiceType::class,
+            TextType::class,
             [
-                'label' => 'label.locations',
                 'required' => true,
-                'placeholder' => 'label.none',
-                'choices' => $this->prepareLocationsForChoices($options['location_repository']),
+                'label' => 'label.locations',
+                'attr' => [
+                    'max_length' => 128,
+                ],
             ]
         );
 
@@ -160,6 +161,10 @@ class UserType extends AbstractType
                 ],
             ]
         );
+
+//        $builder->get('location')->addModelTransformer(
+//            new LocationDataTransformer($options['location_repository'])
+//        );
     }
 
 

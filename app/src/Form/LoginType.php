@@ -1,6 +1,6 @@
 <?php
 /**
- * Login type.
+ * Login form.
  */
 
 namespace Form;
@@ -17,9 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class LoginType extends AbstractType
 {
     /**
-     * Build form
-     * @param FormBuilderInterface $builder
-     * @param array $options
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -68,8 +66,7 @@ class LoginType extends AbstractType
     }
 
     /**
-     * Get block prefix
-     * @return null|string
+     * {@inheritdoc}
      */
     public function getBlockPrefix()
     {

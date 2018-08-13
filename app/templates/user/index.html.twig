@@ -12,9 +12,10 @@
 
     {% for user in users.data %}
     <a href ="{{ url ('user_view', {'id': user.id}) }}">
-        <button class="btn">
+        <p class="btn">
             {{ user.login}}
-        </button>
+
+        </p>
     </a>
     {% endfor %}
 

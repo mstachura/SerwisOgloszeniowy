@@ -50,6 +50,8 @@
       <path value="$PROJECT_DIR$/app/vendor/symfony/polyfill-ctype" />
       <path value="$PROJECT_DIR$/app/vendor/twbs/bootstrap" />
       <path value="$PROJECT_DIR$/app/vendor/doctrine/event-manager" />
+      <path value="$PROJECT_DIR$/app/vendor/escapestudios/symfony2-coding-standard" />
+      <path value="$PROJECT_DIR$/app/vendor/squizlabs/php_codesniffer" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="5.5.0" />

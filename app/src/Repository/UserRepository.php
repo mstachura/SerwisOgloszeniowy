@@ -6,8 +6,10 @@ namespace Repository;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
+use Silex\Application;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Utils\Paginator;
+use Repository\LocationRepository;
 
 /**
  * Class UserRepository.
@@ -30,6 +32,13 @@ class UserRepository
     protected $db;
 
     /**
+     * Location repository.
+     *
+     * @var null|\Repository\LocationRepository $tagsRepository
+     */
+    protected $locationRepository = null;
+
+    /**
      * UserRepository constructor.
      *
      * @param \Doctrine\DBAL\Connection $db
@@ -37,7 +46,10 @@ class UserRepository
     public function __construct(Connection $db)
     {
         $this->db = $db;
+//        $this->locationRepository = new LocationRepository($db);
     }
+
+
 
     /**
      * Fetch all records.
@@ -47,6 +59,17 @@ class UserRepository
     public function findAll()
     {
         $queryBuilder = $this->queryAll();
+        return $queryBuilder->execute()->fetchAll();
+    }
+
+    /**
+     * Fetch all records.
+     *
+     * @return array Result
+     */
+    public function findAllExtra()
+    {
+        $queryBuilder = $this->queryAllExtra();
         return $queryBuilder->execute()->fetchAll();
     }
 
@@ -134,7 +157,7 @@ class UserRepository
         try {
             $queryBuilder = $this->db->createQueryBuilder();
             $queryBuilder->select('u.id', 'u.login', 'u.password')
-                ->from('user', 'u')
+                ->from('si_users', 'u')
                 ->where('u.login = :login')
                 ->setParameter(':login', $login, \PDO::PARAM_STR);
 
@@ -175,7 +198,7 @@ class UserRepository
      *
      * @return array Result
      */
-    public function getUserRoles($userId)
+    public function getUserRoles($user_id)
     {
         $roles = [];
 
@@ -183,9 +206,9 @@ class UserRepository
             $queryBuilder = $this->db->createQueryBuilder();
             $queryBuilder->select('r.name')
                 ->from('user', 'u')
-                ->innerJoin('u', 'roles', 'r', 'u.role_id = r.id')
+                ->innerJoin('u', 'role', 'r', 'u.role_id = r.id')
                 ->where('u.id = :id')
-                ->setParameter(':id', $userId, \PDO::PARAM_INT);
+                ->setParameter(':id', $user_id, \PDO::PARAM_INT);
             $result = $queryBuilder->execute()->fetchAll();
 
             if ($result) {
@@ -219,7 +242,7 @@ class UserRepository
      * @return int
      * @throws DBALException
      */
-    public function save($user, $app){
+    public function save(Application $app, $user){
 
         $user_data= [];
             $user_data['firstname'] = $user['firstname'];
@@ -288,7 +311,7 @@ class UserRepository
      */
     public function findOneByIdWithUserData($id){
         $queryBuilder = $this->queryAllExtra();
-        $queryBuilder->where('id = :id')
+        $queryBuilder->where('u.id = :id')
             ->setParameter(':id', $id, \PDO::PARAM_INT);
         $result = $queryBuilder->execute()->fetch();
 
@@ -336,6 +359,7 @@ class UserRepository
 
         return $paginator->getCurrentPageResults();
     }
+
 }
 
 

@@ -76,7 +76,7 @@ class AdvertisementRepository
     protected function queryAll()
     {
         $queryBuilder = $this->db->createQueryBuilder();
-        return $queryBuilder->select('id', 'name', 'price', 'description', 'user_id', 'type_id', 'location_id', 'province')
+        return $queryBuilder->select('id', 'name', 'price', 'description', 'user_id', 'type_id', 'location_id', 'province', 'category_id')
             ->from('ad');
     }
 
@@ -156,25 +156,29 @@ class AdvertisementRepository
      */
     public function save($ad)
     {
-        $this->db->beginTransaction();
+//        $this->db->beginTransaction();
 //        try {
+        unset($ad['photo']);
+        unset($ad['photo_source']);
+        $photo = [];
+        $photo['name'] = $ad['photo_title'];
+        $photo['source'] = $ad['source'];
+        unset($ad['source']);
+        unset($ad['photo_title']);
+
             if (isset($ad['id']) && ctype_digit((string)$ad['id'])) {
                 // update record
                 $id = $ad['id'];
                 unset($ad['id']);
 
+                $this->db->update('photo', $photo, ['ad_id' => $id]);
                 return $this->db->update('ad', $ad, ['id' => $id]);
             } else {
                 // add new record
 
 
-                unset($ad['photo']);
-                $photo = [];
-                $photo['name'] = $ad['photo_title'];
-                $photo['source'] = $ad['source'];
-                unset($ad['source']);
-                unset($ad['photo_title']);
-                dump($ad);
+
+//                dump($ad);
                 $this->db->insert('ad', $ad);
                 $id = $this->db->lastInsertId();
 

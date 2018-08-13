@@ -17,6 +17,7 @@ use Controller\HomeController;
 use Controller\UserController;
 use Controller\CategoryController;
 use Controller\AuthController;
+use Controller\PhotoController;
 
 
 $app->mount('/hello', new HelloController());
@@ -25,6 +26,7 @@ $app->mount('/', new HomeController());
 $app->mount('/user', new UserController());
 $app->mount('/category', new CategoryController());
 $app->mount('/auth', new AuthController());
+$app->mount('/photo', new PhotoController());
 
 
 

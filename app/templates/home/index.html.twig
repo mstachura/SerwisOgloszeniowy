@@ -24,6 +24,7 @@
     <H1>Lista użytkowników</H1>
     {% for user in users %}
         <p>{{ user.login}}</p>
+        {{ user.firstname}}
         {#<p>{{ user.email}}</p>#}
     {% endfor %}
 

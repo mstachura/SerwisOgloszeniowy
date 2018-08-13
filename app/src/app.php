@@ -80,6 +80,8 @@ $app->register(
     ]
 );
 
+
+
 $app->register(
     new SecurityServiceProvider(),
     [
@@ -108,15 +110,15 @@ $app->register(
             ],
         ],
         'security.access_rules' => [
-//            ['^/auth.+$', 'IS_AUTHENTICATED_ANONYMOUSLY'],
-//            ['^/.+$', 'ROLE_ADMIN'],
+            ['^/auth.+$', 'IS_AUTHENTICATED_ANONYMOUSLY'],
+            ['^/.+$', 'ROLE_ADMIN'],
         ],
         'security.role_hierarchy' => [
             'ROLE_ADMIN' => ['ROLE_USER'],
         ],
     ]
 );
-// ...
+
 
 return $app;
 

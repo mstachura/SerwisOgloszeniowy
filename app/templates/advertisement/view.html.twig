@@ -18,11 +18,13 @@
 
 <div class="">
     {% if advertisement %}
-        {% if advertisement.photo %}
-        <img src="{{  asset('uploads/photos/' ~ advertisement.photo) }}" alt="{{ advertisement.photo }}">
+        {% if photo %}
+        <img src="{{  asset('uploads/photos/' ~ photo.source) }}" alt="{{ photo.source }}">
+            <p>{{ 'photo_name'|trans}}: {{ photo.name}}</p>
         {% else %}
             <img src="{{ asset('images/logo.jpg')}}">
         {% endif %}
+
         <p>{{ 'label.login'|trans}}: {{ advertisement.author}}</p>
         <p>{{ 'nazwa_ogloszenia'|trans}}: {{ advertisement.name}}</p>
         <p>{{ 'dodane_przez_uzytkownika_nr'|trans}}: {{ advertisement.user_id }}</p>

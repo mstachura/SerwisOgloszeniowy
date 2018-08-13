@@ -46,7 +46,7 @@ class AdvertisementType extends AbstractType
             ]
         );
 
-        if (!isset($options['data']) || !isset($options['data']['id'])) {
+//        if (!isset($options['data']) || !isset($options['data']['id'])) {
             $builder->add(
                 'photo',
                 FileType::class,
@@ -70,7 +70,7 @@ class AdvertisementType extends AbstractType
                     ],
                 ]
             );
-        }
+//        }
 
         $builder->add(
             'photo_title',

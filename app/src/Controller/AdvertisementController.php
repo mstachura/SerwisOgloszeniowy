@@ -178,6 +178,7 @@ class AdvertisementController implements ControllerProviderInterface
     public function editAction(Application $app, Request $request, $id){
         $advertisementRepository = new AdvertisementRepository($app['db']);
         $ad = $advertisementRepository->findOneById($id);
+
         $userRepository = new UserRepository($app['db']);
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
@@ -194,15 +195,39 @@ class AdvertisementController implements ControllerProviderInterface
             return $app->redirect($app['url_generator']->generate('ads_index'));
         }
 
+        $photoRepository = new PhotoRepository($app['db']);
+        $photo = $photoRepository -> findOneByAdvertisementId($id);
+        if($photo){
+            $ad['photo_source']=$photo['source'];
+            $ad['photo_title'] = $photo['name'];
+        }
+        else{
+            $ad['photo'] = '';
+        }
+        dump($ad);
         $form = $app['form.factory']->createBuilder(AdvertisementType::class,
             $ad,
-            ['category_repository' => new CategoryRepository($app['db'])]
+            [
+                'category_repository' => new CategoryRepository($app['db']),
+                'type_repository' => new TypeRepository($app['db']),
+                'location_repository' => new LocationRepository($app['db'])
+            ]
         )->getForm();
 
         $form->handleRequest($request);
 
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $advertisementRepository->save($form->getData());
+            $data = $form->getData(); //dane advertisement i photo
+
+            if ($data['photo']) {
+                $fileUploader = new FileUploader($app['config.photos_directory']);
+//            var_dump($photo_title);
+                $fileName = $fileUploader->upload($data['photo']);
+                $data['source'] = $fileName;
+            }
+
+            $advertisementRepository->save($data);
 
             $app['session']->getFlashBag()->add(
                 'messages',
@@ -215,11 +240,13 @@ class AdvertisementController implements ControllerProviderInterface
             return $app->redirect($app['url_generator']->generate('ads_view', ['id' => $id], 301));
         }
 
+
         return $app['twig']->render(
             'advertisement/edit.html.twig',
             [
                 'ad' => $ad,
                 'form' => $form->createView(),
+                'photo' => $photo,
                 'loggedUser' => $loggedUser,
                 'categoriesMenu' => $categoryRepository->findAll()
             ]
@@ -318,13 +345,15 @@ class AdvertisementController implements ControllerProviderInterface
             $photo = $photoRepository->findOneByAdvertisementId($id);
             $advertisement['author'] = $author['login'];
 
-            if($photo) {
-
-                $advertisement['photo'] = $photo['source'];
-            }
-            else{
-                $advertisement['photo'] = '';
-            }
+//            if($photo) {
+//
+//                $advertisement['photo'] = $photo['source'];
+//                $advertisement['photo_name'] = $photo['name'];
+//
+//            }
+//            else{
+//                $advertisement['photo'] = '';
+//            }
 
 
             return $app['twig']->render(
@@ -333,6 +362,7 @@ class AdvertisementController implements ControllerProviderInterface
                 [
                     'advertisement' => $advertisement,
                     'loggedUser' => $loggedUser,
+                    'photo' => $photo,
                     'categoriesMenu' => $categoryRepository->findAll()
 //                    'comments' => $comments,
 //                    'form' => $form->createView(),

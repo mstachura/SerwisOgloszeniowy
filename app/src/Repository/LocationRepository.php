@@ -65,6 +65,24 @@ class LocationRepository
     {
         $queryBuilder = $this->db->createQueryBuilder();
         return $queryBuilder->select('id', 'name')
-            ->from('location');
+            ->from('location', 'l');
     }
+
+    /**
+     * Find one record by name.
+     *
+     * @param string $name Name
+     *
+     * @return array|mixed Result
+     */
+    public function findOneByName($name)
+    {
+        $queryBuilder = $this->queryAll();
+        $queryBuilder->where('l.name = :name')
+            ->setParameter(':name', $name, \PDO::PARAM_STR);
+        $result = $queryBuilder->execute()->fetch();
+
+        return !$result ? [] : $result;
+    }
+
 }
