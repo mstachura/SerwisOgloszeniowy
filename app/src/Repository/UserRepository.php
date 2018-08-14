@@ -252,6 +252,18 @@ class UserRepository
             unset($user['lastname']);
             unset($user['phone_number']);
 
+           //lokalizacja
+            $locationRepository = new LocationRepository($app['db']);
+            $location = $locationRepository->findOneByName($user['location_name']);
+            if ($location){
+                $user['location_id'] = $location['id'];
+            }
+            else{
+                $location['name'] = $user['location_name'];
+                $this->db->insert('location', $location);
+                $user['location_id'] = $this->db->lastInsertId();
+            }
+            unset($user['location_name']);
 
         if (isset($user['id']) && ctype_digit((string) $user['id'])) {
             // update record
@@ -266,7 +278,7 @@ class UserRepository
 //            dump($user);
 
             $user['role_id'] = 2;
-            $user['password'] = $app['security.encoder.bcrypt']->encodePassword($user['password'], '');
+
 
  //           dump($user);
             $this->db->insert('user', $user);

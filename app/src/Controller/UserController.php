@@ -115,8 +115,8 @@ class UserController implements ControllerProviderInterface
             $userRepository = new UserRepository($app['db']);
             $user = $form->getData();
 
-
-//             dump($user);
+            $user['password'] = $app['security.encoder.bcrypt']->encodePassword($user['password'], '');
+             dump($user);
             $userRepository->save($app, $user);
 
             $app['session']->getFlashBag()->add(

@@ -58,7 +58,7 @@ class PhotoType extends AbstractType
             TextareaType::class,
             [
                 'label' => 'label.photo_title',
-                'required'   => true,
+                'required'   => false,
                 'attr' => [
                     'min_length' => 10,
                     'max_length' => 128,

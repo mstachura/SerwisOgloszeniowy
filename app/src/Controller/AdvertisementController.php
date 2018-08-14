@@ -57,6 +57,12 @@ class AdvertisementController implements ControllerProviderInterface
         $controller->get('/page/{page}', [$this, 'indexAction'])
             ->value('page', 1)
             ->bind('ads_index');
+        $controller->get('/search/{phrase}', [$this, 'searchAction'])
+            ->value('page', 1)
+            ->bind('ads_search');
+        $controller->get('/search/{phrase}/page/{page}', [$this, 'searchActionPaginated'])
+            ->value('page', 1)
+            ->bind('ads_search');
 //        $controller->match('/{id}/edit', [$this, 'editAction'])
 //            ->method('GET|POST')
 //            ->assert('id', '[1-9]\d*')
@@ -86,7 +92,7 @@ class AdvertisementController implements ControllerProviderInterface
         $users = $userRepository-> findAll();
         $loggedUser = $userRepository->getLoggedUser($app);
 
-//        dump($advertisements);
+
         return $app['twig']->render(
             'advertisement/index.html.twig',
             [
@@ -328,9 +334,11 @@ class AdvertisementController implements ControllerProviderInterface
     public function viewAction(Application $app, $id, Request $request)
     {
         $advertisementRepository = new AdvertisementRepository($app['db']);
+        $typeRepository = new TypeRepository($app['db']);
         $photoRepository = new PhotoRepository($app['db']);
         $advertisement = $advertisementRepository->findOneById($id);
         $userRepository = new UserRepository($app['db']);
+        $locationRepository = new LocationRepository($app['db']);
         $user = $userRepository->findOneById($id);
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
@@ -342,6 +350,12 @@ class AdvertisementController implements ControllerProviderInterface
 
 
             $author = $userRepository->findOneById($advertisement['user_id']);
+            $location_name = $locationRepository->findOneById($advertisement['location_id']);
+            $category_name = $categoryRepository->findOneById($advertisement['category_id']);
+            $type_name = $typeRepository->findOneById($advertisement['type_id']);
+            $advertisement['type_name'] = $type_name['name'];
+            $advertisement['category_name'] = $category_name['name'];
+            $advertisement['location_name'] = $location_name['name'];
             $photo = $photoRepository->findOneByAdvertisementId($id);
             $advertisement['author'] = $author['login'];
 
@@ -371,5 +385,49 @@ class AdvertisementController implements ControllerProviderInterface
         } else {
             return $app->redirect($app['url_generator']->generate('home_index', 301));
         }
+    }
+
+    /**
+     * Search action
+     * @param Application $app
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function searchAction(Application $app, Request $request, $phrase, $page = 1){
+        $categoryRepository = new CategoryRepository($app['db']);
+        $userRepository = new UserRepository($app['db']);
+        $loggedUser = $userRepository->getLoggedUser($app);
+        $advertisementRepository = new AdvertisementRepository($app['db']);
+        $advertisements = $advertisementRepository->findAllByPhraseOfName($phrase);
+
+        return $app['twig']->render(
+            'advertisement/search.html.twig', [
+            'loggedUser' => $loggedUser,
+            'advertisements' => $advertisements,
+            'categoriesMenu' => $categoryRepository->findAll(),
+        ]);
+    }
+    /**
+     * Search action Paginated
+     * @param Application $app
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function searchActionPaginated(Application $app, Request $request, $phrase, $page = 1){
+        $categoryRepository = new CategoryRepository($app['db']);
+        $userRepository = new UserRepository($app['db']);
+        $loggedUser = $userRepository->getLoggedUser($app);
+        $advertisementRepository = new AdvertisementRepository($app['db']);
+        $advertisements = $advertisementRepository->findByPhrasePaginated($phrase, $page);
+
+        return $app['twig']->render(
+            'advertisement/search.html.twig', [
+            'loggedUser' => $loggedUser,
+            'advertisements' => $advertisements,
+            'categoriesMenu' => $categoryRepository->findAll(),
+            'phrase' => $phrase
+        ]);
     }
 }

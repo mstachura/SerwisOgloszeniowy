@@ -132,11 +132,11 @@ class UserType extends AbstractType
         );
 
         $builder->add(
-            'location_id',
+            'location_name',
             TextType::class,
             [
                 'required' => true,
-                'label' => 'label.locations',
+                'label' => 'label.location_name',
                 'attr' => [
                     'max_length' => 128,
                 ],

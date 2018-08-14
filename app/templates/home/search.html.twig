@@ -4,6 +4,7 @@
 
 {% block body %}
 
+
     <div class="col-md-3">
         <a href="{{ global.request.headers.get('referer') }}" title="{{ 'label.back'|trans }}" class="btn btn-default">
             <span class="fa fa-mail-reply" aria-hidden="true"></span>
@@ -29,27 +30,5 @@
     <input type="submit" value="{{ 'action.search'|trans }}" class="btn btn-success" />
     {{ form_end(form) }}
 
-    {% if results %}
 
-    {% if category_result == 'user' %}
-
-    {% for user in results %} {# result.data przy paginacji#}
-
-        <a href ="{{ url ('user_view', {'id': user.id}) }}">
-            {{ user.login }}
-        </a>
-
-    {% endfor %}
-        {% else %}
-
-            {% for advertisement in results %} {# result.data przy paginacji#}
-
-                <a href ="{{ url ('ads_view', {'id': advertisement.id}) }}">
-                    {{ advertisement.name }}
-                    {#<img src="{{  asset('uploads/photos/' ~ advertisement.photo) }}" alt="{{ advertisement.photo }}">#}
-                </a>
-
-            {% endfor %}
-    {% endif %}
-    {% endif %}
 {% endblock %}

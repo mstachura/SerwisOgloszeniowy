@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'wyszukiwarka'|trans }}{% endblock %}
+
+{% block body %}
+
+{% include 'default/_paginator.html.twig' with {
+    paginator: results,
+    route_name: 'home_search',
+}
+%}
+
+{% if results %}
+
+        {% for user in results.data %} {# result.data przy paginacji#}
+
+            <a href ="{{ url ('user_view', {'id': user.id}) }}">
+                {{ user.login }}
+            </a>
+
+        {% endfor %}
+
+{% endif %}
+{% endblock %}

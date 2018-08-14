@@ -2,7 +2,9 @@
 /**
  * Advertisement type.
  */
+
 namespace Form;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -33,7 +35,7 @@ class AdvertisementType extends AbstractType
             TextType::class,
             [
                 'label' => 'label.name',
-                'required'   => true,
+                'required' => true,
                 'attr' => [
                     'max_length' => 32,
                     'class' => 'form-control',
@@ -47,29 +49,29 @@ class AdvertisementType extends AbstractType
         );
 
 //        if (!isset($options['data']) || !isset($options['data']['id'])) {
-            $builder->add(
-                'photo',
-                FileType::class,
-                [
-                    'label' => 'label.photo',
-                    'required' => false,
-                    'constraints' => [
-                        new Assert\NotBlank(),
-                        new Assert\Image(
-                            [
-                                'maxSize' => '1024k',
-                                'mimeTypes' => [
-                                    'image/png',
-                                    'image/jpeg',
-                                    'image/pjpeg',
-                                    'image/jpeg',
-                                    'image/pjpeg',
-                                ],
-                            ]
-                        ),
-                    ],
-                ]
-            );
+        $builder->add(
+            'photo',
+            FileType::class,
+            [
+                'label' => 'label.photo',
+                'required' => false,
+                'constraints' => [
+                    new Assert\NotBlank(),
+                    new Assert\Image(
+                        [
+                            'maxSize' => '1024k',
+                            'mimeTypes' => [
+                                'image/png',
+                                'image/jpeg',
+                                'image/pjpeg',
+                                'image/jpeg',
+                                'image/pjpeg',
+                            ],
+                        ]
+                    ),
+                ],
+            ]
+        );
 //        }
 
         $builder->add(
@@ -77,7 +79,7 @@ class AdvertisementType extends AbstractType
             TextareaType::class,
             [
                 'label' => 'label.photo_title',
-                'required'   => true,
+                'required' => true,
                 'attr' => [
                     'min_length' => 10,
                     'max_length' => 128,
@@ -96,7 +98,7 @@ class AdvertisementType extends AbstractType
             TextareaType::class,
             [
                 'label' => 'label.description',
-                'required'   => true,
+                'required' => true,
                 'attr' => [
                     'max_length' => 255,
                     'class' => 'form-control',
@@ -114,7 +116,7 @@ class AdvertisementType extends AbstractType
             NumberType::class,
             [
                 'label' => 'label.price',
-                'required'   => true,
+                'required' => true,
                 'attr' => [
                     'class' => 'form-control',
                 ],
@@ -259,10 +261,15 @@ class AdvertisementType extends AbstractType
     protected function prepareProvinceForChoices()
     {
 
-        $provinces = ['małopolskie', 'wielkopolskie', 'dolnośląskie', 'kujawsko-pomorskie', 'lubelskie', 'lubuskie', 'łódzkie', 'mazowieckie', 'opolskie', 'podkarpackie', 'podlaskie', 'pomorskie', 'śląskie', 'świętokrzyskie', 'warmińsko-mazurskie', 'zachodniopomorskie'];
-        $choices=[];
+        $provinces = [
+            'małopolskie',
+            'wielkopolskie',
+            'dolnośląskie',
+            'kujawsko-pomorskie',
+            'lubelskie', 'lubuskie', 'łódzkie', 'mazowieckie', 'opolskie', 'podkarpackie', 'podlaskie', 'pomorskie', 'śląskie', 'świętokrzyskie', 'warmińsko-mazurskie', 'zachodniopomorskie'];
+        $choices = [];
 
-        foreach ($provinces as $province){
+        foreach ($provinces as $province) {
             $choices[$province] = $province;
         }
         return $choices;

@@ -46,13 +46,13 @@ class SearchType extends AbstractType
             TextType::class,
             [
                 'label' => 'label.phrase',
-                'required' => true,
+                'required' => false,
                 'attr' => [
                     'max_length' => 32,
 
                 ],
                 'constraints' => [
-                    new Assert\NotBlank(),
+//                    new Assert\NotBlank(),
                     new Assert\Length(
                         [
                             'max' => 32,

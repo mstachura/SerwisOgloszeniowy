@@ -8,7 +8,8 @@
     {% include 'default/_paginator.html.twig' with {
         paginator: users,
         route_name: 'user_index',
-    } %}
+    }
+    %}
 
     {% for user in users.data %}
     <a href ="{{ url ('user_view', {'id': user.id}) }}">

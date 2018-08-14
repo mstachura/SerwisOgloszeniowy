@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'wyszukiwarka'|trans }}{% endblock %}
+
+{% block body %}
+
+{% include 'default/_paginator_search.html.twig' with {
+    paginator: advertisements,
+    route_name: 'home_search',
+}
+%}
+
+
+    {% for advertisement in advertisements.data %} {# result.data przy paginacji#}
+
+        <a href ="{{ url ('ads_view', {'id': advertisement.id}) }}">
+            {{ advertisement.name }}
+            {#<img src="{{  asset('uploads/photos/' ~ advertisement.photo) }}" alt="{{ advertisement.photo }}">#}
+        </a>
+
+    {% endfor %}
+{% endblock %}

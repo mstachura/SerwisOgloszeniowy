@@ -34,6 +34,7 @@ class HomeController implements ControllerProviderInterface
         $controller->get('/search', [$this, 'searchAction'])
             ->method('GET|POST')
             ->bind('home_search');
+
         return $controller;
     }
 
@@ -80,7 +81,10 @@ class HomeController implements ControllerProviderInterface
         $userRepository = new UserRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
 
-        $search =[];
+            $search = [];
+            $search['category_search'] = '';
+
+
 
         $form = $app['form.factory']->createBuilder(
             SearchType::class,
@@ -95,11 +99,17 @@ class HomeController implements ControllerProviderInterface
             $search = $form->getData();
 
             if($search['category_search'] == 'user'){
-                $userRepository = new UserRepository($app['db']);
-                $results = $userRepository->findAllByUsername($search['phrase']);
+                if (!$search['phrase']) {
+                    return $app->redirect($app['url_generator']->generate('user_index', 301));
+                }
+                return $app->redirect($app['url_generator']->generate('user_search', ['phrase' => $search['phrase']], 301));
+
             }elseif($search['category_search'] == 'advertisement'){
-                $advertisementRepository = new AdvertisementRepository($app['db']);
-                $results = $advertisementRepository -> findAllByPhraseOfName($search['phrase']);
+                if (!$search['phrase']) {
+                    return $app->redirect($app['url_generator']->generate('ads_index', 301));
+                }
+                return $app->redirect($app['url_generator']->generate('ads_search', ['phrase' => $search['phrase']], 301));
+
             }
             else{
                 $app['session']->getFlashBag()->add(
@@ -113,14 +123,14 @@ class HomeController implements ControllerProviderInterface
             }
         }
 
-
+//        dump($results);
         return $app['twig']->render(
             'home/search.html.twig', [
             'loggedUser' => $loggedUser,
-            'results' => $results,
+//            'results' => $results,
             'categoriesMenu' => $categoryRepository->findAll(),
             'form' => $form->createView(),
-            'category_result' => $search['category_search']
+//            'category_result' => $search['category_search']
         ]);
     }
 }

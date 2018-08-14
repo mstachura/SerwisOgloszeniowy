@@ -207,8 +207,7 @@ class PhotoController implements ControllerProviderInterface
             );
 
             return $app->redirect(
-                $app['url_generator']->generate('ads_index'),
-                301
+                $app['url_generator']->generate('ads_edit', ['id' => $id], 301)
             );
         }
 

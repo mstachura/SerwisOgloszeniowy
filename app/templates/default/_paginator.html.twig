@@ -3,6 +3,7 @@
 #}
 <nav aria-label="...">
     <ul class="pager">
+        {% if paginator.page is defined %}
         {% if paginator.page > 1 %}
             {% set previous = (paginator.page - 1) %}
             <li class="previous">
@@ -16,7 +17,7 @@
                     <span aria-hidden="true">&larr;</span>{{ 'labels.nav.prev'|trans }}
                 </a>
             </li>
-        {%  endif %}
+        {% endif %}
 
         {% if paginator.page < paginator.pages_number %}
             {% set next = (paginator.page + 1) %}
@@ -31,6 +32,7 @@
                     {{ 'label.nav.next'|trans }}<span aria-hidden="true">&rarr;</span>
                 </a>
             </li>
-        {% endif  %}
+        {% endif %}
+        {% endif %}
     </ul>
 </nav>
