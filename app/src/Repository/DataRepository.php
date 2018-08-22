@@ -29,11 +29,9 @@ class DataRepository
     }
 
     /**
-     * Find one record.
-     *
-     * @param string $id Element id
-     *
-     * @return array|mixed Result
+     * Find one by user id
+     * @param $user_id
+     * @return array|mixed
      */
     public function findOneByUserId($user_id)
     {

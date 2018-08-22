@@ -16,9 +16,11 @@
 
 
     {% for advertisement in advertisements %}
+
         <a href ="{{ url ('ads_view', {'id': advertisement.id}) }}">
             {{ advertisement.name }}
         </a>
+
     {% endfor %}
 
 {% endblock %}

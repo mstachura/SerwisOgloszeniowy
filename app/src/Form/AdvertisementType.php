@@ -162,13 +162,14 @@ class AdvertisementType extends AbstractType
         );
 
         $builder->add(
-            'location_id',
-            ChoiceType::class,
+            'location_name',
+            TextType::class,
             [
-                'label' => 'label.location',
-                'required' => false,
-                'placeholder' => 'label.none',
-                'choices' => $this->prepareLocationsForChoices($options['location_repository']),
+                'label' => 'label.location_name',
+                'required' => true,
+                'attr' => [
+                    'max_length' => 128,
+                ],
             ]
         );
     }
@@ -266,7 +267,19 @@ class AdvertisementType extends AbstractType
             'wielkopolskie',
             'dolnośląskie',
             'kujawsko-pomorskie',
-            'lubelskie', 'lubuskie', 'łódzkie', 'mazowieckie', 'opolskie', 'podkarpackie', 'podlaskie', 'pomorskie', 'śląskie', 'świętokrzyskie', 'warmińsko-mazurskie', 'zachodniopomorskie'];
+            'lubelskie',
+            'lubuskie',
+            'łódzkie',
+            'mazowieckie',
+            'opolskie',
+            'podkarpackie',
+            'podlaskie',
+            'pomorskie',
+            'śląskie',
+            'świętokrzyskie',
+            'warmińsko-mazurskie',
+            'zachodniopomorskie'
+        ];
         $choices = [];
 
         foreach ($provinces as $province) {

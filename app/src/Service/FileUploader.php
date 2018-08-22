@@ -29,11 +29,10 @@ class FileUploader
     }
 
     /**
-     * Upload file.
-     *
-     * @param \Symfony\Component\HttpFoundation\File\UploadedFile $file
-     *
-     * @return string File name
+     * Upload files
+     * @param UploadedFile $file
+     * @return string
+     * @throws \Exception
      */
     public function upload(UploadedFile $file)
     {

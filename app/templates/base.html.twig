@@ -1,7 +1,10 @@
+{% include "header.html.twig" %}
+
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>{% block title %}Serwis ogłoszeniowy{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{ 'serwis_ogloszeniowy'|trans }}{% endblock %}</title>
     <meta name="author" content="Marta Stachura">
     {#<link rel="stylesheet"href="../../web/css/bootstrap.css">#}
     {% block stylesheets %}
@@ -10,7 +13,6 @@
         <link href="{{ asset('css/main.css') }}" rel="stylesheet">
     {% endblock %}
     {#<link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">#}
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 
@@ -58,8 +60,10 @@
 
 {% endblock %}
 
-{% block footer %}
-    <footer class="card-footer" id="stopka">System interakcyjny - projekt</footer>
-{% endblock %}
+
 
 </body>
+
+{% block footer %}
+<footer class="card-footer" id="stopka">System interakcyjny - projekt</footer>
+{% endblock %}

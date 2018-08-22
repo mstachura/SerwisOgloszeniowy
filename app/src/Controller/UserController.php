@@ -18,7 +18,6 @@ use Repository\LocationRepository;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
-
 /**
  * Class UserController.
  */
@@ -140,7 +139,6 @@ class UserController implements ControllerProviderInterface
             ]
         );
 //        return $app['twig']->render('user/add.html.twig', ['error' => $error]);
-
     }
 
     /**
@@ -151,7 +149,8 @@ class UserController implements ControllerProviderInterface
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function editAction(Application $app, Request $request, $id){
+    public function editAction(Application $app, Request $request, $id)
+    {
         $userRepository = new UserRepository($app['db']);
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
@@ -162,7 +161,6 @@ class UserController implements ControllerProviderInterface
         $user['lastname'] = $user_data['lastname'];
         $user['phone_number'] = $user_data['phone_number'];
 
-//        dump($user);
         if (!$user) {
             $app['session']->getFlashBag()->add(
                 'messages',
@@ -175,7 +173,6 @@ class UserController implements ControllerProviderInterface
 
             return $app->redirect($app['url_generator']->generate('user_index'));
         }
-//        dump($user);
 
         $form = $app['form.factory']->createBuilder(UserType::class, $user)->getForm();
 
@@ -285,7 +282,6 @@ class UserController implements ControllerProviderInterface
         $user = $userRepository->findOneByIdWithUserData($id);
 
         if ($user) {
-
             $userDataRepository = new DataRepository($app['db']);
             $userData = $userDataRepository->findOneByUserId($user['id']);
 

@@ -1,10 +1,6 @@
 {% extends 'base.html.twig' %}
 
-
-
 {% block content %}
-
-
 
     <H1>{{ 'lista_ogloszen'|trans}}</H1>
     {% for advertisement in advertisements.data %}
@@ -17,9 +13,10 @@
             <p>{{ 'label.price'|trans}}: {{ advertisement.price }}</p>
             <p>{{ 'label.description'|trans}}: {{ advertisement.description }}</p>
             <p>{{ 'label.province'|trans}}: {{ advertisement.province }}</p>
-            <p>{{ 'label.location'|trans}}: {{ advertisement.location_id }}</p>
+            {#<p>{{ 'label.location'|trans}}: {{ advertisement.location }}</p>#}
             {#<p>{{ 'nazwa_kategorii'|trans}}: {{ advertisement.category_id }}</p>#}
-            <p>{{ 'label.type'|trans}}: {{ advertisement.type_id }}</p>
+            {#<p>{{ 'label.type'|trans}}: {{ advertisement.type}}</p>#}
+        {#{{ advertisement.photo }}#}
             {#<p>Dodane przez: {{ user.login }}</p>#}
             <a href ="{{ url ('ads_view', {'id': advertisement.id}) }}">
                 {{ advertisement.name }}
@@ -35,11 +32,9 @@
             </a>
         {% endfor %}
 
-    {# ... #}
     {% include 'default/_paginator.html.twig' with {
         paginator: advertisements,
         route_name: 'ads_index',
     } %}
-    {# ... #}
 
 {% endblock %}

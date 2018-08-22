@@ -47,15 +47,13 @@ class HomeController implements ControllerProviderInterface
      */
     public function indexAction(Application $app, Request $request)
     {
-      $advertisementRepository = new AdvertisementRepository($app['db']);
-      $advertisements = $advertisementRepository-> findAll();
-
-      $userRepository = new UserRepository($app['db']);
-      $users = $userRepository-> findAllExtra();
-      $loggedUser = $userRepository->getLoggedUser($app);
-
-      $categoryRepository = new CategoryRepository($app['db']);
-      $categories = $categoryRepository-> findAll();
+        $advertisementRepository = new AdvertisementRepository($app['db']);
+        $advertisements = $advertisementRepository-> findAll();
+        $userRepository = new UserRepository($app['db']);
+        $users = $userRepository-> findAllExtra();
+        $loggedUser = $userRepository->getLoggedUser($app);
+        $categoryRepository = new CategoryRepository($app['db']);
+        $categories = $categoryRepository-> findAll();
 
         return $app['twig']->render(
             'home/index.html.twig',
@@ -76,7 +74,8 @@ class HomeController implements ControllerProviderInterface
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function searchAction(Application $app, Request $request){
+    public function searchAction(Application $app, Request $request)
+    {
         $categoryRepository = new CategoryRepository($app['db']);
         $userRepository = new UserRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
@@ -98,20 +97,24 @@ class HomeController implements ControllerProviderInterface
         if ($form->isSubmitted() && $form->isValid()) {
             $search = $form->getData();
 
-            if($search['category_search'] == 'user'){
+            if ($search['category_search'] == 'user') {
                 if (!$search['phrase']) {
                     return $app->redirect($app['url_generator']->generate('user_index', 301));
                 }
-                return $app->redirect($app['url_generator']->generate('user_search', ['phrase' => $search['phrase']], 301));
-
-            }elseif($search['category_search'] == 'advertisement'){
+                return
+                    $app->redirect(
+                        $app['url_generator']->generate('user_search', ['phrase' => $search['phrase']], 301)
+                    );
+            } elseif ($search['category_search'] == 'advertisement') {
                 if (!$search['phrase']) {
-                    return $app->redirect($app['url_generator']->generate('ads_index', 301));
+                    return
+                        $app->redirect($app['url_generator']->generate('ads_index', 301));
                 }
-                return $app->redirect($app['url_generator']->generate('ads_search', ['phrase' => $search['phrase']], 301));
-
-            }
-            else{
+                return
+                    $app->redirect(
+                        $app['url_generator']->generate('ads_search', ['phrase' => $search['phrase']], 301)
+                    );
+            } else {
                 $app['session']->getFlashBag()->add(
                     'messages',
                     [
@@ -125,12 +128,14 @@ class HomeController implements ControllerProviderInterface
 
 //        dump($results);
         return $app['twig']->render(
-            'home/search.html.twig', [
+            'home/search.html.twig',
+            [
             'loggedUser' => $loggedUser,
 //            'results' => $results,
             'categoriesMenu' => $categoryRepository->findAll(),
             'form' => $form->createView(),
 //            'category_result' => $search['category_search']
-        ]);
+            ]
+        );
     }
 }

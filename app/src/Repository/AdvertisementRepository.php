@@ -77,7 +77,18 @@ class AdvertisementRepository
     protected function queryAll()
     {
         $queryBuilder = $this->db->createQueryBuilder();
-        return $queryBuilder->select('id', 'name', 'price', 'description', 'user_id', 'type_id', 'location_id', 'province', 'category_id')
+
+        return $queryBuilder->select(
+            'id',
+            'name',
+            'price',
+            'description',
+            'user_id',
+            'type_id',
+            'location_id',
+            'province',
+            'category_id'
+        )
             ->from('ad');
     }
 
@@ -88,7 +99,18 @@ class AdvertisementRepository
     protected function queryAllExtra()
     {
         $queryBuilder = $this->db->createQueryBuilder();
-        return $queryBuilder->select('ad.id', 'ad.name', 'ad.price', 'ad.description', 'ad.user_id', 'ad.category_id', 'ad.province', 'ad.type_id', 'ad.location_id', 'l.name')
+        return $queryBuilder->select(
+            'ad.id',
+            'ad.name',
+            'ad.price',
+            'ad.description',
+            'ad.user_id',
+            'ad.category_id',
+            'ad.province',
+            'ad.type_id',
+            'ad.location_id',
+            'l.name'
+        )
             ->from('ad', 'ad')
             ->innerjoin('ad', 'location', 'l', 'ad.location_id = l.id');
     }
@@ -97,34 +119,73 @@ class AdvertisementRepository
      * Query all extra 2
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    protected function queryAllExtra2()
+    protected function queryAllExtraAddCategory()
     {
         $queryBuilder = $this->db->createQueryBuilder();
-        return $queryBuilder->select('ad.id', 'ad.name', 'ad.price', 'ad.description', 'ad.user_id', 'ad.category_id', 'ad.province', 'ad.type_id', 'ad.location_id', 'c.name')
+        return $queryBuilder->select(
+            'ad.id',
+            'ad.name',
+            'ad.price',
+            'ad.description',
+            'ad.user_id',
+            'ad.category_id',
+            'ad.province',
+            'ad.type_id',
+            'ad.location_id',
+            'c.name'
+        )
             ->from('ad', 'ad')
             ->innerjoin('ad', 'category', 'c', 'ad.category_id = c.id');
     }
 
-    protected function queryAllExtra3()
+    protected function queryAllExtraAddType()
     {
         $queryBuilder = $this->db->createQueryBuilder();
-        return $queryBuilder->select('ad.id', 'ad.name', 'ad.price', 'ad.description', 'ad.user_id', 'ad.category_id', 'ad.province', 'ad.type_id', 'ad.location_id', 't.name')
+        return $queryBuilder->select(
+            'ad.id',
+            'ad.name',
+            'ad.price',
+            'ad.description',
+            'ad.user_id',
+            'ad.category_id',
+            'ad.province',
+            'ad.type_id',
+            'ad.location_id',
+            't.name'
+        )
             ->from('ad', 'ad')
             ->innerjoin('ad', 'type', 't', 'ad.type_id = t.id');
     }
 
-//    /**
-//     * Query all extra 2
-//     * @return \Doctrine\DBAL\Query\QueryBuilder
-//     */
-//    protected function queryAllExtra2()
-//    {
-//        $queryBuilder = $this->db->createQueryBuilder();
-//        return $queryBuilder->select('ad.id', 'ad.name', 'ad.price', 'ad.description', 'ad.user_id', 'ad.category_id', 'ad.province', 'ad.type_id', 'ad.location_id', 'c.name')
-//            ->from('ad', 'ad')
-//            ->innerjoin('ad', 'category', 'c', 'ad.category_id = c.id');
-//    }
+    /**
+     * Query all extra add photo
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    protected function queryAllExtraAddPhoto()
+    {
+        $queryBuilder = $this->db->createQueryBuilder();
+        return $queryBuilder->select(
+            'p.source',
+            'p.ad_id',
+            'ad.id',
+            'ad.name',
+            'ad.price',
+            'ad.description',
+            'ad.user_id',
+            'ad.category_id',
+            'ad.province',
+            'ad.type_id',
+            'ad.location_id'
+        )
+            ->from('photo', 'p')
+            ->innerjoin('p', 'ad', 'a', 'p.ad_id = ad.id');
+    }
 
+    /**
+     * Query All Filtered
+     * @param $phrase
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
     protected function queryAllFiltered($phrase)
     {
         $queryBuilder = $this->db->createQueryBuilder();
@@ -132,54 +193,7 @@ class AdvertisementRepository
             ->from('ad', 'ad')
             ->where('ad.name LIKE :phrase')
             ->setParameter(':phrase', '%' . $phrase . '%');
-            }
-
-
-
-
-
-//
-//            /**
-//             * Query all extra 2
-//             * @return \Doctrine\DBAL\Query\QueryBuilder
-//             */
-//    protected function queryAllExtra2()
-//    {
-//        $queryBuilder = $this->db->createQueryBuilder();
-//        return $queryBuilder->select('ad.id', 'ad.name', 'ad.price', 'ad.description', 'ad.user_id', 'ad.category_id', 'ad.province', 'ad.type_id', 'ad.location_id', 'c.name')
-//            ->from('ad', 'ad')
-//            ->innerjoin('ad', 'category', 'c', 'ad.category_id = c.id');
-//    }
-
-//    protected function queryAllExtra3()
-//    {
-//        $queryBuilder = $this->db->createQueryBuilder();
-//        return $queryBuilder->select('ad.id', 'ad.name', 'ad.price', 'ad.description', 'ad.user_id', 'ad.category_id', 'ad.province', 'ad.type_id', 'ad.location_id', 't.name')
-//            ->from('ad', 'ad')
-//            ->innerjoin('ad', 'type', 't', 'ad.type_id = t.id');
-//    }
-//
-//
-//
-//        /**
-//     * Query all extra 2
-//     * @return \Doctrine\DBAL\Query\QueryBuilder
-//     */
-//    protected function queryAllExtra2()
-//    {
-//        $queryBuilder = $this->db->createQueryBuilder();
-//        return $queryBuilder->select('ad.id', 'ad.name', 'ad.price', 'ad.description', 'ad.user_id', 'ad.category_id', 'ad.province', 'ad.type_id', 'ad.location_id', 'c.name')
-//            ->from('ad', 'ad');
-//
-//    }
-//
-//    protected function queryAllExtra3()
-//    {
-//        $queryBuilder = $this->db->createQueryBuilder();
-//        return $queryBuilder->select('ad.id', 'ad.name', 'ad.price', 'ad.description', 'ad.user_id', 'ad.category_id', 'ad.province', 'ad.type_id', 'ad.location_id', 't.name')
-//            ->from('ad', 'ad')
-//            ->innerjoin('ad', 'type', 't', 'ad.type_id = t.id');
-//    }
+    }
 
     /**
      * Find one record.
@@ -200,11 +214,9 @@ class AdvertisementRepository
     }
 
     /**
-     * Find one record.
-     *
-     * @param string $id Element id
-     *
-     * @return array|mixed Result
+     * Find all by user
+     * @param $user_id
+     * @return array
      */
     public function findAllByUser($user_id)
     {
@@ -249,6 +261,12 @@ class AdvertisementRepository
         return !$result ? [] : $result;
     }
 
+    /**
+     * Find By Phrase Paginated
+     * @param $phrase
+     * @param int $page
+     * @return array
+     */
     public function findByPhrasePaginated($phrase, $page = 1)
     {
 
@@ -267,12 +285,13 @@ class AdvertisementRepository
 
 
     /**
-     * Save record.
-     *
-     * @param array $ad Ad
-     *
+     * Save
+     * @param $ad
+     * @return int|string
+     * @throws \Doctrine\DBAL\ConnectionException
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function save($ad)
+    public function save(Application $app, $ad)
     {
         $this->db->beginTransaction();
         try {
@@ -284,6 +303,20 @@ class AdvertisementRepository
             unset($ad['source']);
             unset($ad['photo_title']);
 
+            //lokalizacja
+            $locationRepository = new LocationRepository($app['db']);
+            $location = $locationRepository->findOneByName($ad['location_name']);
+
+            if ($location) {
+                $ad['location_id'] = $location['id'];
+            } else {
+                $location['name'] = $ad['location_name'];
+                $this->db->insert('location', $location);
+                $ad['location_id'] = $this->db->lastInsertId();
+            }
+            unset($ad['location_name']);
+
+
             if (isset($ad['id']) && ctype_digit((string)$ad['id'])) {
                 // update record
                 $id = $ad['id'];
@@ -294,8 +327,6 @@ class AdvertisementRepository
             } else {
                 // add new record
 
-
-//                dump($ad);
                 $this->db->insert('ad', $ad);
                 $id = $this->db->lastInsertId();
 
@@ -305,18 +336,14 @@ class AdvertisementRepository
                     $this->db->insert('photo', $photo);
                 }
             }
-
             $this->db->commit();
-
         } catch (DBALException $e) {
             $this->db->rollBack();
             throw $e;
         }
         return $id;
     }
-    /*
-     *
-     */
+
 
     /**
      * Delete
@@ -331,8 +358,6 @@ class AdvertisementRepository
         try {
             if (isset($ad['id']) && ctype_digit((string)$ad['id'])) {
                 $this->db->delete('ad', ['id' => $ad['id']]);
-
-
             } else {
                 throw new \InvalidArgumentException('Invalid parameter type');
             }

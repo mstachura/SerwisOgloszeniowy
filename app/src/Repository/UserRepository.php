@@ -2,6 +2,7 @@
 /**
  * User repository.
  */
+
 namespace Repository;
 
 use Doctrine\DBAL\Connection;
@@ -48,7 +49,6 @@ class UserRepository
         $this->db = $db;
 //        $this->locationRepository = new LocationRepository($db);
     }
-
 
 
     /**
@@ -103,13 +103,9 @@ class UserRepository
 
 
     /**
-     * Loads user by login.
-     *
-     * @param string $login User login
-     * @throws UsernameNotFoundException
-     * @throws \Doctrine\DBAL\DBALException
-     *
-     * @return array Result
+     * Load user by login
+     * @param $login
+     * @return array
      */
     public function loadUserByLogin($login)
     {
@@ -145,12 +141,9 @@ class UserRepository
     }
 
     /**
-     * Gets user data by login.
-     *
-     * @param string $login User login
-     * @throws \Doctrine\DBAL\DBALException
-     *
-     * @return array Result
+     * Get user by login
+     * @param $login
+     * @return array|mixed
      */
     public function getUserByLogin($login)
     {
@@ -191,12 +184,9 @@ class UserRepository
     }
 
     /**
-     * Gets user roles by User ID.
-     *
-     * @param integer $userId User ID
-     * @throws \Doctrine\DBAL\DBALException
-     *
-     * @return array Result
+     * Get user roles
+     * @param $user_id
+     * @return array
      */
     public function getUserRoles($user_id)
     {
@@ -226,10 +216,11 @@ class UserRepository
      * @param $login
      * @return array
      */
-    public function findAllByUsername($login){
+    public function findAllByUsername($login)
+    {
         $queryBuilder = $this->queryAll();
         $queryBuilder->where('user.login LIKE :login')
-            ->setParameter(':login', '%'.$login.'%');
+            ->setParameter(':login', '%' . $login . '%');
         $result = $queryBuilder->execute()->fetchAll();
 
         return !$result ? [] : $result;
@@ -242,9 +233,11 @@ class UserRepository
      * @return int
      * @throws DBALException
      */
-    public function save(Application $app, $user){
-
-        $user_data= [];
+    public function save(Application $app, $user)
+    {
+        $this->db->beginTransaction();
+        try {
+            $user_data = [];
             $user_data['firstname'] = $user['firstname'];
             $user_data['lastname'] = $user['lastname'];
             $user_data['phone_number'] = $user['phone_number'];
@@ -252,40 +245,45 @@ class UserRepository
             unset($user['lastname']);
             unset($user['phone_number']);
 
-           //lokalizacja
+            //lokalizacja
             $locationRepository = new LocationRepository($app['db']);
             $location = $locationRepository->findOneByName($user['location_name']);
-            if ($location){
+
+            if ($location) {
                 $user['location_id'] = $location['id'];
-            }
-            else{
+            } else {
                 $location['name'] = $user['location_name'];
                 $this->db->insert('location', $location);
                 $user['location_id'] = $this->db->lastInsertId();
             }
             unset($user['location_name']);
 
-        if (isset($user['id']) && ctype_digit((string) $user['id'])) {
-            // update record
-            $id = $user['id'];
-            unset($user['id']);
+            if (isset($user['id']) && ctype_digit((string)$user['id'])) {
+                // update record
+                $id = $user['id'];
+                unset($user['id']);
 //            dump($user);
 //            dump($user_data);
-            $this->db->update('user_data', $user_data, ['user_id' => $id]);
-            return $this->db->update('user', $user, ['id' => $id]);
-        } else {
-            // add new record
+                $this->db->update('user_data', $user_data, ['user_id' => $id]);
+                return $this->db->update('user', $user, ['id' => $id]);
+            } else {
+                // add new record
 //            dump($user);
 
-            $user['role_id'] = 2;
+                $user['role_id'] = 2;
 
 
- //           dump($user);
-            $this->db->insert('user', $user);
-            $user_data['user_id'] = $this->db->lastInsertId();
- //           dump($user_data);
-            return $this->db->insert('user_data', $user_data);
+                //           dump($user);
+                $this->db->insert('user', $user);
+                $user_data['user_id'] = $this->db->lastInsertId();
+                //           dump($user_data);
+            }
+            $this->db->commit();
+        } catch (DBALException $e) {
+            $this->db->rollBack();
+            throw $e;
         }
+        return $this->db->insert('user_data', $user_data);
     }
 
     /**
@@ -297,7 +295,14 @@ class UserRepository
      */
     public function delete($user)
     {
-        return $this->db->delete('user', ['id' => $user['id']]);
+        $this->db->beginTransaction();
+        try {
+            return $this->db->delete('user', ['id' => $user['id']]);
+            $this->db->commit();
+        } catch (DBALException $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
     }
 
     /**
@@ -307,9 +312,18 @@ class UserRepository
     protected function queryAllExtra()
     {
         $queryBuilder = $this->db->createQueryBuilder();
-        return $queryBuilder->select('u.id', 'u.login', 'u.password', 'u.email', 'u.role_id', 'ud.firstname', 'ud.lastname', 'ud.phone_number')
+        return $queryBuilder->select(
+            'u.id',
+            'u.login',
+            'u.password',
+            'u.email',
+            'u.role_id',
+            'ud.firstname',
+            'ud.lastname',
+            'ud.phone_number'
+        )
             ->from('user', 'u')
-            ->innerjoin('u', 'user_data', 'ud','u.id = ud.id');
+            ->innerjoin('u', 'user_data', 'ud', 'u.id = ud.id');
 //        dump($user);
 //        return $queryBuilder->select('u.id', 'u.login', 'u.mail', 'u.password', 'ud.name', 'ud.surname')
 //            ->from('user', 'u')
@@ -321,7 +335,8 @@ class UserRepository
      * @param $id
      * @return array|mixed
      */
-    public function findOneByIdWithUserData($id){
+    public function findOneByIdWithUserData($id)
+    {
         $queryBuilder = $this->queryAllExtra();
         $queryBuilder->where('u.id = :id')
             ->setParameter(':id', $id, \PDO::PARAM_INT);
@@ -372,6 +387,53 @@ class UserRepository
         return $paginator->getCurrentPageResults();
     }
 
+    /**
+     * Find all by phrase of username
+     * @param $phrase
+     * @return array
+     */
+    public function findAllByPhraseOfUsername($phrase)
+    {
+        $queryBuilder = $this->queryAll();
+        $queryBuilder
+            ->where('user.login LIKE :phrase')
+            ->setParameter(':phrase', '%' . $phrase . '%');
+        $result = $queryBuilder->execute()->fetchAll();
+
+        return !$result ? [] : $result;
+    }
+
+    /**
+     * Query All Filtered
+     * @param $phrase
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    protected function queryAllFiltered($phrase)
+    {
+        $queryBuilder = $this->db->createQueryBuilder();
+        return $queryBuilder->select('user.id', 'user.login', 'user.email')
+            ->from('user', 'u')
+            ->where('u.login LIKE :phrase')
+            ->setParameter(':phrase', '%' . $phrase . '%');
+    }
+
+    /**
+     * Find By Phrase Paginated
+     * @param $phrase
+     * @param int $page
+     * @return array
+     */
+    public function findByPhrasePaginated($phrase, $page = 1)
+    {
+
+        $countQueryBuilder = $this->queryAllFiltered($phrase)
+            ->select('COUNT(DISTINCT user.id) AS total_results')
+            ->setMaxResults(1);
+        dump($countQueryBuilder);
+        $paginator = new Paginator($this->queryAllFiltered($phrase), $countQueryBuilder);
+        $paginator->setCurrentPage($page);
+        $paginator->setMaxPerPage(static::NUM_ITEMS);
+
+        return $paginator->getCurrentPageResults();
+    }
 }
-
-

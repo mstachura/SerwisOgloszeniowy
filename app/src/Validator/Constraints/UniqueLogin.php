@@ -3,7 +3,9 @@
  * Unique Login constraint.
  */
 namespace Validator\Constraints;
+
 use Symfony\Component\Validator\Constraint;
+
 /**
  * Class UniqueLogin.
  *

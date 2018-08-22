@@ -3,11 +3,13 @@
  * Unique Login validator.
  */
 namespace Validator\Constraints;
+
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+
 /**
- * Class UniqueLoginValidator.
- *
+ * Unique login validator
+ * Class UniqueLoginValidator
  * @package Validator\Constraints
  */
 class UniqueLoginValidator extends ConstraintValidator

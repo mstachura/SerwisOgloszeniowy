@@ -13,7 +13,6 @@ use Repository\CategoryRepository;
 use Repository\UserRepository;
 use Repository\AdvertisementRepository;
 
-
 /**
  * Class CategoryController.
  */
@@ -35,7 +34,6 @@ class CategoryController implements ControllerProviderInterface
             ->assert('id', '[1-9]\d*')
             ->bind('category_view');
         return $controller;
-
     }
 
     /**
@@ -45,7 +43,8 @@ class CategoryController implements ControllerProviderInterface
      * @return mixed
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function viewAction(Application $app, $id){
+    public function viewAction(Application $app, $id)
+    {
         $userRepository = new UserRepository($app['db']);
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
@@ -57,12 +56,14 @@ class CategoryController implements ControllerProviderInterface
 
 
         return $app['twig']->render(
-            'category/view.html.twig', [
+            'category/view.html.twig',
+            [
             'advertisements' => $advertisements,
             'name_category' => $name_category,
             'loggedUser' => $loggedUser,
             'categoriesMenu' => $categoryRepository->findAll()
-        ]);
+            ]
+        );
     }
 
     /**
@@ -71,7 +72,8 @@ class CategoryController implements ControllerProviderInterface
      * @return mixed
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function indexAction(Application $app){
+    public function indexAction(Application $app)
+    {
         $userRepository = new UserRepository($app['db']);
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);

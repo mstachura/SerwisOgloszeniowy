@@ -35,16 +35,16 @@
         <p>{{ 'nazwa_kategorii'|trans}}: {{ advertisement.category_name }}</p>
         <p>{{ 'label.type'|trans}}: {{ advertisement.type_name }}</p>
 
+
         {#<p>{{ advertisement.photo}}</p>#}
         </div>
-        {#<H2>Edytuj ogłoszenie</H2>#}
+
         <a href ="{{ url ('ads_edit', {'id': advertisement.id}) }}">
             <button class="btn btn-warning">
                 {{ "edytuj_ogloszenie" |trans}}
             </button>
         </a>
 
-        {#<H2>Usuń ogłoszenie</H2>#}
         <a href ="{{ url ('ads_delete', {'id': advertisement.id}) }}">
             <button class="btn btn-danger">
                 {{ "usun_ogloszenie" |trans}}
@@ -58,31 +58,5 @@
     {% else %}
         <p>{{ "nie_ma_takiego_ogloszenia" |trans}}.</p>
     {% endif %}
-
-    {#<H1>{{ "komentarze" |trans}}</H1>#}
-        {#{% for comment in comments %}#}
-
-            {#<p>{{ "data_dodania" |trans}}: {{ comment.date }}</p>#}
-            {#<p>Treść: {{ comment.text }}</p>#}
-            {#<p>Login: {{ comment.login }}</p>#}
-
-        {#{% endfor %}#}
-
-    {#<H2>Dodaj komentarz</H2>#}
-   {#{% include 'comment/add.html.twig' %}#}
-
-    {#<H2>Edytuj komentarz</H2>#}
-    {#<a href ="{{ url ('comment_edit', {'id': advertisement.id}) }}">#}
-        {#<button class="btn btn-warning">#}
-            {#{{ "edytuj_komentarz" |trans}}#}
-        {#</button>#}
-    {#</a>#}
-
-    {#<H2>Usuń komentarz</H2>#}
-    {#<a href ="{{ url ('comment_delete', {'id': advertisement.id}) }}">#}
-        {#<button class="btn btn-danger">#}
-            {#{{ "usun_komentarz" |trans}}#}
-        {#</button>#}
-    {#</a>#}
 
 {% endblock %}

@@ -282,6 +282,11 @@
                   <target>Type phrase</target>
             </trans-unit>
 
+            <trans-unit id="serwis_ogloszeniowy">
+                  <source>serwis_ogloszeniowy</source>
+                  <target>Advertisement page</target>
+            </trans-unit>
+
 
 
 

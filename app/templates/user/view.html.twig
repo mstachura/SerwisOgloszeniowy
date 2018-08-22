@@ -20,16 +20,19 @@
     <p>{{ "label.lastname" |trans}}: {{ userData.lastname}}</p>
     <p>{{ "label.phone_number" |trans}}: {{ userData.phone_number}}</p>
 
-
+<div class="ad">
     <H1>{{ "lista_ogloszen" |trans}}</H1>
     {% for advertisement in advertisements %}
-        <p>{{ advertisement.name}}</p>
-        <p>{{ advertisement.user_id }}</p>
-        <a href ="{{ url ('ads_view', {'id': advertisement.id}) }}">
+        <ol>
+            {#</li><p>{{ advertisement.name}}</p></li>#}
+            {#</li><p>{{ advertisement.user_id }}</p></li>#}
+        <li><a href ="{{ url ('ads_view', {'id': advertisement.id}) }}"></li>
             <p>{{ advertisement.name}}</p>
             {#<img src='' alt="{{ advertisement.photo }}">#}
         </a>
+        </ol>
     {% endfor %}
+</div>
 
     <H1>{{ "dodaj_ogloszenie" |trans}}</H1>
     <a href ="{{ url ('ads_add') }}">

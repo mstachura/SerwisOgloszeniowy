@@ -297,6 +297,11 @@
                     <target>Wpisz szukaną frazę</target>
              </trans-unit>
 
+             <trans-unit id="serwis_ogloszeniowy">
+                    <source>serwis_ogloszeniowy</source>
+                    <target>Serwis ogłoszeniowy</target>
+             </trans-unit>
+
 
 
 

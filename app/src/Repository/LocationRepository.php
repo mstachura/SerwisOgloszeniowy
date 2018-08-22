@@ -84,5 +84,4 @@ class LocationRepository
 
         return !$result ? [] : $result;
     }
-
 }

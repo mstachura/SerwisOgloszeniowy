@@ -1,14 +1,32 @@
 #stopka{
-    position:relative;
-    bottom:0;
+    /*position: marker;*/
+    align-content: end;
     width:100%;
-    height:60px;
+    background-color: #486574;
+    color: white;
 
 }
 
-#nawigacja{
-    position:relative;
-    top:0;
-    width:100%;
-    height:60px;
+.ad{
+    /*background-color: #B2BCC1;*/
 }
+
+.form{
+    width: 1000px;
+    margin: 0 auto;
+    display: block;
+}
+
+body{
+    text-align: center;
+    background-color: #E1EEF4;
+    font-family: "Roboto", Helvetica, Arial, sans-serif;
+    text-decoration: none;
+}
+
+
+
+
+
+
+

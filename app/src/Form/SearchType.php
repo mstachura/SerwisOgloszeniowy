@@ -52,7 +52,6 @@ class SearchType extends AbstractType
 
                 ],
                 'constraints' => [
-//                    new Assert\NotBlank(),
                     new Assert\Length(
                         [
                             'max' => 32,

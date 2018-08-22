@@ -19,7 +19,6 @@ use Controller\CategoryController;
 use Controller\AuthController;
 use Controller\PhotoController;
 
-
 $app->mount('/hello', new HelloController());
 $app->mount('/advertisement', new AdvertisementController());
 $app->mount('/', new HomeController());
@@ -27,7 +26,3 @@ $app->mount('/user', new UserController());
 $app->mount('/category', new CategoryController());
 $app->mount('/auth', new AuthController());
 $app->mount('/photo', new PhotoController());
-
-
-
-

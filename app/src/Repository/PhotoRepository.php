@@ -73,8 +73,22 @@ class PhotoRepository
         return !$result ? [] : $result;
     }
 
+    /**
+     * Delete
+     * @param $photo
+     * @return int
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception\InvalidArgumentException
+     */
     public function delete($photo)
     {
-        return $this->db->delete('photo', ['id' => $photo['id']]);
+        $this->db->beginTransaction();
+        try {
+            return $this->db->delete('photo', ['id' => $photo['id']]);
+            $this->db->commit();
+        } catch (DBALException $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
     }
 }

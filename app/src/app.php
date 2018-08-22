@@ -13,10 +13,6 @@ use Silex\Provider\TranslationServiceProvider;
 use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\SecurityServiceProvider;
 
-
-// ...
-
-
 $app = new Application();
 
 $app->register(new SessionServiceProvider());

@@ -63,6 +63,12 @@ class AdvertisementController implements ControllerProviderInterface
         $controller->get('/search/{phrase}/page/{page}', [$this, 'searchActionPaginated'])
             ->value('page', 1)
             ->bind('ads_search');
+        $controller->get('/search/{phrase}', [$this, 'searchAction'])
+            ->value('page', 1)
+            ->bind('users_search');
+        $controller->get('/search/{phrase}/page/{page}', [$this, 'searchActionPaginated'])
+            ->value('page', 1)
+            ->bind('users_search');
 //        $controller->match('/{id}/edit', [$this, 'editAction'])
 //            ->method('GET|POST')
 //            ->assert('id', '[1-9]\d*')
@@ -169,8 +175,6 @@ class AdvertisementController implements ControllerProviderInterface
                 'form' => $form->createView(),
             ]
         );
-
-
     }
 
     /**
@@ -181,7 +185,8 @@ class AdvertisementController implements ControllerProviderInterface
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function editAction(Application $app, Request $request, $id){
+    public function editAction(Application $app, Request $request, $id)
+    {
         $advertisementRepository = new AdvertisementRepository($app['db']);
         $ad = $advertisementRepository->findOneById($id);
 
@@ -203,15 +208,15 @@ class AdvertisementController implements ControllerProviderInterface
 
         $photoRepository = new PhotoRepository($app['db']);
         $photo = $photoRepository -> findOneByAdvertisementId($id);
-        if($photo){
+        if ($photo) {
             $ad['photo_source']=$photo['source'];
             $ad['photo_title'] = $photo['name'];
-        }
-        else{
+        } else {
             $ad['photo'] = '';
         }
         dump($ad);
-        $form = $app['form.factory']->createBuilder(AdvertisementType::class,
+        $form = $app['form.factory']->createBuilder(
+            AdvertisementType::class,
             $ad,
             [
                 'category_repository' => new CategoryRepository($app['db']),
@@ -337,6 +342,7 @@ class AdvertisementController implements ControllerProviderInterface
         $typeRepository = new TypeRepository($app['db']);
         $photoRepository = new PhotoRepository($app['db']);
         $advertisement = $advertisementRepository->findOneById($id);
+        $photo = $photoRepository->findOneByAdvertisementId($id);
         $userRepository = new UserRepository($app['db']);
         $locationRepository = new LocationRepository($app['db']);
         $user = $userRepository->findOneById($id);
@@ -350,13 +356,17 @@ class AdvertisementController implements ControllerProviderInterface
 
 
             $author = $userRepository->findOneById($advertisement['user_id']);
+            $photo = $photoRepository->findOneByAdvertisementId($id);
             $location_name = $locationRepository->findOneById($advertisement['location_id']);
             $category_name = $categoryRepository->findOneById($advertisement['category_id']);
             $type_name = $typeRepository->findOneById($advertisement['type_id']);
+//            $photo_image = $photoRepository->findOneByAdvertisementId($photo['ad_id']);
+            $advertisement['photo'] = $photo['source'];
             $advertisement['type_name'] = $type_name['name'];
             $advertisement['category_name'] = $category_name['name'];
             $advertisement['location_name'] = $location_name['name'];
-            $photo = $photoRepository->findOneByAdvertisementId($id);
+
+
             $advertisement['author'] = $author['login'];
 
 //            if($photo) {
@@ -394,7 +404,8 @@ class AdvertisementController implements ControllerProviderInterface
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function searchAction(Application $app, Request $request, $phrase, $page = 1){
+    public function searchAction(Application $app, Request $request, $phrase, $page = 1)
+    {
         $categoryRepository = new CategoryRepository($app['db']);
         $userRepository = new UserRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
@@ -402,12 +413,15 @@ class AdvertisementController implements ControllerProviderInterface
         $advertisements = $advertisementRepository->findAllByPhraseOfName($phrase);
 
         return $app['twig']->render(
-            'advertisement/search.html.twig', [
+            'advertisement/search.html.twig',
+            [
             'loggedUser' => $loggedUser,
             'advertisements' => $advertisements,
             'categoriesMenu' => $categoryRepository->findAll(),
-        ]);
+            ]
+        );
     }
+
     /**
      * Search action Paginated
      * @param Application $app
@@ -415,19 +429,24 @@ class AdvertisementController implements ControllerProviderInterface
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function searchActionPaginated(Application $app, Request $request, $phrase, $page = 1){
+    public function searchActionPaginated(Application $app, Request $request, $phrase, $page = 1)
+    {
         $categoryRepository = new CategoryRepository($app['db']);
         $userRepository = new UserRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
         $advertisementRepository = new AdvertisementRepository($app['db']);
         $advertisements = $advertisementRepository->findByPhrasePaginated($phrase, $page);
+        $users = $userRepository->findByPhrasePaginated($phrase, $page);
 
         return $app['twig']->render(
-            'advertisement/search.html.twig', [
+            'advertisement/search.html.twig',
+            [
             'loggedUser' => $loggedUser,
             'advertisements' => $advertisements,
+            'users' => $users,
             'categoriesMenu' => $categoryRepository->findAll(),
             'phrase' => $phrase
-        ]);
+            ]
+        );
     }
 }
