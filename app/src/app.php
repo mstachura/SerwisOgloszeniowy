@@ -15,6 +15,7 @@ use Silex\Provider\SecurityServiceProvider;
 
 $app = new Application();
 
+
 $app->register(new SessionServiceProvider());
 
 $app->register(new AssetServiceProvider());

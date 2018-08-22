@@ -133,6 +133,7 @@ class AdvertisementRepository
             'ad.price',
             'ad.description',
             'u.login',
+            'u.id AS user_id',
             'c.id AS category_id',
             'c.name AS category_name',
             'ad.province',
@@ -279,10 +280,11 @@ class AdvertisementRepository
      */
     public function save(Application $app, $ad)
     {
-        $this->db->beginTransaction();
+        dump($ad);
+//        $this->db->beginTransaction();
         try {
             unset($ad['photo']);
-            unset($ad['photo_source']);
+//            unset($ad['photo_source']);
             $photo = [];
             $photo['name'] = $ad['photo_title'];
             $photo['source'] = $ad['source'];
@@ -308,8 +310,14 @@ class AdvertisementRepository
                 $id = $ad['id'];
                 unset($ad['id']);
 
-                $this->db->update('photo', $photo, ['ad_id' => $id]);
-                return $this->db->update('ad', $ad, ['id' => $id]);
+                $photoRepository = new PhotoRepository($app['db']);
+                if ($photoRepository -> findOneByAdvertisementId($id)) {
+                    $this->db->update('photo', $photo, ['ad_id' => $id]);
+                } else {
+                    $photo['ad_id'] = $id;
+                    $this->db->insert('photo', $photo);
+                }
+                    return $this->db->update('ad', $ad, ['id' => $id]);
             } else {
                 // add new record
 

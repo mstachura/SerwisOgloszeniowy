@@ -194,7 +194,8 @@ class PhotoController implements ControllerProviderInterface
         $form = $app['form.factory']->createBuilder(FormType::class, $photo)->add('id', HiddenType::class)->getForm();
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) { //jeśli przesłano dane formularza
+            $ad_id = $photo['ad_id'];
             $photoRepository->delete($form->getData());
 
             $app['session']->getFlashBag()->add(
@@ -206,7 +207,7 @@ class PhotoController implements ControllerProviderInterface
             );
 
             return $app->redirect(
-                $app['url_generator']->generate('ads_edit', ['id' => $id], 301)
+                $app['url_generator']->generate('ads_edit', ['id' => $ad_id], 301)
             );
         }
 

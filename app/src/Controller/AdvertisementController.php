@@ -73,6 +73,7 @@ class AdvertisementController implements ControllerProviderInterface
 //            ->assert('id', '[1-9]\d*')
 //            ->bind('comment_delete');
 
+
         return $controller;
     }
 
@@ -181,12 +182,18 @@ class AdvertisementController implements ControllerProviderInterface
      */
     public function editAction(Application $app, Request $request, $id)
     {
+//        $loggedUser = [];
+
+
         $advertisementRepository = new AdvertisementRepository($app['db']);
         $ad = $advertisementRepository->findOneById($id);
-
+        $locationRepository = new LocationRepository($app['db']);
+        $location=$locationRepository ->findOneById($ad['location_id']);
+        $ad['location_name'] = $location['name'];
         $userRepository = new UserRepository($app['db']);
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
+        $loggedUser['id'] = '1';
 
         if (!$ad) {
             $app['session']->getFlashBag()->add(
@@ -203,10 +210,10 @@ class AdvertisementController implements ControllerProviderInterface
         $photoRepository = new PhotoRepository($app['db']);
         $photo = $photoRepository -> findOneByAdvertisementId($id);
         if ($photo) {
-            $ad['photo_source']=$photo['source'];
-            $ad['photo_title'] = $photo['name'];
+//            $ad['photo_source']=$photo['source'];
+//            $ad['photo_title'] = $photo['name'];
         } else {
-            $ad['photo'] = '';
+            $photo['source'] = '';
         }
 //        dump($ad);
         $form = $app['form.factory']->createBuilder(
@@ -230,9 +237,10 @@ class AdvertisementController implements ControllerProviderInterface
 //            var_dump($photo_title);
                 $fileName = $fileUploader->upload($data['photo']);
                 $data['source'] = $fileName;
+                dump($data);
             }
 
-            $advertisementRepository->save($data);
+            $advertisementRepository->save($app, $data);
 
             $app['session']->getFlashBag()->add(
                 'messages',
@@ -335,25 +343,25 @@ class AdvertisementController implements ControllerProviderInterface
         $advertisementRepository = new AdvertisementRepository($app['db']);
         $advertisement = $advertisementRepository->findOneByIdExtra($id);
         $userRepository = new UserRepository($app['db']);
+        $photoRepository = new PhotoRepository($app['db']);
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
-
+        $loggedUser['id'] = '1';
+        $photo = $photoRepository ->findOneByAdvertisementId($id);
         if ($advertisement) {
-//            if($photo) {
-//
-//                $advertisement['photo'] = $photo['source'];
-//                $advertisement['photo_name'] = $photo['name'];
-//
-//            }
-//            else{
-//                $advertisement['photo'] = '';
-//            }
+            if ($photo) {
+                $advertisement['photo_name'] = $photo['name'];
+            } else {
+                $advertisement['source'] = '';
+                $advertisement['photo_name'] = '';
+            }
 
 
             return $app['twig']->render(
 
                 'advertisement/view.html.twig',
                 [
+                    'photo' => $photo,
                     'advertisement' => $advertisement,
                     'loggedUser' => $loggedUser,
                     'categoriesMenu' => $categoryRepository->findAll()

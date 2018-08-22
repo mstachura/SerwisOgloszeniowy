@@ -61,6 +61,7 @@ class UserController implements ControllerProviderInterface
             ->bind('user_search');
 
 
+
         return $controller;
     }
 
@@ -160,9 +161,11 @@ class UserController implements ControllerProviderInterface
         $userRepository = new UserRepository($app['db']);
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
+        $loggedUser = [];
+        $loggedUser['id'] = '1';
         $userDataRepository = new DataRepository($app['db']);
         $user = $userRepository->findOneById($id); //tu ma być findOneByIdWithUserId
-        $user_data = $userDataRepository ->findOneByUserId($id);
+        $user_data = $userDataRepository->findOneByUserId($id);
         $user['firstname'] = $user_data['firstname'];
         $user['lastname'] = $user_data['lastname'];
         $user['phone_number'] = $user_data['phone_number'];
@@ -180,33 +183,44 @@ class UserController implements ControllerProviderInterface
             return $app->redirect($app['url_generator']->generate('user_index'));
         }
 
-        $form = $app['form.factory']->createBuilder(UserType::class, $user)->getForm();
+        if ($loggedUser['id'] == $id or $app['security.authorization_checker']->isGranted('ROLE_ADMIN')) {
+            $form = $app['form.factory']->createBuilder(UserType::class, $user)->getForm();
 
-        $form->handleRequest($request);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $userRepository->save($form->getData(), $app);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $userRepository->save($form->getData(), $app);
 
+                $app['session']->getFlashBag()->add(
+                    'messages',
+                    [
+                        'type' => 'success',
+                        'message' => 'message.element_successfully_edited',
+                    ]
+                );
+
+                return $app->redirect($app['url_generator']->generate('user_view', ['id' => $id], 301));
+            }
+
+            return $app['twig']->render(
+                'user/edit.html.twig',
+                [
+                    'user' => $user,
+                    'form' => $form->createView(),
+                    'loggedUser' => $loggedUser,
+                    'categoriesMenu' => $categoryRepository->findAll()
+                ]
+            );
+        } else {
             $app['session']->getFlashBag()->add(
                 'messages',
                 [
-                    'type' => 'success',
-                    'message' => 'message.element_successfully_edited',
+                    'type' => 'warning',
+                    'message' => 'message.it_is_not_your_profile',
                 ]
             );
-
-            return $app->redirect($app['url_generator']->generate('user_view', ['id' => $id], 301));
+            return $app->redirect($app['url_generator']->generate('home_index'));
         }
-
-        return $app['twig']->render(
-            'user/edit.html.twig',
-            [
-                'user' => $user,
-                'form' => $form->createView(),
-                'loggedUser' => $loggedUser,
-                'categoriesMenu' => $categoryRepository->findAll()
-            ]
-        );
     }
 
     /**
@@ -224,6 +238,8 @@ class UserController implements ControllerProviderInterface
         $user = $userRepository->findOneById($id);
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
+        $loggedUser = [];
+        $loggedUser['id'] = '1';
 
         if (!$user) {
             $app['session']->getFlashBag()->add(
@@ -237,35 +253,47 @@ class UserController implements ControllerProviderInterface
             return $app->redirect($app['url_generator']->generate('user_index'));
         }
 
-        $form = $app['form.factory']->createBuilder(FormType::class, $user)->add('id', HiddenType::class)->getForm();
-        $form->handleRequest($request);
+        if ($loggedUser['id'] == $id or $app['security.authorization_checker']->isGranted('ROLE_ADMIN')) {
+            $form = $app['form.factory']->
+                createBuilder(FormType::class, $user)->add('id', HiddenType::class)->getForm();
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $userRepository->delete($form->getData());
+            if ($form->isSubmitted() && $form->isValid()) {
+                $userRepository->delete($form->getData());
 
+                $app['session']->getFlashBag()->add(
+                    'messages',
+                    [
+                        'type' => 'success',
+                        'message' => 'message.element_successfully_deleted',
+                    ]
+                );
+
+                return $app->redirect(
+                    $app['url_generator']->generate('user_index'),
+                    301
+                );
+            }
+
+            return $app['twig']->render(
+                'user/delete.html.twig',
+                [
+                    'user' => $user,
+                    'form' => $form->createView(),
+                    'loggedUser' => $loggedUser,
+                    'categoriesMenu' => $categoryRepository->findAll()
+                ]
+            );
+        } else {
             $app['session']->getFlashBag()->add(
                 'messages',
                 [
-                    'type' => 'success',
-                    'message' => 'message.element_successfully_deleted',
+                    'type' => 'warning',
+                    'message' => 'message.it_is_not_your_profile',
                 ]
             );
-
-            return $app->redirect(
-                $app['url_generator']->generate('user_index'),
-                301
-            );
+            return $app->redirect($app['url_generator']->generate('home_index'));
         }
-
-        return $app['twig']->render(
-            'user/delete.html.twig',
-            [
-                'user' => $user,
-                'form' => $form->createView(),
-                'loggedUser' => $loggedUser,
-                'categoriesMenu' => $categoryRepository->findAll()
-            ]
-        );
     }
 
     /**

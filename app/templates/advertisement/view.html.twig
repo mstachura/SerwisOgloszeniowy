@@ -22,7 +22,7 @@
         <img src="{{  asset('uploads/photos/' ~ photo.source) }}" alt="{{ photo.source }}">
             <p>{{ 'photo_name'|trans}}: {{ photo.name}}</p>
         {% else %}
-            <img src="{{ asset('images/logo.jpg')}}">
+            <img src="{{ asset('images/brak_zdjecia.jpg')}}">
         {% endif %}
 
         <p>{{ 'label.login'|trans}}: {{ advertisement.login}}</p>
@@ -37,6 +37,8 @@
 
         {#<p>{{ advertisement.photo}}</p>#}
         </div>
+        {#is_granted('IS_AUTHENTICATED_FULLY' ) and#}
+    {% if loggedUser.id==advertisement.user_id or is_granted('ROLE_ADMIN')%}
 
         <a href ="{{ url ('ads_edit', {'id': advertisement.id}) }}">
             <button class="btn btn-warning">
@@ -49,10 +51,12 @@
                 {{ "usun_ogloszenie" |trans}}
             </button>
         </a>
+    {% endif %}
 
 
     {% else %}
         <p>{{ "nie_ma_takiego_ogloszenia" |trans}}.</p>
     {% endif %}
+
 
 {% endblock %}

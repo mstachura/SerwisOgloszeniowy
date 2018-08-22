@@ -65,11 +65,6 @@ class PhotoType extends AbstractType
                     'max_length' => 128,
                     'class' => 'form-control',
                 ],
-                'constraints' => [
-                    new Assert\NotBlank(
-                        ['groups' => ['photo-default']]
-                    ),
-                ],
             ]
         );
     }

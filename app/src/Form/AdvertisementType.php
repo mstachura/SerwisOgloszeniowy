@@ -79,16 +79,11 @@ class AdvertisementType extends AbstractType
             TextareaType::class,
             [
                 'label' => 'label.photo_title',
-                'required' => true,
+                'required' => false,
                 'attr' => [
                     'min_length' => 10,
                     'max_length' => 128,
                     'class' => 'form-control',
-                ],
-                'constraints' => [
-                    new Assert\NotBlank(
-                        ['groups' => ['ads-default']]
-                    ),
                 ],
             ]
         );

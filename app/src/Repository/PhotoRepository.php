@@ -82,7 +82,7 @@ class PhotoRepository
      */
     public function delete($photo)
     {
-        $this->db->beginTransaction();
+//        $this->db->beginTransaction();
         try {
             return $this->db->delete('photo', ['id' => $photo['id']]);
             $this->db->commit();

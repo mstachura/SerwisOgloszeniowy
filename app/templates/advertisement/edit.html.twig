@@ -21,8 +21,8 @@
     {{ form_start(form, { method: 'post', action: url('ads_edit', {'id': ad.id}) }) }}
 
     {{ form_row(form.name) }}
-    {% if ad.photo_source %}
-        <img src="{{  asset('uploads/photos/' ~ ad.photo_source) }}" alt="{{ ad.photo_source }}">
+    {% if photo.source %}
+        <img src="{{  asset('uploads/photos/' ~ photo.source) }}" alt="{{ photo.source }}">
         <a href ="{{ url ('photo_delete', {'id': photo.id}) }}">
             <p class="btn btn-danger"> {{ 'action.delete'|trans }}</p>
         </a>
