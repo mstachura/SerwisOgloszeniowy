@@ -63,12 +63,7 @@ class AdvertisementController implements ControllerProviderInterface
         $controller->get('/search/{phrase}/page/{page}', [$this, 'searchActionPaginated'])
             ->value('page', 1)
             ->bind('ads_search');
-        $controller->get('/search/{phrase}', [$this, 'searchAction'])
-            ->value('page', 1)
-            ->bind('users_search');
-        $controller->get('/search/{phrase}/page/{page}', [$this, 'searchActionPaginated'])
-            ->value('page', 1)
-            ->bind('users_search');
+
 //        $controller->match('/{id}/edit', [$this, 'editAction'])
 //            ->method('GET|POST')
 //            ->assert('id', '[1-9]\d*')
@@ -92,7 +87,6 @@ class AdvertisementController implements ControllerProviderInterface
     {
         $advertisementRepository = new AdvertisementRepository($app['db']);
         $advertisements = $advertisementRepository->findAllPaginated($page);
-
         $categoryRepository = new CategoryRepository($app['db']);
         $userRepository = new UserRepository($app['db']);
         $users = $userRepository-> findAll();
@@ -149,8 +143,8 @@ class AdvertisementController implements ControllerProviderInterface
 
             $loggedUser['id'] = 1;
             $data['user_id'] = $loggedUser['id'];
-            dump($data);
-            $id = $advertisementRepository->save($data);
+//            dump($data);
+            $id = $advertisementRepository->save($app, $data);
 
 
 
@@ -214,7 +208,7 @@ class AdvertisementController implements ControllerProviderInterface
         } else {
             $ad['photo'] = '';
         }
-        dump($ad);
+//        dump($ad);
         $form = $app['form.factory']->createBuilder(
             AdvertisementType::class,
             $ad,
@@ -339,36 +333,12 @@ class AdvertisementController implements ControllerProviderInterface
     public function viewAction(Application $app, $id, Request $request)
     {
         $advertisementRepository = new AdvertisementRepository($app['db']);
-        $typeRepository = new TypeRepository($app['db']);
-        $photoRepository = new PhotoRepository($app['db']);
-        $advertisement = $advertisementRepository->findOneById($id);
-        $photo = $photoRepository->findOneByAdvertisementId($id);
+        $advertisement = $advertisementRepository->findOneByIdExtra($id);
         $userRepository = new UserRepository($app['db']);
-        $locationRepository = new LocationRepository($app['db']);
-        $user = $userRepository->findOneById($id);
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
 
         if ($advertisement) {
-            $userRepository = new UserRepository($app['db']);
-//            $commentRepository = new CommentRepository($app['db']);
-//            $comments = $commentRepository->findAllFromAdvertisement($id);
-
-
-            $author = $userRepository->findOneById($advertisement['user_id']);
-            $photo = $photoRepository->findOneByAdvertisementId($id);
-            $location_name = $locationRepository->findOneById($advertisement['location_id']);
-            $category_name = $categoryRepository->findOneById($advertisement['category_id']);
-            $type_name = $typeRepository->findOneById($advertisement['type_id']);
-//            $photo_image = $photoRepository->findOneByAdvertisementId($photo['ad_id']);
-            $advertisement['photo'] = $photo['source'];
-            $advertisement['type_name'] = $type_name['name'];
-            $advertisement['category_name'] = $category_name['name'];
-            $advertisement['location_name'] = $location_name['name'];
-
-
-            $advertisement['author'] = $author['login'];
-
 //            if($photo) {
 //
 //                $advertisement['photo'] = $photo['source'];
@@ -386,10 +356,7 @@ class AdvertisementController implements ControllerProviderInterface
                 [
                     'advertisement' => $advertisement,
                     'loggedUser' => $loggedUser,
-                    'photo' => $photo,
                     'categoriesMenu' => $categoryRepository->findAll()
-//                    'comments' => $comments,
-//                    'form' => $form->createView(),
                 ]
             );
         } else {
@@ -397,30 +364,30 @@ class AdvertisementController implements ControllerProviderInterface
         }
     }
 
-    /**
-     * Search action
-     * @param Application $app
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    public function searchAction(Application $app, Request $request, $phrase, $page = 1)
-    {
-        $categoryRepository = new CategoryRepository($app['db']);
-        $userRepository = new UserRepository($app['db']);
-        $loggedUser = $userRepository->getLoggedUser($app);
-        $advertisementRepository = new AdvertisementRepository($app['db']);
-        $advertisements = $advertisementRepository->findAllByPhraseOfName($phrase);
-
-        return $app['twig']->render(
-            'advertisement/search.html.twig',
-            [
-            'loggedUser' => $loggedUser,
-            'advertisements' => $advertisements,
-            'categoriesMenu' => $categoryRepository->findAll(),
-            ]
-        );
-    }
+//    /**
+//     * Search action
+//     * @param Application $app
+//     * @param Request $request
+//     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+//     * @throws \Doctrine\DBAL\DBALException
+//     */
+//    public function searchAction(Application $app, Request $request, $phrase, $page = 1)
+//    {
+//        $categoryRepository = new CategoryRepository($app['db']);
+//        $userRepository = new UserRepository($app['db']);
+//        $loggedUser = $userRepository->getLoggedUser($app);
+//        $advertisementRepository = new AdvertisementRepository($app['db']);
+//        $advertisements = $advertisementRepository->findAllByPhraseOfName($phrase);
+//
+//        return $app['twig']->render(
+//            'advertisement/search.html.twig',
+//            [
+//            'loggedUser' => $loggedUser,
+//            'advertisements' => $advertisements,
+//            'categoriesMenu' => $categoryRepository->findAll(),
+//            ]
+//        );
+//    }
 
     /**
      * Search action Paginated
@@ -443,7 +410,7 @@ class AdvertisementController implements ControllerProviderInterface
             [
             'loggedUser' => $loggedUser,
             'advertisements' => $advertisements,
-            'users' => $users,
+//            'users' => $users,
             'categoriesMenu' => $categoryRepository->findAll(),
             'phrase' => $phrase
             ]

@@ -59,11 +59,11 @@ class AdvertisementRepository
      */
     public function findAllPaginated($page = 1)
     {
-        $countQueryBuilder = $this->queryAll()
+        $countQueryBuilder = $this->queryAllFullExtra()
             ->select('COUNT(DISTINCT ad.id) AS total_results')
             ->setMaxResults(1);
 
-        $paginator = new Paginator($this->queryAll(), $countQueryBuilder);
+        $paginator = new Paginator($this->queryAllFullExtra(), $countQueryBuilder);
         $paginator->setCurrentPage($page);
         $paginator->setMaxPerPage(static::NUM_ITEMS);
 
@@ -92,93 +92,59 @@ class AdvertisementRepository
             ->from('ad');
     }
 
-    /**
-     * Query All Extra
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    protected function queryAllExtra()
-    {
-        $queryBuilder = $this->db->createQueryBuilder();
-        return $queryBuilder->select(
-            'ad.id',
-            'ad.name',
-            'ad.price',
-            'ad.description',
-            'ad.user_id',
-            'ad.category_id',
-            'ad.province',
-            'ad.type_id',
-            'ad.location_id',
-            'l.name'
-        )
-            ->from('ad', 'ad')
-            ->innerjoin('ad', 'location', 'l', 'ad.location_id = l.id');
-    }
+//    /**
+//     * Query All Extra
+//     * @return \Doctrine\DBAL\Query\QueryBuilder
+//     */
+//    protected function queryAllExtra()
+//    {
+//        $queryBuilder = $this->db->createQueryBuilder();
+//        return $queryBuilder->select(
+//            'ad.id',
+//            'ad.name',
+//            'ad.price',
+//            'ad.description',
+//            'ad.user_id',
+//            'ad.category_id',
+//            'ad.province',
+//            'ad.type_id',
+//            'ad.location_id',
+//            'l.name'
+//        )
+//            ->from('ad', 'ad')
+//            ->innerjoin('ad', 'location', 'l', 'ad.location_id = l.id');
+//    }
 
-    /**
-     * Query all extra 2
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    protected function queryAllExtraAddCategory()
-    {
-        $queryBuilder = $this->db->createQueryBuilder();
-        return $queryBuilder->select(
-            'ad.id',
-            'ad.name',
-            'ad.price',
-            'ad.description',
-            'ad.user_id',
-            'ad.category_id',
-            'ad.province',
-            'ad.type_id',
-            'ad.location_id',
-            'c.name'
-        )
-            ->from('ad', 'ad')
-            ->innerjoin('ad', 'category', 'c', 'ad.category_id = c.id');
-    }
 
-    protected function queryAllExtraAddType()
-    {
-        $queryBuilder = $this->db->createQueryBuilder();
-        return $queryBuilder->select(
-            'ad.id',
-            'ad.name',
-            'ad.price',
-            'ad.description',
-            'ad.user_id',
-            'ad.category_id',
-            'ad.province',
-            'ad.type_id',
-            'ad.location_id',
-            't.name'
-        )
-            ->from('ad', 'ad')
-            ->innerjoin('ad', 'type', 't', 'ad.type_id = t.id');
-    }
+
+
 
     /**
      * Query all extra add photo
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    protected function queryAllExtraAddPhoto()
+    protected function queryAllFullExtra()
     {
         $queryBuilder = $this->db->createQueryBuilder();
         return $queryBuilder->select(
             'p.source',
-            'p.ad_id',
             'ad.id',
             'ad.name',
             'ad.price',
             'ad.description',
-            'ad.user_id',
-            'ad.category_id',
+            'u.login',
+            'c.id AS category_id',
+            'c.name AS category_name',
             'ad.province',
-            'ad.type_id',
-            'ad.location_id'
+            't.name AS type_name',
+            'l.name AS location_name'
         )
-            ->from('photo', 'p')
-            ->innerjoin('p', 'ad', 'a', 'p.ad_id = ad.id');
+            ->from('ad')
+            ->innerjoin('ad', 'type', 't', 'ad.type_id = t.id')
+            ->innerjoin('ad', 'category', 'c', 'ad.category_id = c.id')
+            ->innerjoin('ad', 'location', 'l', 'ad.location_id = l.id')
+            ->innerjoin('ad', 'user', 'u', 'ad.user_id = u.id')
+            ->leftjoin('ad', 'photo', 'p', 'ad.id = p.ad_id');
     }
 
     /**
@@ -207,6 +173,24 @@ class AdvertisementRepository
         $queryBuilder = $this->queryAll();
         $queryBuilder
             ->where('id = :id')
+            ->setParameter(':id', $id, \PDO::PARAM_INT);
+        $result = $queryBuilder->execute()->fetch();
+
+        return !$result ? [] : $result;
+    }
+
+    /**
+     * Find one record.
+     *
+     * @param string $id Element id
+     *
+     * @return array|mixed Result
+     */
+    public function findOneByIdExtra($id)
+    {
+        $queryBuilder = $this->queryAllFullExtra();
+        $queryBuilder
+            ->where('ad.id = :id')
             ->setParameter(':id', $id, \PDO::PARAM_INT);
         $result = $queryBuilder->execute()->fetch();
 
@@ -271,17 +255,19 @@ class AdvertisementRepository
     {
 
         $countQueryBuilder = $this->queryAllFiltered($phrase)
-        ->select('COUNT(DISTINCT ad.id) AS total_results')
+            ->select('COUNT(DISTINCT ad.id) AS total_results')
 //            ->where('ad.name LIKE :phrase')
 //            ->setParameter(':phrase', '%' . $phrase . '%')
             ->setMaxResults(1);
-        dump($countQueryBuilder);
+//        dump($countQueryBuilder);
         $paginator = new Paginator($this->queryAllFiltered($phrase), $countQueryBuilder);
         $paginator->setCurrentPage($page);
         $paginator->setMaxPerPage(static::NUM_ITEMS);
 
         return $paginator->getCurrentPageResults();
     }
+
+
 
 
     /**

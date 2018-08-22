@@ -411,7 +411,7 @@ class UserRepository
     protected function queryAllFiltered($phrase)
     {
         $queryBuilder = $this->db->createQueryBuilder();
-        return $queryBuilder->select('user.id', 'user.login', 'user.email')
+        return $queryBuilder->select('u.id', 'u.login')
             ->from('user', 'u')
             ->where('u.login LIKE :phrase')
             ->setParameter(':phrase', '%' . $phrase . '%');
@@ -427,9 +427,9 @@ class UserRepository
     {
 
         $countQueryBuilder = $this->queryAllFiltered($phrase)
-            ->select('COUNT(DISTINCT user.id) AS total_results')
+            ->select('COUNT(DISTINCT u.id) AS total_results')
             ->setMaxResults(1);
-        dump($countQueryBuilder);
+//        dump($countQueryBuilder);
         $paginator = new Paginator($this->queryAllFiltered($phrase), $countQueryBuilder);
         $paginator->setCurrentPage($page);
         $paginator->setMaxPerPage(static::NUM_ITEMS);

@@ -22,7 +22,7 @@
             {% if paginator.page < paginator.pages_number %}
                 {% set next = (paginator.page + 1) %}
                 <li class="next">
-                    <a href="{{ url('users_search', {'phrase': phrase, 'page': next}) }}" title="{{ 'label.nav.next'|trans }}">
+                    <a href="{{ url('user_search', {'phrase': phrase, 'page': next}) }}" title="{{ 'label.nav.next'|trans }}">
                         {{ 'label.nav.next'|trans }}<span aria-hidden="true">&rarr;</span>
                     </a>
                 </li>

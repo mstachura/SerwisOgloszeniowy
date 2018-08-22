@@ -4,15 +4,15 @@
 
 {% block body %}
 
-{% include 'default/_paginator.html.twig' with {
-    paginator: results,
+{% include 'default/_paginator_search_user.html.twig' with {
+    paginator: users,
     route_name: 'home_search',
 }
 %}
 
-{% if results %}
+{% if users %}
 
-        {% for user in results.data %} {# result.data przy paginacji#}
+        {% for user in users.data %} {# result.data przy paginacji#}
 
             <a href ="{{ url ('user_view', {'id': user.id}) }}">
                 {{ user.login }}

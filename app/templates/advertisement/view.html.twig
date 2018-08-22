@@ -18,16 +18,15 @@
 
 <div class="">
     {% if advertisement %}
-        {% if photo %}
+        {% if advertisement.source %}
         <img src="{{  asset('uploads/photos/' ~ photo.source) }}" alt="{{ photo.source }}">
             <p>{{ 'photo_name'|trans}}: {{ photo.name}}</p>
         {% else %}
             <img src="{{ asset('images/logo.jpg')}}">
         {% endif %}
 
-        <p>{{ 'label.login'|trans}}: {{ advertisement.author}}</p>
+        <p>{{ 'label.login'|trans}}: {{ advertisement.login}}</p>
         <p>{{ 'nazwa_ogloszenia'|trans}}: {{ advertisement.name}}</p>
-        <p>{{ 'dodane_przez_uzytkownika_nr'|trans}}: {{ advertisement.user_id }}</p>
         <p>{{ 'label.price'|trans}}: {{ advertisement.price }}</p>
         <p>{{ 'label.description'|trans}}: {{ advertisement.description }}</p>
         <p>{{ 'label.province'|trans}}: {{ advertisement.province }}</p>
@@ -51,9 +50,6 @@
             </button>
         </a>
 
-        <H1>{{ "dane_autora_ogloszenia" |trans}}</H1>
-        <p>{{ 'nr_id_uzytkownika'|trans}}: {{ advertisement.user_id}}</p>
-        <p>{{ 'label.login'|trans}}: {{ advertisement.author }}</p>
 
     {% else %}
         <p>{{ "nie_ma_takiego_ogloszenia" |trans}}.</p>

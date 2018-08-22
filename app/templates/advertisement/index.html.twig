@@ -5,23 +5,26 @@
     <H1>{{ 'lista_ogloszen'|trans}}</H1>
     {% for advertisement in advertisements.data %}
 
-        <p> Id: {{ advertisement.id }}</p>
+        {% if advertisement.source %}
+            <img src="{{  asset('uploads/photos/' ~ advertisement.source) }}" alt="{{ advertisement.source }}">
+        {% else %}
+            <img src="{{ asset('images/logo.jpg')}}">
+        {% endif %}
 
         {#{% for advertisement in advertisements %}#}
             <p>{{ 'nazwa_ogloszenia'|trans}}: {{ advertisement.name}}</p>
-            <p>{{ 'dodane_przez_uzytkownika_nr'|trans}}: {{ advertisement.user_id }}</p>
+            <p>{{ 'dodane_przez_uzytkownika_nr'|trans}}: {{ advertisement.login }}</p>
             <p>{{ 'label.price'|trans}}: {{ advertisement.price }}</p>
             <p>{{ 'label.description'|trans}}: {{ advertisement.description }}</p>
             <p>{{ 'label.province'|trans}}: {{ advertisement.province }}</p>
-            {#<p>{{ 'label.location'|trans}}: {{ advertisement.location }}</p>#}
-            {#<p>{{ 'nazwa_kategorii'|trans}}: {{ advertisement.category_id }}</p>#}
-            {#<p>{{ 'label.type'|trans}}: {{ advertisement.type}}</p>#}
-        {#{{ advertisement.photo }}#}
-            {#<p>Dodane przez: {{ user.login }}</p>#}
-            <a href ="{{ url ('ads_view', {'id': advertisement.id}) }}">
-                {{ advertisement.name }}
-                {#<img src="{{  asset('uploads/photos/' ~ advertisement.photo) }}" alt="{{ advertisement.photo }}">#}
+            <p>{{ 'label.location'|trans}}: {{ advertisement.location_name }}</p>
+            <p>{{ 'nazwa_kategorii'|trans}}:</p>
+            <a href ="{{ url ('category_view', {'id': advertisement.category_id}) }}">
+                {{ advertisement.category_name }}
             </a>
+            <p>{{ 'label.type'|trans}}: {{ advertisement.type_name}}</p>
+
+
 
             <a href ="{{ url ('ads_delete', {'id': advertisement.id}) }}">
                 <button class="btn btn-danger"> {{ "usun_ogloszenie" |trans}}</button>

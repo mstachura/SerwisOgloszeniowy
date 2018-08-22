@@ -53,6 +53,12 @@ class UserController implements ControllerProviderInterface
         $controller->get('/page/{page}', [$this, 'indexAction'])
             ->value('page', 1)
             ->bind('user_index');
+//        $controller->get('/search/{phrase}', [$this, 'searchAction'])
+//            ->value('page', 1)
+//            ->bind('user_search');
+        $controller->get('/search/{phrase}/page/{page}', [$this, 'searchActionPaginated'])
+            ->value('page', 1)
+            ->bind('user_search');
 
 
         return $controller;
@@ -307,5 +313,30 @@ class UserController implements ControllerProviderInterface
             );
             return $app->redirect($app['url_generator']->generate('home_index', 301));
         }
+    }
+
+    /**
+     * Search action Paginated
+     * @param Application $app
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function searchActionPaginated(Application $app, Request $request, $phrase, $page = 1)
+    {
+        $categoryRepository = new CategoryRepository($app['db']);
+        $userRepository = new UserRepository($app['db']);
+        $loggedUser = $userRepository->getLoggedUser($app);
+        $users = $userRepository->findByPhrasePaginated($phrase, $page);
+
+        return $app['twig']->render(
+            'user/search.html.twig',
+            [
+                'loggedUser' => $loggedUser,
+                'users' => $users,
+                'categoriesMenu' => $categoryRepository->findAll(),
+                'phrase' => $phrase
+            ]
+        );
     }
 }
