@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <p>Strona główna</p>
+
     <a href ="{{ url ('ads_add') }}">
         <button class="btn btn-info">Dodaj ogłoszenie</button>
     </a>
@@ -15,18 +15,7 @@
     </a>
 
 
-    <H1>{{ 'kategorie'|trans}}</H1>
-    {% for category in categories %}
-        <p>{{ 'nr_kategorii'|trans}}: {{ category.id }}</p>
-        <p>{{ 'nazwa_kategorii'|trans}}: {{ category.name }}</p>
-    {% endfor %}
 
-    <H1>Lista użytkowników</H1>
-    {% for user in users %}
-        <p>{{ user.login}}</p>
-        {{ user.firstname}}
-        {#<p>{{ user.email}}</p>#}
-    {% endfor %}
 
 
 {% endblock %}

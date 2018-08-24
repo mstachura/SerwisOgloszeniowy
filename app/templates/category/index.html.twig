@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'kategorie'|trans }}{% endblock %}
+
+{% block body %}
+
+
+    {% include 'default/_paginator.html.twig' with {
+        paginator: advertisements,
+        route_name: 'category_view',
+    }
+    %}
+
+    {% for advertisement in advertisements.data %}
+        <a href ="{{ url ('ads_view', {'id': advertisement.id}) }}">
+            <p class="btn">
+                {{ advertisement.name}}
+
+            </p>
+        </a>
+    {% endfor %}
+
+{% endblock %}

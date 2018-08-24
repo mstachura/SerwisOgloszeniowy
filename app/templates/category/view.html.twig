@@ -15,12 +15,17 @@
     <h1>{{ 'ogloszenia_kategorii'|trans }}: {{ name_category }}</h1>
 
 
-    {% for advertisement in advertisements %}
+    {% for advertisement in advertisements.data %}
 
         <a href ="{{ url ('ads_view', {'id': advertisement.id}) }}">
             {{ advertisement.name }}
         </a>
 
     {% endfor %}
+
+    {% include 'default/_paginator_category_view.html.twig' with {
+        paginator: advertisements,
+        route_name: 'category_view',
+    } %}
 
 {% endblock %}

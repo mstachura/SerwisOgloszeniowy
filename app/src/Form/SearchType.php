@@ -27,7 +27,7 @@ class SearchType extends AbstractType
             'category_search',
             ChoiceType::class,
             [
-                'label' => 'label.category_search ',
+                'label' => 'label.category_search',
                 'required' => true,
                 'attr' => array('class' => 'form-control'),
                 'choices' => $this->prepareCategoriesForChoices(),

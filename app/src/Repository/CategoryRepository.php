@@ -5,12 +5,21 @@
 namespace Repository;
 
 use Doctrine\DBAL\Connection;
+use Utils\Paginator;
 
 /**
  * Class CategoryRepository.
  */
 class CategoryRepository
 {
+
+    /**
+     * Number of items per page.
+     *
+     * const int NUM_ITEMS
+     */
+    const NUM_ITEMS = 3;
+
     /**
      * Doctrine DBAL connection.
      *

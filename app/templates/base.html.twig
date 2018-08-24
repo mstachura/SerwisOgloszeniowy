@@ -18,7 +18,7 @@
 
 
 
-<nav class="navbar navbar-default container-fluid" id="nawigacja">
+<nav class="navbar navbar-default container-fluid" id="nav">
     {% include 'menu.html.twig' %}
     <div class="container-fluid">
         <div class="btn-group pull-right" role="group" aria-label="{{ 'label.actions'|trans }}">
@@ -40,7 +40,7 @@
 {% include 'default/_flash_messages.html.twig' %}
 
 {% block body %}
-<header> {% block header %}{% include 'header.html.twig' %}{% endblock %} </header>
+<header> {% block header %}{% endblock %} </header>
     {% block content %}Page will be soon.{% endblock %}
 
 

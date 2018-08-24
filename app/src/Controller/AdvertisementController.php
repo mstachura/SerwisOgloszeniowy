@@ -57,9 +57,9 @@ class AdvertisementController implements ControllerProviderInterface
         $controller->get('/page/{page}', [$this, 'indexAction'])
             ->value('page', 1)
             ->bind('ads_index');
-        $controller->get('/search/{phrase}', [$this, 'searchAction'])
-            ->value('page', 1)
-            ->bind('ads_search');
+//        $controller->get('/search/{phrase}', [$this, 'searchAction'])
+//            ->value('page', 1)
+//            ->bind('ads_search');
         $controller->get('/search/{phrase}/page/{page}', [$this, 'searchActionPaginated'])
             ->value('page', 1)
             ->bind('ads_search');
@@ -187,6 +187,14 @@ class AdvertisementController implements ControllerProviderInterface
 
         $advertisementRepository = new AdvertisementRepository($app['db']);
         $ad = $advertisementRepository->findOneById($id);
+
+        $photoRepository = new PhotoRepository($app['db']);
+        $photo = $photoRepository -> findOneByAdvertisementId($id);
+
+        if ($photo) {
+            $ad['photo_title'] = $photo['name'];
+        }
+
         $locationRepository = new LocationRepository($app['db']);
         $location=$locationRepository ->findOneById($ad['location_id']);
         $ad['location_name'] = $location['name'];
@@ -222,7 +230,7 @@ class AdvertisementController implements ControllerProviderInterface
             [
                 'category_repository' => new CategoryRepository($app['db']),
                 'type_repository' => new TypeRepository($app['db']),
-                'location_repository' => new LocationRepository($app['db'])
+                'location_repository' => new LocationRepository($app['db']),
             ]
         )->getForm();
 

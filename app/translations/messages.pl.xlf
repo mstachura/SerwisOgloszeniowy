@@ -114,7 +114,7 @@
 
              <trans-unit id="dodane_przez_uzytkownika_nr">
                   <source>dodane_przez_uzytkownika_nr</source>
-                  <target>Dodane przez użytkownika nr</target>
+                  <target>Dodane przez</target>
              </trans-unit>
 
              <trans-unit id="label.province">
@@ -300,6 +300,36 @@
              <trans-unit id="serwis_ogloszeniowy">
                     <source>serwis_ogloszeniowy</source>
                     <target>Serwis ogłoszeniowy</target>
+             </trans-unit>
+
+             <trans-unit id="label.location_name">
+                    <source>label.location_name</source>
+                    <target>Miejscowość</target>
+             </trans-unit>
+
+             <trans-unit id="label.category_search">
+                    <source>label.category_search</source>
+                    <target>Wybierz kategorię</target>
+             </trans-unit>
+
+             <trans-unit id="photo_name">
+                    <source>photo_name</source>
+                    <target>Nazwa zdjęcia</target>
+             </trans-unit>
+
+             <trans-unit id="zl">
+                    <source>zl</source>
+                    <target>zł</target>
+             </trans-unit>
+
+             <trans-unit id="usun_zdjecie">
+                    <source>usun_zdjecie</source>
+                    <target>Usuń zdjęcie</target>
+             </trans-unit>
+
+             <trans-unit id="czy_na_pewno_chcesz_usunac_to_zdjecie">
+                    <source>czy_na_pewno_chcesz_usunac_to_zdjecie</source>
+                    <target>Czy na pewno chcesz usunąć to zdjęcie?</target>
              </trans-unit>
 
 

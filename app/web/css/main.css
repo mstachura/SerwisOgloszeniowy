@@ -1,6 +1,9 @@
 #stopka{
-    /*position: marker;*/
-    align-content: end;
+    margin-top: 50px;
+    clear: both;
+    bottom: 0;
+    display: block;
+    padding: 10px 0;
     width:100%;
     background-color: #486574;
     color: white;
@@ -11,19 +14,41 @@
     /*background-color: #B2BCC1;*/
 }
 
+#back{
+    float:left;
+
+}
+
+.nav{
+    float:right;
+}
+
+.logo{
+    float: left;
+}
+
 .form{
     width: 1000px;
+    position: relative;
     margin: 0 auto;
     display: block;
 }
 
+.left{
+    float:left;
+}
 body{
     text-align: center;
     background-color: #E1EEF4;
     font-family: "Roboto", Helvetica, Arial, sans-serif;
     text-decoration: none;
+    height: 100%;
 }
 
+img{
+    height: 200px;
+    width: auto;
+}
 
 
 

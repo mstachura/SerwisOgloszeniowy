@@ -116,9 +116,6 @@ class AdvertisementRepository
 //    }
 
 
-
-
-
     /**
      * Query all extra add photo
      * @return \Doctrine\DBAL\Query\QueryBuilder
@@ -215,20 +212,35 @@ class AdvertisementRepository
     }
 
     /**
+     * @param $category_id
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    protected function queryAllFilteredCategory($category_id)
+    {
+        $queryBuilder = $this->db->createQueryBuilder();
+        return $queryBuilder->select('ad.id', 'ad.name')
+            ->from('ad', 'ad')
+            ->where('ad.category_id = :category_id')
+            ->setParameter(':category_id', $category_id);
+    }
+
+    /**
      * Find all by category
      * @param $category_id
      * @return array
      */
-    public function findAllByCategory($category_id)
+    public function findAllByCategoryPaginated($category_id, $page = 1)
     {
-        $queryBuilder = $this->queryAll();
-        $queryBuilder
-            ->where('category_id = :category_id')
-            ->setParameter(':category_id', $category_id, \PDO::PARAM_INT);
-        $result = $queryBuilder->execute()->fetchAll();
+        $countQueryBuilder = $this->queryAllFilteredCategory($category_id)
+            ->select('COUNT(DISTINCT ad.id) AS total_results')
+            ->setMaxResults(1);
+        $paginator = new Paginator($this->queryAllFilteredCategory($category_id), $countQueryBuilder);
+        $paginator->setCurrentPage($page);
+        $paginator->setMaxPerPage(static::NUM_ITEMS);
 
-        return !$result ? [] : $result;
+        return $paginator->getCurrentPageResults();
     }
+
 
     /**
      * Find all by phrase of name
@@ -269,8 +281,6 @@ class AdvertisementRepository
     }
 
 
-
-
     /**
      * Save
      * @param $ad
@@ -282,59 +292,68 @@ class AdvertisementRepository
     {
         dump($ad);
 //        $this->db->beginTransaction();
-        try {
-            unset($ad['photo']);
+        // try {
+        unset($ad['photo']);
 //            unset($ad['photo_source']);
+
+        if ($ad['source']) { //jeśli w formularzu dodano plik ze zdjęciem
             $photo = [];
+
             $photo['name'] = $ad['photo_title'];
             $photo['source'] = $ad['source'];
-            unset($ad['source']);
-            unset($ad['photo_title']);
+        }
 
-            //lokalizacja
-            $locationRepository = new LocationRepository($app['db']);
-            $location = $locationRepository->findOneByName($ad['location_name']);
-
-            if ($location) {
-                $ad['location_id'] = $location['id'];
-            } else {
-                $location['name'] = $ad['location_name'];
-                $this->db->insert('location', $location);
-                $ad['location_id'] = $this->db->lastInsertId();
-            }
-            unset($ad['location_name']);
+        unset($ad['source']);
+        unset($ad['photo_title']);
 
 
-            if (isset($ad['id']) && ctype_digit((string)$ad['id'])) {
-                // update record
-                $id = $ad['id'];
-                unset($ad['id']);
+        //lokalizacja
+        $locationRepository = new LocationRepository($app['db']);
+        $location = $locationRepository->findOneByName($ad['location_name']);
 
-                $photoRepository = new PhotoRepository($app['db']);
-                if ($photoRepository -> findOneByAdvertisementId($id)) {
+        if ($location) {
+            $ad['location_id'] = $location['id'];
+        } else {
+            $location['name'] = $ad['location_name'];
+            $this->db->insert('location', $location);
+            $ad['location_id'] = $this->db->lastInsertId();
+        }
+        unset($ad['location_name']);
+
+
+        if (isset($ad['id']) && ctype_digit((string)$ad['id'])) {
+            // update record
+            $id = $ad['id'];
+            unset($ad['id']);
+
+            $photoRepository = new PhotoRepository($app['db']);
+
+            if ($photo) { //sprawdzamy, czy w formularzu przesyłamy zdjęcie
+                if ($photoRepository->findOneByAdvertisementId($id)) { //sprawdzamy, czy ogłoszenie posiadało zdjęcie
                     $this->db->update('photo', $photo, ['ad_id' => $id]);
                 } else {
-                    $photo['ad_id'] = $id;
-                    $this->db->insert('photo', $photo);
+                    $photo['ad_id'] = $id; //zdjęcie dostaje numer ogłoszenia
+                    $this->db->insert('photo', $photo); //dodajemy zdjęcie do istniejącego już ogłoszenia
                 }
-                    return $this->db->update('ad', $ad, ['id' => $id]);
-            } else {
-                // add new record
-
-                $this->db->insert('ad', $ad);
-                $id = $this->db->lastInsertId();
-
-
-                if ($photo['source']) {
-                    $photo['ad_id'] = $id;
-                    $this->db->insert('photo', $photo);
-                }
+                return $this->db->update('ad', $ad, ['id' => $id]);
             }
-            $this->db->commit();
-        } catch (DBALException $e) {
-            $this->db->rollBack();
-            throw $e;
+        } else {
+            // add new record
+
+            $this->db->insert('ad', $ad);
+            $id = $this->db->lastInsertId();
+
+
+            if ($photo['source']) {
+                $photo['ad_id'] = $id;
+                $this->db->insert('photo', $photo);
+            }
         }
+//            $this->db->commit();
+//        } catch (DBALException $e) {
+//            $this->db->rollBack();
+//            throw $e;
+//        }
         return $id;
     }
 

@@ -109,7 +109,7 @@
 
             <trans-unit id="dodane_przez_uzytkownika_nr">
                  <source>dodane_przez_uzytkownika_nr</source>
-                 <target>Added by user number</target>
+                 <target>Added by</target>
             </trans-unit>
 
             <trans-unit id="label.province">
@@ -285,6 +285,36 @@
             <trans-unit id="serwis_ogloszeniowy">
                   <source>serwis_ogloszeniowy</source>
                   <target>Advertisement page</target>
+            </trans-unit>
+
+            <trans-unit id="label.location_name">
+                  <source>label.location_name</source>
+                  <target>City</target>
+            </trans-unit>
+
+            <trans-unit id="label.category_search">
+                  <source>label.category_search</source>
+                  <target>Choose category</target>
+            </trans-unit>
+
+            <trans-unit id="photo_name">
+                  <source>photo_name</source>
+                  <target>Name of photo</target>
+            </trans-unit>
+
+            <trans-unit id="zl">
+                  <source>zl</source>
+                  <target>zl</target>
+            </trans-unit>
+
+            <trans-unit id="usun_zdjecie">
+                  <source>usun_zdjecie</source>
+                  <target>Delete photo</target>
+            </trans-unit>
+
+            <trans-unit id="czy_na_pewno_chcesz_usunac_to_zdjecie">
+                  <source>czy_na_pewno_chcesz_usunac_to_zdjecie</source>
+                  <target>Do you really want to delete this photo?</target>
             </trans-unit>
 
 

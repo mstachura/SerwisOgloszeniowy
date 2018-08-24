@@ -3,36 +3,47 @@
 {% block content %}
 
     <H1>{{ 'lista_ogloszen'|trans}}</H1>
-    {% for advertisement in advertisements.data %}
 
+    {% for advertisement in advertisements.data %}
+        <div class="col-md-3 left">
         {% if advertisement.source %}
-            <img src="{{  asset('uploads/photos/' ~ advertisement.source) }}" alt="{{ advertisement.source }}">
+            <a href ="{{ url ('ads_view', {'id': advertisement.id})}}">
+                <img src="{{  asset('uploads/photos/' ~ advertisement.source) }}" alt="{{ advertisement.source }}">
+            </a>
         {% else %}
-            <img src="{{ asset('images/logo.jpg')}}">
+            <a href ="{{ url ('ads_view', {'id': advertisement.id})}}">
+                <img src="{{ asset('images/logo.jpg')}}">
+            </a>
         {% endif %}
 
         {#{% for advertisement in advertisements %}#}
             <p>{{ 'nazwa_ogloszenia'|trans}}: {{ advertisement.name}}</p>
-            <p>{{ 'dodane_przez_uzytkownika_nr'|trans}}: {{ advertisement.login }}</p>
-            <p>{{ 'label.price'|trans}}: {{ advertisement.price }}</p>
+            {#<p>{{ 'dodane_przez_uzytkownika_nr'|trans}}:#}
+                {#<a href ="{{ url ('user_view', {'id': advertisement.user_id}) }}">#}
+                    {#{{ advertisement.login }}#}
+                {#</a>#}
             <p>{{ 'label.description'|trans}}: {{ advertisement.description }}</p>
-            <p>{{ 'label.province'|trans}}: {{ advertisement.province }}</p>
-            <p>{{ 'label.location'|trans}}: {{ advertisement.location_name }}</p>
-            <p>{{ 'nazwa_kategorii'|trans}}:</p>
-            <a href ="{{ url ('category_view', {'id': advertisement.category_id}) }}">
-                {{ advertisement.category_name }}
-            </a>
-            <p>{{ 'label.type'|trans}}: {{ advertisement.type_name}}</p>
+            <p>{{ 'label.price'|trans}}: {{ advertisement.price }}{{ 'zl'|trans }}</p>
+            {#<p>{{ 'label.province'|trans}}: {{ advertisement.province }}</p>#}
+            {#<p>{{ 'label.location'|trans}}: {{ advertisement.location_name }}</p>#}
+            {#<p>{{ 'nazwa_kategorii'|trans}}:</p>#}
+            {#<a href ="{{ url ('category_view', {'id': advertisement.category_id}) }}">#}
+                {#{{ advertisement.category_name }}#}
+            {#</a>#}
+            {#<p>{{ 'label.type'|trans}}: {{ advertisement.type_name}}</p>#}
+
+        <a href ="{{ url ('ads_delete', {'id': advertisement.id}) }}">
+            <button class="btn btn-danger"> {{ "usun_ogloszenie" |trans}}</button>
+        </a>
+
+        <a href ="{{ url ('ads_edit', {'id': advertisement.id}) }}">
+            <button class="btn btn-warning"> {{ "edytuj_ogloszenie" |trans}}</button>
+        </a>
+
+        </div>
 
 
 
-            <a href ="{{ url ('ads_delete', {'id': advertisement.id}) }}">
-                <button class="btn btn-danger"> {{ "usun_ogloszenie" |trans}}</button>
-            </a>
-
-            <a href ="{{ url ('ads_edit', {'id': advertisement.id}) }}">
-                <button class="btn btn-warning"> {{ "edytuj_ogloszenie" |trans}}</button>
-            </a>
         {% endfor %}
 
     {% include 'default/_paginator.html.twig' with {

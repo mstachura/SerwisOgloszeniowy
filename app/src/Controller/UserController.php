@@ -123,6 +123,10 @@ class UserController implements ControllerProviderInterface
 
             $user['password'] = $app['security.encoder.bcrypt']->encodePassword($user['password'], '');
              dump($user);
+
+            $loggedUser['id'] = 1;
+            $data['user_id'] = $loggedUser['id'];
+
             $userRepository->save($app, $user);
 
             $app['session']->getFlashBag()->add(
@@ -238,8 +242,7 @@ class UserController implements ControllerProviderInterface
         $user = $userRepository->findOneById($id);
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
-        $loggedUser = [];
-        $loggedUser['id'] = '1';
+
 
         if (!$user) {
             $app['session']->getFlashBag()->add(
@@ -311,7 +314,8 @@ class UserController implements ControllerProviderInterface
 
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
-
+        $loggedUser = [];
+        $loggedUser['id'] = '1';
 
         $user = $userRepository->findOneByIdWithUserData($id);
 
