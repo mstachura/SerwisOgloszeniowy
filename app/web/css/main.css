@@ -1,5 +1,4 @@
 #stopka{
-    margin-top: 50px;
     clear: both;
     bottom: 0;
     display: block;
@@ -7,6 +6,7 @@
     width:100%;
     background-color: #486574;
     color: white;
+    position: absolute;
 
 }
 
@@ -43,10 +43,11 @@ body{
     font-family: "Roboto", Helvetica, Arial, sans-serif;
     text-decoration: none;
     height: 100%;
+    position: relative;
 }
 
 img{
-    height: 200px;
+    max-height: 200px;
     width: auto;
 }
 

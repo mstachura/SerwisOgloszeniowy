@@ -103,9 +103,13 @@ class UserRepository
 
 
     /**
-     * Load user by login
-     * @param $login
-     * @return array
+     * Loads user by login.
+     *
+     * @param string $login User login
+     * @throws UsernameNotFoundException
+     * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return array Result
      */
     public function loadUserByLogin($login)
     {
@@ -140,17 +144,21 @@ class UserRepository
         }
     }
 
+
     /**
-     * Get user by login
-     * @param $login
-     * @return array|mixed
+     * Gets user data by login.
+     *
+     * @param string $login User login
+     * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return array Result
      */
     public function getUserByLogin($login)
     {
         try {
             $queryBuilder = $this->db->createQueryBuilder();
             $queryBuilder->select('u.id', 'u.login', 'u.password')
-                ->from('si_users', 'u')
+                ->from('user', 'u')
                 ->where('u.login = :login')
                 ->setParameter(':login', $login, \PDO::PARAM_STR);
 
@@ -184,11 +192,14 @@ class UserRepository
     }
 
     /**
-     * Get user roles
-     * @param $user_id
-     * @return array
+     * Gets user roles by User ID.
+     *
+     * @param integer $userId User ID
+     * @throws \Doctrine\DBAL\DBALException
+     *
+     * @return array Result
      */
-    public function getUserRoles($user_id)
+    public function getUserRoles($userId)
     {
         $roles = [];
 
@@ -198,7 +209,7 @@ class UserRepository
                 ->from('user', 'u')
                 ->innerJoin('u', 'role', 'r', 'u.role_id = r.id')
                 ->where('u.id = :id')
-                ->setParameter(':id', $user_id, \PDO::PARAM_INT);
+                ->setParameter(':id', $userId, \PDO::PARAM_INT);
             $result = $queryBuilder->execute()->fetchAll();
 
             if ($result) {
@@ -210,6 +221,7 @@ class UserRepository
             return $roles;
         }
     }
+
 
     /**
      * Find all by username
@@ -275,8 +287,6 @@ class UserRepository
 
                 $user['role_id'] = 2;
 
-
-                //           dump($user);
                 $this->db->insert('user', $user);
                 $user_data['user_id'] = $this->db->lastInsertId();
                 //           dump($user_data);

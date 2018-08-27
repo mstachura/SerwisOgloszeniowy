@@ -92,28 +92,28 @@ $app->register(
                 'form' => [
                     'login_path' => 'auth_login',
                     'check_path' => 'auth_login_check',
-                    'default_target_path' => 'tag_index',
+                    'default_target_path' => 'home_index',
                     'username_parameter' => 'login_type[login]',
                     'password_parameter' => 'login_type[password]',
                 ],
                 'anonymous' => true,
                 'logout' => [
                     'logout_path' => 'auth_logout',
-                    'target_url' => 'tag_index',
+                    'target_url' => 'home_index',
                 ],
                 'users' => function () use ($app) {
                     return new Provider\UserProvider($app['db']);
                 },
             ],
         ],
-//        'security.access_rules' => [
-//            ['^/auth.+$', 'IS_AUTHENTICATED_ANONYMOUSLY'],
+        'security.access_rules' => [
+            ['^/auth.+$', 'IS_AUTHENTICATED_ANONYMOUSLY'],
 
-//        ['^/registration$', 'IS_AUTHENTICATED_ANONYMOUSLY'],
-//        ['.+/delete$', 'IS_AUTHENTICATED_FULLY'],
-//        ['.+/edit$', 'IS_AUTHENTICATED_FULLY'],
-//        ['.+/add$', 'IS_AUTHENTICATED_FULLY'],
-//        ],
+        ['^/registration$', 'IS_AUTHENTICATED_ANONYMOUSLY'],
+        ['.+/delete$', 'IS_AUTHENTICATED_FULLY'],
+        ['.+/edit$', 'IS_AUTHENTICATED_FULLY'],
+        ['.+/add$', 'IS_AUTHENTICATED_FULLY'],
+        ],
         'security.role_hierarchy' => [
             'ROLE_ADMIN' => ['ROLE_USER'],
         ],

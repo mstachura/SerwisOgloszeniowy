@@ -61,7 +61,6 @@ class UserController implements ControllerProviderInterface
             ->bind('user_search');
 
 
-
         return $controller;
     }
 
@@ -122,10 +121,10 @@ class UserController implements ControllerProviderInterface
             $user = $form->getData();
 
             $user['password'] = $app['security.encoder.bcrypt']->encodePassword($user['password'], '');
-             dump($user);
 
             $loggedUser['id'] = 1;
             $data['user_id'] = $loggedUser['id'];
+
 
             $userRepository->save($app, $user);
 
@@ -134,6 +133,16 @@ class UserController implements ControllerProviderInterface
                 [
                     'type' => 'success',
                     'message' => 'message.element_successfully_added',
+                ]
+            );
+
+            return $app['twig']->render(
+                'user/add.html.twig',
+                [
+                    'user' => $user,
+                    'form' => $form->createView(),
+                    'loggedUser' => $loggedUser,
+                    'categoriesMenu' => $categoryRepository->findAll()
                 ]
             );
             return $app->redirect($app['url_generator']->generate('home_index', 301));
@@ -149,7 +158,6 @@ class UserController implements ControllerProviderInterface
                 'categoriesMenu' => $categoryRepository->findAll()
             ]
         );
-//        return $app['twig']->render('user/add.html.twig', ['error' => $error]);
     }
 
     /**
@@ -165,8 +173,7 @@ class UserController implements ControllerProviderInterface
         $userRepository = new UserRepository($app['db']);
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
-        $loggedUser = [];
-        $loggedUser['id'] = '1';
+        dump($loggedUser);
         $userDataRepository = new DataRepository($app['db']);
         $user = $userRepository->findOneById($id); //tu ma być findOneByIdWithUserId
         $user_data = $userDataRepository->findOneByUserId($id);
@@ -243,8 +250,61 @@ class UserController implements ControllerProviderInterface
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
 
+        if ($loggedUser['id'] == $id or $app['security.authorization_checker']->isGranted('ROLE_ADMIN')) {
+            if (!$user) {
+                $app['session']->getFlashBag()->add(
+                    'messages',
+                    [
+                        'type' => 'warning',
+                        'message' => 'message.record_not_found',
+                    ]
+                );
 
-        if (!$user) {
+                return $app->redirect($app['url_generator']->generate('user_index'));
+            }
+
+            if ($loggedUser['id'] == $id or $app['security.authorization_checker']->isGranted('ROLE_ADMIN')) {
+                $form = $app['form.factory']->
+                createBuilder(FormType::class, $user)->add('id', HiddenType::class)->getForm();
+                $form->handleRequest($request);
+
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $userRepository->delete($form->getData());
+
+                    $app['session']->getFlashBag()->add(
+                        'messages',
+                        [
+                            'type' => 'success',
+                            'message' => 'message.element_successfully_deleted',
+                        ]
+                    );
+
+                    return $app->redirect(
+                        $app['url_generator']->generate('user_index'),
+                        301
+                    );
+                }
+
+                return $app['twig']->render(
+                    'user/delete.html.twig',
+                    [
+                        'user' => $user,
+                        'form' => $form->createView(),
+                        'loggedUser' => $loggedUser,
+                        'categoriesMenu' => $categoryRepository->findAll()
+                    ]
+                );
+            } else {
+                $app['session']->getFlashBag()->add(
+                    'messages',
+                    [
+                        'type' => 'warning',
+                        'message' => 'message.it_is_not_your_profile',
+                    ]
+                );
+                return $app->redirect($app['url_generator']->generate('home_index'));
+            }
+        } else {
             $app['session']->getFlashBag()->add(
                 'messages',
                 [
@@ -252,50 +312,7 @@ class UserController implements ControllerProviderInterface
                     'message' => 'message.record_not_found',
                 ]
             );
-
-            return $app->redirect($app['url_generator']->generate('user_index'));
-        }
-
-        if ($loggedUser['id'] == $id or $app['security.authorization_checker']->isGranted('ROLE_ADMIN')) {
-            $form = $app['form.factory']->
-                createBuilder(FormType::class, $user)->add('id', HiddenType::class)->getForm();
-            $form->handleRequest($request);
-
-            if ($form->isSubmitted() && $form->isValid()) {
-                $userRepository->delete($form->getData());
-
-                $app['session']->getFlashBag()->add(
-                    'messages',
-                    [
-                        'type' => 'success',
-                        'message' => 'message.element_successfully_deleted',
-                    ]
-                );
-
-                return $app->redirect(
-                    $app['url_generator']->generate('user_index'),
-                    301
-                );
-            }
-
-            return $app['twig']->render(
-                'user/delete.html.twig',
-                [
-                    'user' => $user,
-                    'form' => $form->createView(),
-                    'loggedUser' => $loggedUser,
-                    'categoriesMenu' => $categoryRepository->findAll()
-                ]
-            );
-        } else {
-            $app['session']->getFlashBag()->add(
-                'messages',
-                [
-                    'type' => 'warning',
-                    'message' => 'message.it_is_not_your_profile',
-                ]
-            );
-            return $app->redirect($app['url_generator']->generate('home_index'));
+            return $app->redirect($app['url_generator']->generate('home_index', 301));
         }
     }
 
@@ -314,8 +331,7 @@ class UserController implements ControllerProviderInterface
 
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
-        $loggedUser = [];
-        $loggedUser['id'] = '1';
+
 
         $user = $userRepository->findOneByIdWithUserData($id);
 

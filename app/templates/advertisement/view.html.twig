@@ -47,8 +47,8 @@
 
         {#<p>{{ advertisement.photo}}</p>#}
         </div>
-        {#is_granted('IS_AUTHENTICATED_FULLY' ) and#}
-    {% if loggedUser.id==advertisement.user_id or is_granted('ROLE_ADMIN')%}
+
+        {% if is_granted('IS_AUTHENTICATED_FULLY' ) and loggedUser.id==advertisement.user_id or is_granted('ROLE_ADMIN')%}
 
         <a href ="{{ url ('ads_edit', {'id': advertisement.id}) }}">
             <button class="btn btn-warning">

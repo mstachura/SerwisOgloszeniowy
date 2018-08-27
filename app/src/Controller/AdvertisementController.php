@@ -90,7 +90,7 @@ class AdvertisementController implements ControllerProviderInterface
         $advertisements = $advertisementRepository->findAllPaginated($page);
         $categoryRepository = new CategoryRepository($app['db']);
         $userRepository = new UserRepository($app['db']);
-        $users = $userRepository-> findAll();
+        $users = $userRepository->findAll();
         $loggedUser = $userRepository->getLoggedUser($app);
 
 
@@ -119,6 +119,7 @@ class AdvertisementController implements ControllerProviderInterface
         $loggedUser = $userRepository->getLoggedUser($app);
 
         $ad = [];
+
         $form = $app['form.factory']->createBuilder(
             AdvertisementType::class,
             $ad,
@@ -142,11 +143,12 @@ class AdvertisementController implements ControllerProviderInterface
                 $data['source'] = $fileName;
             }
 
-            $loggedUser['id'] = 1;
+
             $data['user_id'] = $loggedUser['id'];
 //            dump($data);
-            $id = $advertisementRepository->save($app, $data);
 
+
+            $id = $advertisementRepository->save($app, $data);
 
 
             $app['session']->getFlashBag()->add(
@@ -158,7 +160,6 @@ class AdvertisementController implements ControllerProviderInterface
             );
             return $app->redirect($app['url_generator']->generate('ads_view', ['id' => $id], 301));
         }
-
 
 
         return $app['twig']->render(
@@ -189,91 +190,104 @@ class AdvertisementController implements ControllerProviderInterface
         $ad = $advertisementRepository->findOneById($id);
 
         $photoRepository = new PhotoRepository($app['db']);
-        $photo = $photoRepository -> findOneByAdvertisementId($id);
+        $photo = $photoRepository->findOneByAdvertisementId($id);
 
-        if ($photo) {
-            $ad['photo_title'] = $photo['name'];
-        }
-
-        $locationRepository = new LocationRepository($app['db']);
-        $location=$locationRepository ->findOneById($ad['location_id']);
-        $ad['location_name'] = $location['name'];
         $userRepository = new UserRepository($app['db']);
-        $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
-        $loggedUser['id'] = '1';
 
-        if (!$ad) {
+
+        if ($ad['user_id'] == $loggedUser['id'] or $app['security.authorization_checker']->isGranted('ROLE_ADMIN')) {
+            if ($photo) {
+                $ad['photo_title'] = $photo['name'];
+            }
+
+            $locationRepository = new LocationRepository($app['db']);
+            $location = $locationRepository->findOneById($ad['location_id']);
+            $ad['location_name'] = $location['name'];
+
+            $categoryRepository = new CategoryRepository($app['db']);
+
+
+            if (!$ad) {
+                $app['session']->getFlashBag()->add(
+                    'messages',
+                    [
+                        'type' => 'warning',
+                        'message' => 'message.record_not_found',
+                    ]
+                );
+
+                return $app->redirect($app['url_generator']->generate('ads_index'));
+            }
+
+            $photoRepository = new PhotoRepository($app['db']);
+            $photo = $photoRepository->findOneByAdvertisementId($id);
+            if ($photo) {
+//            $ad['photo_source']=$photo['source'];
+//            $ad['photo_title'] = $photo['name'];
+            } else {
+                $photo['source'] = '';
+            }
+//        dump($ad);
+            $form = $app['form.factory']->createBuilder(
+                AdvertisementType::class,
+                $ad,
+                [
+                    'category_repository' => new CategoryRepository($app['db']),
+                    'type_repository' => new TypeRepository($app['db']),
+                    'location_repository' => new LocationRepository($app['db']),
+                ]
+            )->getForm();
+
+            $form->handleRequest($request);
+
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $data = $form->getData(); //dane advertisement i photo
+
+                if ($data['photo']) {
+                    $fileUploader = new FileUploader($app['config.photos_directory']);
+//            var_dump($photo_title);
+                    $fileName = $fileUploader->upload($data['photo']);
+                    $data['source'] = $fileName;
+                    dump($data);
+                }
+
+                $advertisementRepository->save($app, $data);
+
+                $app['session']->getFlashBag()->add(
+                    'messages',
+                    [
+                        'type' => 'success',
+                        'message' => 'message.element_successfully_edited',
+                    ]
+                );
+
+                return $app->redirect($app['url_generator']->generate('ads_view', ['id' => $id], 301));
+            }
+
+
+            return $app['twig']->render(
+                'advertisement/edit.html.twig',
+                [
+                    'ad' => $ad,
+                    'form' => $form->createView(),
+                    'photo' => $photo,
+                    'loggedUser' => $loggedUser,
+                    'categoriesMenu' => $categoryRepository->findAll()
+                ]
+            );
+        } else {
             $app['session']->getFlashBag()->add(
                 'messages',
                 [
                     'type' => 'warning',
-                    'message' => 'message.record_not_found',
+                    'message' => 'message.its_not_your_ad',
                 ]
             );
-
-            return $app->redirect($app['url_generator']->generate('ads_index'));
-        }
-
-        $photoRepository = new PhotoRepository($app['db']);
-        $photo = $photoRepository -> findOneByAdvertisementId($id);
-        if ($photo) {
-//            $ad['photo_source']=$photo['source'];
-//            $ad['photo_title'] = $photo['name'];
-        } else {
-            $photo['source'] = '';
-        }
-//        dump($ad);
-        $form = $app['form.factory']->createBuilder(
-            AdvertisementType::class,
-            $ad,
-            [
-                'category_repository' => new CategoryRepository($app['db']),
-                'type_repository' => new TypeRepository($app['db']),
-                'location_repository' => new LocationRepository($app['db']),
-            ]
-        )->getForm();
-
-        $form->handleRequest($request);
-
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData(); //dane advertisement i photo
-
-            if ($data['photo']) {
-                $fileUploader = new FileUploader($app['config.photos_directory']);
-//            var_dump($photo_title);
-                $fileName = $fileUploader->upload($data['photo']);
-                $data['source'] = $fileName;
-                dump($data);
-            }
-
-            $advertisementRepository->save($app, $data);
-
-            $app['session']->getFlashBag()->add(
-                'messages',
-                [
-                    'type' => 'success',
-                    'message' => 'message.element_successfully_edited',
-                ]
-            );
-
             return $app->redirect($app['url_generator']->generate('ads_view', ['id' => $id], 301));
         }
-
-
-        return $app['twig']->render(
-            'advertisement/edit.html.twig',
-            [
-                'ad' => $ad,
-                'form' => $form->createView(),
-                'photo' => $photo,
-                'loggedUser' => $loggedUser,
-                'categoriesMenu' => $categoryRepository->findAll()
-            ]
-        );
     }
-
 
     /**
      * Delete action
@@ -293,49 +307,60 @@ class AdvertisementController implements ControllerProviderInterface
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
 
-        if (!$ad) {
-            $app['session']->getFlashBag()->add(
-                'messages',
+        if ($ad['user_id'] == $loggedUser['id'] or $app['security.authorization_checker']->isGranted('ROLE_ADMIN')) {
+            if (!$ad) {
+                $app['session']->getFlashBag()->add(
+                    'messages',
+                    [
+                        'type' => 'warning',
+                        'message' => 'message.record_not_found',
+                    ]
+                );
+
+                return $app->redirect($app['url_generator']->generate('ads_index'));
+            }
+
+            $form = $app['form.factory']->createBuilder(FormType::class, $ad)->add('id', HiddenType::class)->getForm();
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $advertisementRepository->delete($form->getData());
+
+                $app['session']->getFlashBag()->add(
+                    'messages',
+                    [
+                        'type' => 'success',
+                        'message' => 'message.element_successfully_deleted',
+                        'loggedUser' => $loggedUser,
+                        'categoriesMenu' => $categoryRepository->findAll()
+                    ]
+                );
+
+                return $app->redirect(
+                    $app['url_generator']->generate('ads_index'),
+                    301
+                );
+            }
+
+            return $app['twig']->render(
+                'advertisement/delete.html.twig',
                 [
-                    'type' => 'warning',
-                    'message' => 'message.record_not_found',
-                ]
-            );
-
-            return $app->redirect($app['url_generator']->generate('ads_index'));
-        }
-
-        $form = $app['form.factory']->createBuilder(FormType::class, $ad)->add('id', HiddenType::class)->getForm();
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $advertisementRepository->delete($form->getData());
-
-            $app['session']->getFlashBag()->add(
-                'messages',
-                [
-                    'type' => 'success',
-                    'message' => 'message.element_successfully_deleted',
+                    'ad' => $ad,
+                    'form' => $form->createView(),
                     'loggedUser' => $loggedUser,
                     'categoriesMenu' => $categoryRepository->findAll()
                 ]
             );
-
-            return $app->redirect(
-                $app['url_generator']->generate('ads_index'),
-                301
+        } else {
+            $app['session']->getFlashBag()->add(
+                'messages',
+                [
+                    'type' => 'warning',
+                    'message' => 'message.its_not_your_ad',
+                ]
             );
+            return $app->redirect($app['url_generator']->generate('ads_view', ['id' => $id], 301));
         }
-
-        return $app['twig']->render(
-            'advertisement/delete.html.twig',
-            [
-                'ad' => $ad,
-                'form' => $form->createView(),
-                'loggedUser' => $loggedUser,
-                'categoriesMenu' => $categoryRepository->findAll()
-            ]
-        );
     }
 
     /**
@@ -354,8 +379,8 @@ class AdvertisementController implements ControllerProviderInterface
         $photoRepository = new PhotoRepository($app['db']);
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
-        $loggedUser['id'] = '1';
-        $photo = $photoRepository ->findOneByAdvertisementId($id);
+
+        $photo = $photoRepository->findOneByAdvertisementId($id);
         if ($advertisement) {
             if ($photo) {
                 $advertisement['photo_name'] = $photo['name'];
@@ -419,16 +444,15 @@ class AdvertisementController implements ControllerProviderInterface
         $loggedUser = $userRepository->getLoggedUser($app);
         $advertisementRepository = new AdvertisementRepository($app['db']);
         $advertisements = $advertisementRepository->findByPhrasePaginated($phrase, $page);
-        $users = $userRepository->findByPhrasePaginated($phrase, $page);
+
 
         return $app['twig']->render(
             'advertisement/search.html.twig',
             [
-            'loggedUser' => $loggedUser,
-            'advertisements' => $advertisements,
-//            'users' => $users,
-            'categoriesMenu' => $categoryRepository->findAll(),
-            'phrase' => $phrase
+                'loggedUser' => $loggedUser,
+                'advertisements' => $advertisements,
+                'categoriesMenu' => $categoryRepository->findAll(),
+                'phrase' => $phrase
             ]
         );
     }
