@@ -1,4 +1,24 @@
-
-<a href ="{{ url ('home_index')}}">
-    <img src = "{{ asset ('images/logo.jpg') }}" alt="logo" class="logo"/>
+<a href="{{ url ('home_index') }}">
+    <img src="{{ asset ('images/logo.jpg') }}" alt="logo" class="logo"/>
 </a>
+
+{% block content %}
+
+    <div class="right">
+
+
+        <a href="{{ url ('ads_add') }}">
+            <button class="btn btn-success">
+                {{ "dodaj_ogloszenie" |trans }}
+            </button>
+        </a>
+
+
+        <a href="{{ url ('home_search') }}">
+            <button class="btn btn-info">{{ "szukaj" |trans }}</button>
+        </a>
+
+
+    </div>
+
+{% endblock %}

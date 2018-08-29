@@ -17,7 +17,10 @@
         {% endif %}
 
         {#{% for advertisement in advertisements %}#}
-            <p>{{ 'nazwa_ogloszenia'|trans}}: {{ advertisement.name}}</p>
+            <p>{{ 'nazwa_ogloszenia'|trans}}: </p>
+            <a href ="{{ url ('ads_view', {'id': advertisement.id}) }}">
+                {{ advertisement.name}}
+            </a>
             {#<p>{{ 'dodane_przez_uzytkownika_nr'|trans}}:#}
                 {#<a href ="{{ url ('user_view', {'id': advertisement.user_id}) }}">#}
                     {#{{ advertisement.login }}#}

@@ -138,14 +138,14 @@ class AdvertisementController implements ControllerProviderInterface
 
             if ($data['photo']) {
                 $fileUploader = new FileUploader($app['config.photos_directory']);
-//            var_dump($photo_title);
+
                 $fileName = $fileUploader->upload($data['photo']);
                 $data['source'] = $fileName;
             }
 
 
             $data['user_id'] = $loggedUser['id'];
-//            dump($data);
+
 
 
             $id = $advertisementRepository->save($app, $data);
@@ -228,7 +228,7 @@ class AdvertisementController implements ControllerProviderInterface
             } else {
                 $photo['source'] = '';
             }
-//        dump($ad);
+
             $form = $app['form.factory']->createBuilder(
                 AdvertisementType::class,
                 $ad,
@@ -247,10 +247,9 @@ class AdvertisementController implements ControllerProviderInterface
 
                 if ($data['photo']) {
                     $fileUploader = new FileUploader($app['config.photos_directory']);
-//            var_dump($photo_title);
+
                     $fileName = $fileUploader->upload($data['photo']);
                     $data['source'] = $fileName;
-                    dump($data);
                 }
 
                 $advertisementRepository->save($app, $data);

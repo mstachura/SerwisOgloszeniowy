@@ -173,7 +173,7 @@ class UserController implements ControllerProviderInterface
         $userRepository = new UserRepository($app['db']);
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
-        dump($loggedUser);
+
         $userDataRepository = new DataRepository($app['db']);
         $user = $userRepository->findOneById($id); //tu ma być findOneByIdWithUserId
         $user_data = $userDataRepository->findOneByUserId($id);
@@ -327,6 +327,8 @@ class UserController implements ControllerProviderInterface
     {
         $advertisementRepository = new AdvertisementRepository($app['db']);
         $advertisements = $advertisementRepository->findAllByUser($id);
+        $ad = $advertisementRepository->findOneByIdExtra($id);
+
         $userRepository = new UserRepository($app['db']);
 
         $categoryRepository = new CategoryRepository($app['db']);
@@ -345,6 +347,7 @@ class UserController implements ControllerProviderInterface
                 'user/view.html.twig',
                 [
                     'advertisements' => $advertisements,
+                    'ad' => $ad,
                     'user' => $user,
                     'userData' => $userData,
                     'loggedUser' => $loggedUser,

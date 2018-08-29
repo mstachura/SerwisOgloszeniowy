@@ -28,9 +28,7 @@ $app->register(
 
 $app['config.photos_directory'] = __DIR__.'/../web/uploads/photos';
 $app['config.download_photos_directory'] = 'uploads/photos';
-//dump($app['config.download_photos_directory']);
-//dump($app['config.download_files_directory'])
-// ...
+
 $app['twig'] = $app->extend('twig', function ($twig, $app) {
     // add custom globals, filters, tags, ...
     $twig->addGlobal('photos_directory', $app['config.photos_directory']);

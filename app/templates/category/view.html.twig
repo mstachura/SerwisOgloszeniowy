@@ -8,7 +8,7 @@
         <a href="{{ global.request.headers.get('referer') }}" title="{{ 'label.back'|trans }}" class="btn btn-default">
             <span class="fa fa-mail-reply" aria-hidden="true"></span>
             <i class="glyphicon glyphicon-arrow-left"></i>
-            {{ 'label.back'|trans }}
+            <span aria-hidden="true">&larr;</span>{{ 'label.back'|trans }}
         </a>
     </div>
 
@@ -17,7 +17,7 @@
 
     {% for advertisement in advertisements.data %}
 
-        <a href ="{{ url ('ads_view', {'id': advertisement.id}) }}">
+        <a href="{{ url ('ads_view', {'id': advertisement.id}) }}">
             {{ advertisement.name }}
         </a>
 

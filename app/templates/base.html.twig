@@ -1,3 +1,4 @@
+
 {% include "header.html.twig" %}
 
 <html>
@@ -17,18 +18,26 @@
 
 </head>
 <body>
+{% include 'default/_flash_messages.html.twig' %}
 
-{% if is_granted('IS_AUTHENTICATED_FULLY' )%}
-   {{ loggedUser.login }}
+
+{% if is_granted('IS_AUTHENTICATED_FULLY' ) %}
+
+    {{ 'zalogowany_jako'|trans }}:
+    <a href="{{ url ('user_view', {'id': loggedUser.id}) }}">
+        {{ loggedUser.login }}
+    </a>
 {% endif %}
 
-<nav class="navbar navbar-default container-fluid" id="nav">
+<nav class="navbar navbar-default container-fluid">
     {% include 'menu.html.twig' %}
     <div class="container-fluid">
         <div class="btn-group pull-right" role="group" aria-label="{{ 'label.actions'|trans }}">
             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <a class="btn btn-default" href="{{ url('auth_logout') }}" title="{{ 'auth.logout.label'|trans }}">
-                    {{ 'auth.logout.label'|trans }}
+                    <button class="btn btn-info">
+                        {{ 'auth.logout.label'|trans }}
+                    </button>
                 </a>
             {% else %}
                 <a class="btn btn-default" href="{{ url('auth_login') }}" title="{{ 'auth.login.label'|trans }}">
@@ -36,15 +45,20 @@
                         {{ 'auth.login.label'|trans }}
                     </button>
                 </a>
+
+                <a href="{{ url ('user_registration') }}">
+                    <button class="btn btn-info">{{ 'zarejestruj'|trans }}</button>
+                </a>
+
             {% endif %}
         </div>
     </div>
 </nav>
 
-{% include 'default/_flash_messages.html.twig' %}
+
 
 {% block body %}
-<header> {% block header %}{% endblock %} </header>
+    <header> {% block header %}{% endblock %} </header>
     {% block content %}Page will be soon.{% endblock %}
 
 
@@ -57,17 +71,18 @@
     {#<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->#}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+            integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+            crossorigin="anonymous"></script>
 
 
 
 
 {% endblock %}
 
-
+{% block footer %}
+    <footer id="stopka">System interakcyjny - projekt</footer>
+{% endblock %}
 
 </body>
 
-{% block footer %}
-<footer class="card-footer" id="stopka">System interakcyjny - projekt</footer>
-{% endblock %}

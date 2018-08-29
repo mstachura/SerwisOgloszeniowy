@@ -22,9 +22,9 @@
                   <target>Komentarze</target>
              </trans-unit>
 
-             <trans-unit id="dane_autora_ogloszenia">
-                  <source>dane_autora_ogloszenia</source>
-                  <target>Dane autora ogłoszenia</target>
+             <trans-unit id="dane_autora">
+                  <source>dane_autora</source>
+                  <target>Dane autora</target>
              </trans-unit>
 
              <trans-unit id="ad">
@@ -330,6 +330,31 @@
              <trans-unit id="czy_na_pewno_chcesz_usunac_to_zdjecie">
                     <source>czy_na_pewno_chcesz_usunac_to_zdjecie</source>
                     <target>Czy na pewno chcesz usunąć to zdjęcie?</target>
+             </trans-unit>
+
+             <trans-unit id="auth.logout.label">
+                    <source>auth.logout.label</source>
+                    <target>Wyloguj</target>
+             </trans-unit>
+
+             <trans-unit id="zalogowany_jako">
+                    <source>zalogowany_jako</source>
+                    <target>Zalogowany jako</target>
+             </trans-unit>
+
+             <trans-unit id="zarejestruj">
+                    <source>zarejestruj</source>
+                    <target>Zarejestruj</target>
+             </trans-unit>
+
+             <trans-unit id="szukaj">
+                   <source>szukaj</source>
+                   <target>Szukaj</target>
+             </trans-unit>
+
+             <trans-unit id="profil">
+                   <source>profil</source>
+                   <target>Profil użytkownika</target>
              </trans-unit>
 
 

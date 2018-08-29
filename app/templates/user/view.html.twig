@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block title %}
-    Profil użytkownika - {{ user.id }}
+    {{"profil" |trans  }} - {{ user.id }}
 {% endblock %}
 
 {% block content %}
@@ -9,11 +9,11 @@
         <a href="{{ global.request.headers.get('referer') }}" title="{{ 'label.back'|trans }}" class="btn btn-default">
             <span class="fa fa-mail-reply" aria-hidden="true"></span>
             <i class="glyphicon glyphicon-arrow-left"></i>
-            {{ 'label.back'|trans }}
+            <span aria-hidden="true">&larr;</span>{{ 'label.back'|trans }}
         </a>
     </div>
 
-    <H1>{{ "dane_autora_ogloszenia" |trans}}</H1>
+    <H1>{{ "dane_autora" |trans}}</H1>
     <p>{{ "label.login" |trans}}: {{ user.login}}</p>
 
     <p>{{ "label.email" |trans}}: {{ user.email}}</p>
@@ -26,7 +26,7 @@
     {% for advertisement in advertisements %}
 
             {#</li><p>{{ advertisement.name}}</p></li>#}
-            {#</li><p>{{ advertisement.user_id }}</p></li>#}
+            </li><p>{{ ad.source }}</p></li>
         <a href ="{{ url ('ads_view', {'id': advertisement.id}) }}"></li>
             <p>{{ advertisement.name}}</p>
             {#<img src='' alt="{{ advertisement.photo }}">#}
@@ -35,12 +35,6 @@
     {% endfor %}
 </div>
 
-
-    <a href ="{{ url ('ads_add') }}">
-        <button class="btn btn-success">
-            {{ "dodaj_ogloszenie" |trans}}
-        </button>
-    </a>
     
 
     {% if (is_granted('IS_AUTHENTICATED_FULLY' ) and loggedUser.id == user.id) or is_granted('ROLE_ADMIN')%}

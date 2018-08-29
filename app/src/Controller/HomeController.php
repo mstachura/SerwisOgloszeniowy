@@ -126,7 +126,7 @@ class HomeController implements ControllerProviderInterface
             }
         }
 
-//        dump($results);
+
         return $app['twig']->render(
             'home/search.html.twig',
             [

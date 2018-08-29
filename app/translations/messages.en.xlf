@@ -22,9 +22,9 @@
                 <target>Comments</target>
             </trans-unit>
 
-            <trans-unit id="dane_autora_ogloszenia">
-                <source>dane_autora_ogloszenia</source>
-                <target>Data of ad's author</target>
+            <trans-unit id="dane_autora">
+                <source>dane_autora</source>
+                <target>Data of author</target>
             </trans-unit>
 
             <trans-unit id="ad">
@@ -315,6 +315,31 @@
             <trans-unit id="czy_na_pewno_chcesz_usunac_to_zdjecie">
                   <source>czy_na_pewno_chcesz_usunac_to_zdjecie</source>
                   <target>Do you really want to delete this photo?</target>
+            </trans-unit>
+
+            <trans-unit id="auth.logout.label">
+                  <source>auth.logout.label</source>
+                  <target>Log out</target>
+            </trans-unit>
+
+            <trans-unit id="zalogowany_jako">
+                  <source>zalogowany_jako</source>
+                  <target>Logged as</target>
+            </trans-unit>
+
+            <trans-unit id="zarejestruj">
+                  <source>zarejestruj</source>
+                  <target>Register</target>
+            </trans-unit>
+
+            <trans-unit id="szukaj">
+                  <source>szukaj</source>
+                  <target>Search</target>
+            </trans-unit>
+
+            <trans-unit id="profil">
+                  <source>profil</source>
+                  <target>User profile</target>
             </trans-unit>
 
 

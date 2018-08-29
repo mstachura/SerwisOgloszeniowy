@@ -272,7 +272,7 @@ class AdvertisementRepository
 //            ->where('ad.name LIKE :phrase')
 //            ->setParameter(':phrase', '%' . $phrase . '%')
             ->setMaxResults(1);
-//        dump($countQueryBuilder);
+
         $paginator = new Paginator($this->queryAllFiltered($phrase), $countQueryBuilder);
         $paginator->setCurrentPage($page);
         $paginator->setMaxPerPage(static::NUM_ITEMS);
@@ -290,7 +290,7 @@ class AdvertisementRepository
      */
     public function save(Application $app, $ad)
     {
-        dump($ad);
+
 //        $this->db->beginTransaction();
         // try {
         unset($ad['photo']);

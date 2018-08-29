@@ -9,7 +9,7 @@
         <a href="{{ global.request.headers.get('referer') }}" title="{{ 'label.back'|trans }}" class="btn btn-default">
             <span class="fa fa-mail-reply" aria-hidden="true"></span>
             <i class="glyphicon glyphicon-arrow-left"></i>
-            {{ 'label.back'|trans }}
+            <span aria-hidden="true">&larr;</span>{{ 'label.back'|trans }}
         </a>
     </div>
 
@@ -17,13 +17,11 @@
 
 
 
-    <a href ="{{ url ('user_index') }}">
-        {{ "lista_uzytkownikow" |trans}}
-    </a>
+
 
     {{ form_start(form, { method: 'post', action: url('home_search') }) }}
     {{ form_widget(form) }}
-    <input type="submit" value="{{ 'action.search'|trans }}" class="btn btn-success" />
+    <input type="submit" value="{{ 'action.search'|trans }}" class="btn btn-info" />
     {{ form_end(form) }}
 
 

@@ -277,19 +277,18 @@ class UserRepository
                 // update record
                 $id = $user['id'];
                 unset($user['id']);
-//            dump($user);
-//            dump($user_data);
+
                 $this->db->update('user_data', $user_data, ['user_id' => $id]);
                 return $this->db->update('user', $user, ['id' => $id]);
             } else {
                 // add new record
-//            dump($user);
+
 
                 $user['role_id'] = 2;
 
                 $this->db->insert('user', $user);
                 $user_data['user_id'] = $this->db->lastInsertId();
-                //           dump($user_data);
+
             }
             $this->db->commit();
         } catch (DBALException $e) {
@@ -337,7 +336,7 @@ class UserRepository
         )
             ->from('user', 'u')
             ->innerjoin('u', 'user_data', 'ud', 'u.id = ud.id');
-//        dump($user);
+
 //        return $queryBuilder->select('u.id', 'u.login', 'u.mail', 'u.password', 'ud.name', 'ud.surname')
 //            ->from('user', 'u')
 //            ->innerJoin('u', 'userdata', 'ud', 'u.id = ud.userId');
@@ -376,7 +375,7 @@ class UserRepository
                 ->setParameter(':id', $id, \PDO::PARAM_INT);
         }
 
-//        dump($queryBuilder->execute()->fetchAll());
+
         return $queryBuilder->execute()->fetchAll();
     }
 
@@ -442,7 +441,7 @@ class UserRepository
         $countQueryBuilder = $this->queryAllFiltered($phrase)
             ->select('COUNT(DISTINCT u.id) AS total_results')
             ->setMaxResults(1);
-//        dump($countQueryBuilder);
+
         $paginator = new Paginator($this->queryAllFiltered($phrase), $countQueryBuilder);
         $paginator->setCurrentPage($page);
         $paginator->setMaxPerPage(static::NUM_ITEMS);

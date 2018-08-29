@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-use Controller\HelloController;
+//use Controller\HelloController;
 use Controller\AdvertisementController;
 use Controller\HomeController;
 use Controller\UserController;
@@ -19,7 +19,7 @@ use Controller\CategoryController;
 use Controller\AuthController;
 use Controller\PhotoController;
 
-$app->mount('/hello', new HelloController());
+//$app->mount('/hello', new HelloController());
 $app->mount('/advertisement', new AdvertisementController());
 $app->mount('/', new HomeController());
 $app->mount('/user', new UserController());
