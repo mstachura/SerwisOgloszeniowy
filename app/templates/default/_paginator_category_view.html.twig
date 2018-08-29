@@ -7,13 +7,13 @@
             {% if paginator.page > 1 %}
                 {% set previous = (paginator.page - 1) %}
                 <li class="previous">
-                    <a href="{{ url(route_name, {'id': category_id, 'page': previous}) }}" title="{{ 'labels.nav.prev'|trans }}">
+                    <a class="btn btn-info" href="{{ url(route_name, {'id': category_id, 'page': previous}) }}" title="{{ 'labels.nav.prev'|trans }}">
                         <span aria-hidden="true">&larr;</span>{{ 'labels.nav.prev'|trans }}
                     </a>
                 </li>
             {% else %}
                 <li class="previous disabled">
-                    <a href="#" title="{{ 'labels.nav.prev'|trans }}">
+                    <a class="btn btn-info" href="#" title="{{ 'labels.nav.prev'|trans }}">
                         <span aria-hidden="true">&larr;</span>{{ 'labels.nav.prev'|trans }}
                     </a>
                 </li>
@@ -22,7 +22,7 @@
             {% if paginator.page < paginator.pages_number %}
                 {% set next = (paginator.page + 1) %}
                 <li class="next">
-                    <a href="{{ url(route_name, {'id': category_id, 'page': next}) }}" title="{{ 'label.nav.next'|trans }}">
+                    <a class="btn btn-info" href="{{ url(route_name, {'id': category_id, 'page': next}) }}" title="{{ 'label.nav.next'|trans }}">
                         {{ 'label.nav.next'|trans }}<span aria-hidden="true">&rarr;</span>
                     </a>
                 </li>

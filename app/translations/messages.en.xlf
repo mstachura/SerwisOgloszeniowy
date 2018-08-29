@@ -342,6 +342,11 @@
                   <target>User profile</target>
             </trans-unit>
 
+            <trans-unit id="nie_masz_jeszcze_konta">
+                  <source>nie_masz_jeszcze_konta</source>
+                  <target>You don't have an account yet?</target>
+            </trans-unit>
+
 
 
 

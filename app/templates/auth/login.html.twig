@@ -23,4 +23,12 @@
         <input type="submit" value="{{ 'action.login'|trans }}" class="btn btn-info" />
         {{ form_end(form) }}
     </div>
+
+    {% if is_granted('IS_AUTHENTICATED_ANONYMOUSLY') %}
+        {{ "nie_masz_jeszcze_konta" |trans }}
+        <a class="btn btn-default" href="{{ url ('user_registration') }}">
+            {{ 'zarejestruj'|trans }}
+        </a>
+    {% endif %}
+
 {% endblock %}

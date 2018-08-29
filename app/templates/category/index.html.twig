@@ -4,12 +4,13 @@
 
 {% block body %}
 
-
+    <div class="paginator container">
     {% include 'default/_paginator.html.twig' with {
         paginator: advertisements,
         route_name: 'category_view',
     }
     %}
+    </div>
 
     {% for advertisement in advertisements.data %}
         <a href ="{{ url ('ads_view', {'id': advertisement.id}) }}">

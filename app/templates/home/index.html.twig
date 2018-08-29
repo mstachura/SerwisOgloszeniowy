@@ -8,12 +8,7 @@
 
 {% block content %}
 
-    {% if is_granted('IS_AUTHENTICATED_ANONYMOUSLY') %}
-        {{ "nie_masz_jeszcze_konta" |trans }}
-        <a class="btn btn-default" href="{{ url ('user_registration') }}">
-            {{ 'zarejestruj'|trans }}
-        </a>
-    {% endif %}
+
     {% include "advertisement/ads_list.html.twig" %}
 
     <div class="paginator container">

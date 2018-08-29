@@ -47,9 +47,7 @@ ul {
 .navigation{
     border-top: 2px solid #486574;
     border-bottom: 2px solid #486574;
-    /*background-color: #486574;*/
-    /*color: #ffffff;*/
-    /*font-size: 20px;*/
+    font-size: 20px;
 }
 
 .logo{

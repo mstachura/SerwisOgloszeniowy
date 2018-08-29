@@ -344,7 +344,7 @@
 
              <trans-unit id="zarejestruj">
                     <source>zarejestruj</source>
-                    <target>Zarejestruj</target>
+                    <target>Zarejestruj się</target>
              </trans-unit>
 
              <trans-unit id="szukaj">
@@ -355,6 +355,11 @@
              <trans-unit id="profil">
                    <source>profil</source>
                    <target>Profil użytkownika</target>
+             </trans-unit>
+
+             <trans-unit id="nie_masz_jeszcze_konta">
+                   <source>nie_masz_jeszcze_konta</source>
+                   <target>Nie masz jeszcze konta?</target>
              </trans-unit>
 
 
