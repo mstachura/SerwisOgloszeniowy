@@ -35,7 +35,7 @@ class UserController implements ControllerProviderInterface
         $controller = $app['controllers_factory'];
 //        $controller->match('/', [$this, 'indexAction'])
 //            ->bind('user_index');
-        $controller->match('/{id}', [$this, 'viewAction'])
+        $controller->match('/{id}/page/{page}', [$this, 'viewAction'])
             ->assert('id', '[1-9]\d*')
             ->method('POST|GET')
             ->bind('user_view');
@@ -136,15 +136,6 @@ class UserController implements ControllerProviderInterface
                 ]
             );
 
-            return $app['twig']->render(
-                'user/add.html.twig',
-                [
-                    'user' => $user,
-                    'form' => $form->createView(),
-                    'loggedUser' => $loggedUser,
-                    'categoriesMenu' => $categoryRepository->findAll()
-                ]
-            );
             return $app->redirect($app['url_generator']->generate('home_index', 301));
         }
 
@@ -323,11 +314,11 @@ class UserController implements ControllerProviderInterface
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function viewAction(Application $app, $id)
+    public function viewAction(Application $app, $id, $page = 1)
     {
         $advertisementRepository = new AdvertisementRepository($app['db']);
-        $advertisements = $advertisementRepository->findAllByUser($id);
-        $ad = $advertisementRepository->findOneByIdExtra($id);
+        $advertisements = $advertisementRepository->findAllByUserPaginated($id, $page);
+
 
         $userRepository = new UserRepository($app['db']);
 
@@ -347,8 +338,8 @@ class UserController implements ControllerProviderInterface
                 'user/view.html.twig',
                 [
                     'advertisements' => $advertisements,
-                    'ad' => $ad,
                     'user' => $user,
+                    'user_id' => $id,
                     'userData' => $userData,
                     'loggedUser' => $loggedUser,
                     'categoriesMenu' => $categoryRepository->findAll()

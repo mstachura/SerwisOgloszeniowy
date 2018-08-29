@@ -1,5 +1,4 @@
 
-{% include "header.html.twig" %}
 
 <html>
 <head lang="en">
@@ -21,38 +20,16 @@
 {% include 'default/_flash_messages.html.twig' %}
 
 
-{% if is_granted('IS_AUTHENTICATED_FULLY' ) %}
 
-    {{ 'zalogowany_jako'|trans }}:
-    <a href="{{ url ('user_view', {'id': loggedUser.id}) }}">
-        {{ loggedUser.login }}
-    </a>
-{% endif %}
+<div>
 
-<nav class="navbar navbar-default container-fluid">
+{% include "header.html.twig" %}
+
+</div>
+
+<nav class="navbar navbar-default container-fluid navigation">
     {% include 'menu.html.twig' %}
-    <div class="container-fluid">
-        <div class="btn-group pull-right" role="group" aria-label="{{ 'label.actions'|trans }}">
-            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                <a class="btn btn-default" href="{{ url('auth_logout') }}" title="{{ 'auth.logout.label'|trans }}">
-                    <button class="btn btn-info">
-                        {{ 'auth.logout.label'|trans }}
-                    </button>
-                </a>
-            {% else %}
-                <a class="btn btn-default" href="{{ url('auth_login') }}" title="{{ 'auth.login.label'|trans }}">
-                    <button class="btn btn-info">
-                        {{ 'auth.login.label'|trans }}
-                    </button>
-                </a>
 
-                <a href="{{ url ('user_registration') }}">
-                    <button class="btn btn-info">{{ 'zarejestruj'|trans }}</button>
-                </a>
-
-            {% endif %}
-        </div>
-    </div>
 </nav>
 
 

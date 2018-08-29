@@ -20,7 +20,7 @@ class AdvertisementRepository
      *
      * const int NUM_ITEMS
      */
-    const NUM_ITEMS = 3;
+    const NUM_ITEMS = 4;
 
     /**
      * Doctrine DBAL connection.
@@ -153,8 +153,26 @@ class AdvertisementRepository
     protected function queryAllFiltered($phrase)
     {
         $queryBuilder = $this->db->createQueryBuilder();
-        return $queryBuilder->select('ad.id', 'ad.name', 'ad.price', 'ad.description')
-            ->from('ad', 'ad')
+        return $queryBuilder->select(
+            'p.source',
+            'ad.id',
+            'ad.name',
+            'ad.price',
+            'ad.description',
+            'u.login',
+            'u.id AS user_id',
+            'c.id AS category_id',
+            'c.name AS category_name',
+            'ad.province',
+            't.name AS type_name',
+            'l.name AS location_name'
+        )
+            ->from('ad')
+            ->innerjoin('ad', 'type', 't', 'ad.type_id = t.id')
+            ->innerjoin('ad', 'category', 'c', 'ad.category_id = c.id')
+            ->innerjoin('ad', 'location', 'l', 'ad.location_id = l.id')
+            ->innerjoin('ad', 'user', 'u', 'ad.user_id = u.id')
+            ->leftjoin('ad', 'photo', 'p', 'ad.id = p.ad_id')
             ->where('ad.name LIKE :phrase')
             ->setParameter(':phrase', '%' . $phrase . '%');
     }
@@ -200,16 +218,52 @@ class AdvertisementRepository
      * @param $user_id
      * @return array
      */
-    public function findAllByUser($user_id)
+    public function findAllByUserPaginated($user_id, $page)
     {
-        $queryBuilder = $this->queryAll();
-        $queryBuilder
-            ->where('user_id = :user_id')
-            ->setParameter(':user_id', $user_id, \PDO::PARAM_INT);
-        $result = $queryBuilder->execute()->fetchAll();
 
-        return !$result ? [] : $result;
+        $countQueryBuilder = $this->queryAllFilteredByUserId($user_id)
+            ->select('COUNT(DISTINCT ad.id) AS total_results')
+            ->setMaxResults(1);
+        $paginator = new Paginator($this->queryAllFilteredByUserId($user_id), $countQueryBuilder);
+        $paginator->setCurrentPage($page);
+        $paginator->setMaxPerPage(static::NUM_ITEMS);
+
+        return $paginator->getCurrentPageResults();
     }
+
+
+    /**
+     * Query All Filtered
+     * @param $phrase
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    protected function queryAllFilteredByUserId($user_id)
+    {
+        $queryBuilder = $this->db->createQueryBuilder();
+        return $queryBuilder->select(
+            'p.source',
+            'ad.id',
+            'ad.name',
+            'ad.price',
+            'ad.description',
+            'u.login',
+            'u.id AS user_id',
+            'c.id AS category_id',
+            'c.name AS category_name',
+            'ad.province',
+            't.name AS type_name',
+            'l.name AS location_name'
+        )
+            ->from('ad')
+            ->innerjoin('ad', 'type', 't', 'ad.type_id = t.id')
+            ->innerjoin('ad', 'category', 'c', 'ad.category_id = c.id')
+            ->innerjoin('ad', 'location', 'l', 'ad.location_id = l.id')
+            ->innerjoin('ad', 'user', 'u', 'ad.user_id = u.id')
+            ->leftjoin('ad', 'photo', 'p', 'ad.id = p.ad_id')
+            ->where('ad.user_id LIKE :user_id')
+            ->setParameter(':user_id', $user_id);
+    }
+
 
     /**
      * @param $category_id

@@ -22,17 +22,14 @@
     <p>{{ "label.phone_number" |trans}}: {{ userData.phone_number}}</p>
 
 <div class="ad">
-    <H1>{{ "lista_ogloszen" |trans}}</H1>
-    {% for advertisement in advertisements %}
+    {% include "advertisement/ads_list.html.twig" %}
 
-            {#</li><p>{{ advertisement.name}}</p></li>#}
-            </li><p>{{ ad.source }}</p></li>
-        <a href ="{{ url ('ads_view', {'id': advertisement.id}) }}"></li>
-            <p>{{ advertisement.name}}</p>
-            {#<img src='' alt="{{ advertisement.photo }}">#}
-        </a>
-
-    {% endfor %}
+    <div class="paginator container">
+        {% include 'default/_paginator_user_view.html.twig' with {
+            paginator: advertisements,
+            route_name: 'user_view'
+        } %}
+    </div>
 </div>
 
     

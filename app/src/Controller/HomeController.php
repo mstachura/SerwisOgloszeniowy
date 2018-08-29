@@ -48,7 +48,7 @@ class HomeController implements ControllerProviderInterface
     public function indexAction(Application $app, Request $request)
     {
         $advertisementRepository = new AdvertisementRepository($app['db']);
-        $advertisements = $advertisementRepository-> findAll();
+        $advertisements = $advertisementRepository-> findAllPaginated();
         $userRepository = new UserRepository($app['db']);
         $users = $userRepository-> findAllExtra();
         $loggedUser = $userRepository->getLoggedUser($app);

@@ -1,10 +1,25 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ 'serwis_ogloszeniowy_strona_glowna'|trans}}
+    {{ 'serwis_ogloszeniowy_strona_glowna'|trans }}
 {% endblock %}
+
+
 
 {% block content %}
 
+    {% if is_granted('IS_AUTHENTICATED_ANONYMOUSLY') %}
+        {{ "nie_masz_jeszcze_konta" |trans }}
+        <a class="btn btn-default" href="{{ url ('user_registration') }}">
+            {{ 'zarejestruj'|trans }}
+        </a>
+    {% endif %}
+    {% include "advertisement/ads_list.html.twig" %}
 
+    <div class="paginator container">
+        {% include 'default/_paginator.html.twig' with {
+            paginator: advertisements,
+            route_name: 'ads_index',
+        } %}
+    </div>
 {% endblock %}

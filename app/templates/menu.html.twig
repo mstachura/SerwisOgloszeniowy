@@ -1,11 +1,11 @@
 
-    {% for category in categoriesMenu %}
-            <div class="col-md-3 left nav">
+{% for category in categoriesMenu %}
+    <div class="col-md-1">
         <a href="{{ url ('category_view', {'id': category.id}) }}">
             {{ category.name }}
         </a>
 
-</div>
-    {% endfor %}
+    </div>
+{% endfor %}
 
 

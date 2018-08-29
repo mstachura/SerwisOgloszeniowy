@@ -6,19 +6,51 @@
 
     <div class="right">
 
+        <div class="container-fluid">
 
-        <a href="{{ url ('ads_add') }}">
-            <button class="btn btn-success">
-                {{ "dodaj_ogloszenie" |trans }}
-            </button>
-        </a>
-
-
-        <a href="{{ url ('home_search') }}">
-            <button class="btn btn-info">{{ "szukaj" |trans }}</button>
-        </a>
+            <a class="btn btn-default" href="{{ url ('ads_add') }}">
+                <button class="btn btn-success">
+                    {{ "dodaj_ogloszenie" |trans }}
+                </button>
+            </a>
 
 
+            <a class="btn btn-default" href="{{ url ('home_search') }}">
+                <button class="btn btn-info">{{ "szukaj" |trans }}</button>
+            </a>
+
+            {#<div class="btn-group pull-right" role="group" aria-label="{{ 'label.actions'|trans }}">#}
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <a class="btn btn-default" href="{{ url('auth_logout') }}" title="{{ 'auth.logout.label'|trans }}">
+                        <button class="btn btn-info">
+                            {{ 'auth.logout.label'|trans }}
+                        </button>
+                    </a>
+                {% else %}
+                    <a class="btn btn-default" href="{{ url('auth_login') }}" title="{{ 'auth.login.label'|trans }}">
+                        <button class="btn btn-info">
+                            {{ 'auth.login.label'|trans }}
+                        </button>
+                    </a>
+
+                    <a class="btn btn-default" href="{{ url ('user_registration') }}">
+                        <button class="btn btn-info">{{ 'zarejestruj'|trans }}</button>
+                    </a>
+
+                {% endif %}
+
+            {% if is_granted('IS_AUTHENTICATED_FULLY' ) %}
+                <div class="btn btn-default">
+                {{ 'zalogowany_jako'|trans }}:<br>
+                <a href="{{ url ('user_view', {'id': loggedUser.id}) }}">
+                    {{ loggedUser.login }}
+                </a>
+                </div>
+            {% endif %}
+
+            {#</div>#}
+        </div>
     </div>
+
 
 {% endblock %}

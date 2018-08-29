@@ -4,16 +4,18 @@
 
 {% block body %}
 
-
-    <div class="col-md-3">
+    {% form_theme form with ['bootstrap_3_horizontal_layout.html.twig', 'form/form_errors.html.twig'] %}
+    <div class="container">
+    <div class="col-md-12">
         <a href="{{ global.request.headers.get('referer') }}" title="{{ 'label.back'|trans }}" class="btn btn-default">
             <span class="fa fa-mail-reply" aria-hidden="true"></span>
             <i class="glyphicon glyphicon-arrow-left"></i>
             <span aria-hidden="true">&larr;</span>{{ 'label.back'|trans }}
         </a>
-    </div>
+
 
     <h1>{{ 'wyszukiwarka'|trans }}</h1>
+
 
 
 
@@ -23,6 +25,9 @@
     {{ form_widget(form) }}
     <input type="submit" value="{{ 'action.search'|trans }}" class="btn btn-info" />
     {{ form_end(form) }}
+    </div>
+    </div>
+
 
 
 {% endblock %}
