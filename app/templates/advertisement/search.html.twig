@@ -4,18 +4,20 @@
 
 {% block body %}
 
-{% include 'default/_paginator_search_advertisement.html.twig' with {
-    paginator: advertisements,
-    route_name: 'home_search',
-}
-%}
 
         {% include "advertisement/ads_list.html.twig" %}
 
         <div class="paginator container">
-            {% include 'default/_paginator.html.twig' with {
+            {% include 'default/_paginator_search.html.twig' with {
                 paginator: advertisements,
-                route_name: 'ads_index',
-            } %}
+                route_name: 'ads_search',
+            }
+            %}
         </div>
+
+
+
+
+
+
 {% endblock %}

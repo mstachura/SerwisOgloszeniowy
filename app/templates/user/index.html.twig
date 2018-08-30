@@ -5,7 +5,7 @@
 {% block body %}
     <h1>{{ 'lista_uzytkownikow'|trans }}</h1>
 
-    {% include 'default/_paginator_user_view.html.twig' with {
+    {% include 'default/_paginator.html.twig' with {
         paginator: users,
         route_name: 'user_index',
     }

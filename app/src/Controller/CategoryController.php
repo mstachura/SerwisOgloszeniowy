@@ -54,18 +54,16 @@ class CategoryController implements ControllerProviderInterface
         $advertisementRepository = new AdvertisementRepository($app['db']);
 
         $advertisements = $advertisementRepository->findAllByCategoryPaginated($id, $page);
-        $name_category = $categoryRepository->findOneById($id);
-        $name_category = $name_category['name'];
+        $category = $categoryRepository->findOneById($id);
 
 
         return $app['twig']->render(
             'category/view.html.twig',
             [
                 'advertisements' => $advertisements,
-                'name_category' => $name_category,
+                'category' => $category,
                 'loggedUser' => $loggedUser,
                 'categoriesMenu' => $categoryRepository->findAll(),
-                'category_id' => $id
             ]
         );
     }

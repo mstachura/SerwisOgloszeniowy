@@ -272,8 +272,26 @@ class AdvertisementRepository
     protected function queryAllFilteredCategory($category_id)
     {
         $queryBuilder = $this->db->createQueryBuilder();
-        return $queryBuilder->select('ad.id', 'ad.name')
-            ->from('ad', 'ad')
+        return $queryBuilder->select(
+            'p.source',
+            'ad.id',
+            'ad.name',
+            'ad.price',
+            'ad.description',
+            'u.login',
+            'u.id AS user_id',
+            'c.id AS category_id',
+            'c.name AS category_name',
+            'ad.province',
+            't.name AS type_name',
+            'l.name AS location_name'
+        )
+            ->from('ad')
+            ->innerjoin('ad', 'type', 't', 'ad.type_id = t.id')
+            ->innerjoin('ad', 'category', 'c', 'ad.category_id = c.id')
+            ->innerjoin('ad', 'location', 'l', 'ad.location_id = l.id')
+            ->innerjoin('ad', 'user', 'u', 'ad.user_id = u.id')
+            ->leftjoin('ad', 'photo', 'p', 'ad.id = p.ad_id')
             ->where('ad.category_id = :category_id')
             ->setParameter(':category_id', $category_id);
     }
@@ -347,14 +365,14 @@ class AdvertisementRepository
 
 //        $this->db->beginTransaction();
         // try {
-        unset($ad['photo']);
+        unset($ad['photo']); //samo zdjęcie (obrazek) nie trafia do bazy danych
 //            unset($ad['photo_source']);
 
         if ($ad['source']) { //jeśli w formularzu dodano plik ze zdjęciem
             $photo = [];
 
             $photo['name'] = $ad['photo_title'];
-            $photo['source'] = $ad['source'];
+            $photo['source'] = $ad['source']; //source - nazwa pliku/ścieżka
         }
 
         unset($ad['source']);
@@ -366,16 +384,16 @@ class AdvertisementRepository
         $location = $locationRepository->findOneByName($ad['location_name']);
 
         if ($location) {
-            $ad['location_id'] = $location['id'];
+            $ad['location_id'] = $location['id']; //dodajemy id lokalizacji, które jest w bazie danych
         } else {
             $location['name'] = $ad['location_name'];
             $this->db->insert('location', $location);
-            $ad['location_id'] = $this->db->lastInsertId();
+            $ad['location_id'] = $this->db->lastInsertId(); //ogłoszenie dostaje id lokalizacji nowo dodanej lokalizacji
         }
         unset($ad['location_name']);
 
 
-        if (isset($ad['id']) && ctype_digit((string)$ad['id'])) {
+        if (isset($ad['id']) && ctype_digit((string)$ad['id'])) { //czy ogłoszenie jest w bazie danych
             // update record
             $id = $ad['id'];
             unset($ad['id']);
@@ -403,12 +421,7 @@ class AdvertisementRepository
                 $this->db->insert('photo', $photo);
             }
         }
-//            $this->db->commit();
-//        } catch (DBALException $e) {
-//            $this->db->rollBack();
-//            throw $e;
-//        }
-        return $id;
+        return $id; //do przekierowania
     }
 
 

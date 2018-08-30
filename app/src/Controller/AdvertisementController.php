@@ -90,8 +90,11 @@ class AdvertisementController implements ControllerProviderInterface
         $advertisements = $advertisementRepository->findAllPaginated($page);
         $categoryRepository = new CategoryRepository($app['db']);
         $userRepository = new UserRepository($app['db']);
-        $users = $userRepository->findAll();
+//        $users = $userRepository->findAll();
         $loggedUser = $userRepository->getLoggedUser($app);
+
+
+
 
 
         return $app['twig']->render(
@@ -120,27 +123,25 @@ class AdvertisementController implements ControllerProviderInterface
 
         $loggedUser = $userRepository->getLoggedUser($app);
 
-//        $advertisementRepository = new AdvertisementRepository($app['db']);
-//        $ad = $advertisementRepository->findOneById($id);
-//
-        $locationRepository = new LocationRepository($app['db']);
-        $location = $locationRepository->findOneByName($name);
-
         $ad = [];
+
+        $locationRepository = new LocationRepository($app['db']);
+        $location = $locationRepository->findOneById($loggedUser['location_id']);
+
+        $ad['location_name'] = $location['name'];
 
         $form = $app['form.factory']->createBuilder(
             AdvertisementType::class,
             $ad,
             [
-                'category_repository' => new CategoryRepository($app['db']),
-                'location_repository' => new LocationRepository($app['db']),
+                'category_repository' => new CategoryRepository($app['db']), //lista rozwijana
                 'type_repository' => new TypeRepository($app['db'])
             ]
         )->getForm();
         $form->handleRequest($request);
 
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) { //czy przesłano formularz? czy jest zwalidowany?
             $advertisementRepository = new AdvertisementRepository($app['db']);
             $data = $form->getData(); //dane advertisement i photo
 
@@ -152,13 +153,8 @@ class AdvertisementController implements ControllerProviderInterface
             }
 
 
-            $data['user_id'] = $loggedUser['id'];
+            $data['user_id'] = $loggedUser['id']; //autorem ogłoszenia jest zalogowany użytkownik
 
-            if ($ad['user_id'] == $loggedUser['id'] or $app['security.authorization_checker']->isGranted('ROLE_ADMIN')) {
-                if ($location) {
-                    $ad['location_name'] = $location['name'];
-                }
-            }
 
             $id = $advertisementRepository->save($app, $data);
 
@@ -197,49 +193,40 @@ class AdvertisementController implements ControllerProviderInterface
     {
 //        $loggedUser = [];
 
-
+        $categoryRepository = new CategoryRepository($app['db']);
+        $userRepository = new UserRepository($app['db']);
+        $loggedUser = $userRepository->getLoggedUser($app);
         $advertisementRepository = new AdvertisementRepository($app['db']);
         $ad = $advertisementRepository->findOneById($id);
+
+        if (!$ad) {
+            $app['session']->getFlashBag()->add(
+                'messages',
+                [
+                    'type' => 'warning',
+                    'message' => 'message.record_not_found',
+                ]
+            );
+
+            return $app->redirect($app['url_generator']->generate('ads_index'));
+        }
 
         $photoRepository = new PhotoRepository($app['db']);
         $photo = $photoRepository->findOneByAdvertisementId($id);
 
-        $userRepository = new UserRepository($app['db']);
-        $loggedUser = $userRepository->getLoggedUser($app);
-
-
         if ($ad['user_id'] == $loggedUser['id'] or $app['security.authorization_checker']->isGranted('ROLE_ADMIN')) {
             if ($photo) {
                 $ad['photo_title'] = $photo['name'];
+            } else {
+                $photo['source'] = '';
             }
 
             $locationRepository = new LocationRepository($app['db']);
             $location = $locationRepository->findOneById($ad['location_id']);
             $ad['location_name'] = $location['name'];
 
-            $categoryRepository = new CategoryRepository($app['db']);
-
-
-            if (!$ad) {
-                $app['session']->getFlashBag()->add(
-                    'messages',
-                    [
-                        'type' => 'warning',
-                        'message' => 'message.record_not_found',
-                    ]
-                );
-
-                return $app->redirect($app['url_generator']->generate('ads_index'));
-            }
-
             $photoRepository = new PhotoRepository($app['db']);
             $photo = $photoRepository->findOneByAdvertisementId($id);
-            if ($photo) {
-//            $ad['photo_source']=$photo['source'];
-//            $ad['photo_title'] = $photo['name'];
-            } else {
-                $photo['source'] = '';
-            }
 
             $form = $app['form.factory']->createBuilder(
                 AdvertisementType::class,
@@ -247,7 +234,6 @@ class AdvertisementController implements ControllerProviderInterface
                 [
                     'category_repository' => new CategoryRepository($app['db']),
                     'type_repository' => new TypeRepository($app['db']),
-                    'location_repository' => new LocationRepository($app['db']),
                 ]
             )->getForm();
 
@@ -318,19 +304,19 @@ class AdvertisementController implements ControllerProviderInterface
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
 
+        if (!$ad) {
+            $app['session']->getFlashBag()->add(
+                'messages',
+                [
+                    'type' => 'warning',
+                    'message' => 'message.record_not_found',
+                ]
+            );
+
+            return $app->redirect($app['url_generator']->generate('ads_index'));
+        }
+
         if ($ad['user_id'] == $loggedUser['id'] or $app['security.authorization_checker']->isGranted('ROLE_ADMIN')) {
-            if (!$ad) {
-                $app['session']->getFlashBag()->add(
-                    'messages',
-                    [
-                        'type' => 'warning',
-                        'message' => 'message.record_not_found',
-                    ]
-                );
-
-                return $app->redirect($app['url_generator']->generate('ads_index'));
-            }
-
             $form = $app['form.factory']->createBuilder(FormType::class, $ad)->add('id', HiddenType::class)->getForm();
             $form->handleRequest($request);
 
@@ -393,14 +379,6 @@ class AdvertisementController implements ControllerProviderInterface
 
         $photo = $photoRepository->findOneByAdvertisementId($id);
         if ($advertisement) {
-            if ($photo) {
-                $advertisement['photo_name'] = $photo['name'];
-            } else {
-                $advertisement['source'] = '';
-                $advertisement['photo_name'] = '';
-            }
-
-
             return $app['twig']->render(
 
                 'advertisement/view.html.twig',
@@ -412,34 +390,17 @@ class AdvertisementController implements ControllerProviderInterface
                 ]
             );
         } else {
+            $app['session']->getFlashBag()->add(
+                'messages',
+                [
+                    'type' => 'warning',
+                    'message' => 'message.record_not_found',
+                ]
+            );
             return $app->redirect($app['url_generator']->generate('home_index', 301));
         }
     }
 
-//    /**
-//     * Search action
-//     * @param Application $app
-//     * @param Request $request
-//     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-//     * @throws \Doctrine\DBAL\DBALException
-//     */
-//    public function searchAction(Application $app, Request $request, $phrase, $page = 1)
-//    {
-//        $categoryRepository = new CategoryRepository($app['db']);
-//        $userRepository = new UserRepository($app['db']);
-//        $loggedUser = $userRepository->getLoggedUser($app);
-//        $advertisementRepository = new AdvertisementRepository($app['db']);
-//        $advertisements = $advertisementRepository->findAllByPhraseOfName($phrase);
-//
-//        return $app['twig']->render(
-//            'advertisement/search.html.twig',
-//            [
-//            'loggedUser' => $loggedUser,
-//            'advertisements' => $advertisements,
-//            'categoriesMenu' => $categoryRepository->findAll(),
-//            ]
-//        );
-//    }
 
     /**
      * Search action Paginated

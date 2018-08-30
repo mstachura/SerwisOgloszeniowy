@@ -179,23 +179,7 @@ class UserType extends AbstractType
             [
                 'validation_groups' => ['user-default'],
                 'user_repository' => null,
-                'location_repository' => null
             ]
         );
-    }
-
-    /**
-     * Prepare Locations For Choices
-     * @param $locationRepository
-     * @return array
-     */
-    protected function prepareLocationsForChoices($locationRepository)
-    {
-        $locations = $locationRepository->findAll();
-        $choices = [];
-        foreach ($locations as $location) {
-            $choices[$location['name']] = $location['id'];
-        }
-        return $choices;
     }
 }

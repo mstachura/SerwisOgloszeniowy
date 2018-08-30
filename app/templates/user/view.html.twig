@@ -17,12 +17,12 @@
     <p>{{ "label.login" |trans}}: {{ user.login}}</p>
 
     <p>{{ "label.email" |trans}}: {{ user.email}}</p>
-    <p>{{ "label.firstname" |trans}}: {{ userData.firstname}}</p>
-    <p>{{ "label.lastname" |trans}}: {{ userData.lastname}}</p>
-    <p>{{ "label.phone_number" |trans}}: {{ userData.phone_number}}</p>
-    {#{% for advertisement in advertisements.data %}#}
-    {#<p>{{ 'label.location'|trans }}: {{ ad.location_name }}</p>#}
-    {#{% endfor %}#}
+    <p>{{ "label.firstname" |trans}}: {{ user.firstname}}</p>
+    <p>{{ "label.lastname" |trans}}: {{ user.lastname}}</p>
+    <p>{{ "label.phone_number" |trans}}: {{ user.phone_number}}</p>
+
+    <p>{{ 'label.location'|trans }}: {{ user.location_name }}</p>
+
 
     {% if (is_granted('IS_AUTHENTICATED_FULLY' ) and loggedUser.id == user.id) or is_granted('ROLE_ADMIN')%}
 

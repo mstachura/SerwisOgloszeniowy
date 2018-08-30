@@ -64,6 +64,10 @@ ul {
     display: block;
 }
 
+form img{
+    max-width: 200px;
+}
+
 .left{
     float:left;
 }

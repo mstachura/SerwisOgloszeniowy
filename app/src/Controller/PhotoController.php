@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Repository\PhotoRepository;
 use Repository\CategoryRepository;
 use Repository\UserRepository;
-use Form\PhotoType;
+use Repository\AdvertisementRepository;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
@@ -61,6 +61,11 @@ class PhotoController implements ControllerProviderInterface
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
 
+        $advertisementRepository = new AdvertisementRepository($app['db']);
+
+        $ad = $advertisementRepository->findOneById($photo['ad_id']);
+
+
         if (!$photo) {
             $app['session']->getFlashBag()->add(
                 'messages',
@@ -73,34 +78,49 @@ class PhotoController implements ControllerProviderInterface
             return $app->redirect($app['url_generator']->generate('ads_index'));
         }
 
-        $form = $app['form.factory']->createBuilder(FormType::class, $photo)->add('id', HiddenType::class)->getForm();
-        $form->handleRequest($request);
+        if ($ad['user_id'] == $loggedUser['id'] or $app['security.authorization_checker']->isGranted('ROLE_ADMIN')) {
+            $form = $app['form.factory']->createBuilder(FormType::class, $photo)->add('id', HiddenType::class)->getForm();
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) { //jeśli przesłano dane formularza
-            $ad_id = $photo['ad_id'];
-            $photoRepository->delete($form->getData());
+            if ($form->isSubmitted() && $form->isValid()) { //jeśli przesłano dane formularza
+                $ad_id = $photo['ad_id'];
+                $photoRepository->delete($form->getData());
 
+
+                $app['session']->getFlashBag()->add(
+                    'messages',
+                    [
+                        'type' => 'success',
+                        'message' => 'message.element_successfully_deleted',
+                    ]
+                );
+
+                return $app->redirect(
+                    $app['url_generator']->generate('ads_edit', ['id' => $ad_id], 301)
+                );
+            }
+
+            return $app['twig']->render(
+                'photo/delete.html.twig',
+                [
+                    'photo' => $photo,
+                    'form' => $form->createView(),
+                    'loggedUser' => $loggedUser,
+                    'categoriesMenu' => $categoryRepository->findAll()
+                ]
+            );
+        } else {
             $app['session']->getFlashBag()->add(
                 'messages',
                 [
                     'type' => 'success',
-                    'message' => 'message.element_successfully_deleted',
+                    'message' => 'its_not_your_photo',
                 ]
             );
 
             return $app->redirect(
-                $app['url_generator']->generate('ads_edit', ['id' => $ad_id], 301)
+                $app['url_generator']->generate('home_index', 301)
             );
         }
-
-        return $app['twig']->render(
-            'photo/delete.html.twig',
-            [
-                'photo' => $photo,
-                'form' => $form->createView(),
-                'loggedUser' => $loggedUser,
-                'categoriesMenu' => $categoryRepository->findAll()
-            ]
-        );
     }
 }

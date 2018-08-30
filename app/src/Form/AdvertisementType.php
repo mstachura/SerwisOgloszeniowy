@@ -180,7 +180,6 @@ class AdvertisementType extends AbstractType
             [
                 'validation_groups' => ['ads-default'],
                 'category_repository' => null,
-                'location_repository' => null,
                 'type_repository' => null
             ]
         );
@@ -210,20 +209,20 @@ class AdvertisementType extends AbstractType
         return $choices;
     }
 
-    /**
-     * Prepare Locations For Choices
-     * @param $locationRepository
-     * @return array
-     */
-    protected function prepareLocationsForChoices($locationRepository)
-    {
-        $locations = $locationRepository->findAll();
-        $choices = [];
-        foreach ($locations as $location) {
-            $choices[$location['name']] = $location['id'];
-        }
-        return $choices;
-    }
+//    /**
+//     * Prepare Locations For Choices
+//     * @param $locationRepository
+//     * @return array
+//     */
+//    protected function prepareLocationsForChoices($locationRepository)
+//    {
+//        $locations = $locationRepository->findAll();
+//        $choices = [];
+//        foreach ($locations as $location) {
+//            $choices[$location['name']] = $location['id'];
+//        }
+//        return $choices;
+//    }
 
     /**
      * Prepare Types For Choices

@@ -4,9 +4,9 @@
 
 {% block body %}
 
-{% include 'default/_paginator_search_user.html.twig' with {
+{% include 'default/_paginator_search.html.twig' with {
     paginator: users,
-    route_name: 'home_search',
+    route_name: 'user_search',
 }
 %}
 

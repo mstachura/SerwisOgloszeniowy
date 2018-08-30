@@ -102,7 +102,6 @@ class UserController implements ControllerProviderInterface
 
         $categoryRepository = new CategoryRepository($app['db']);
         $userRepository = new UserRepository($app['db']);
-        $locationRepository = new LocationRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
 
         $user = [];
@@ -110,21 +109,20 @@ class UserController implements ControllerProviderInterface
             UserType::class,
             $user,
             [
-                'user_repository' => new UserRepository($app['db']),
-                'location_repository' => new LocationRepository($app['db'])
+                'user_repository' => new UserRepository($app['db']) //unique login
             ]
         )->getForm();
         $form->handleRequest($request);
 
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $userRepository = new UserRepository($app['db']);
+//            $userRepository = new UserRepository($app['db']);
             $user = $form->getData();
 
             $user['password'] = $app['security.encoder.bcrypt']->encodePassword($user['password'], '');
 
-            $loggedUser['id'] = 1;
-            $data['user_id'] = $loggedUser['id'];
+
+//            $data['user_id'] = $loggedUser['id'];
 
 
             $userRepository->save($app, $user);
@@ -329,19 +327,23 @@ class UserController implements ControllerProviderInterface
         $advertisementRepository = new AdvertisementRepository($app['db']);
         $advertisements = $advertisementRepository->findAllByUserPaginated($id, $page);
 
-
         $userRepository = new UserRepository($app['db']);
+        $user = $userRepository->findOneByIdWithUserData($id);
+
+
+
 
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
 
 
-        $user = $userRepository->findOneByIdWithUserData($id);
+
 
         if ($user) {
-            $userDataRepository = new DataRepository($app['db']);
-            $userData = $userDataRepository->findOneByUserId($user['id']);
+            $locationRepository = new LocationRepository($app['db']);
+            $location = $locationRepository->findOneById($user['location_id']);
 
+            $user['location_name'] = $location['name'];
 
             return $app['twig']->render(
 
@@ -349,8 +351,6 @@ class UserController implements ControllerProviderInterface
                 [
                     'advertisements' => $advertisements,
                     'user' => $user,
-                    'user_id' => $id,
-                    'userData' => $userData,
                     'loggedUser' => $loggedUser,
                     'categoriesMenu' => $categoryRepository->findAll()
                 ]

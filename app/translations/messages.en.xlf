@@ -59,7 +59,7 @@
 
             <trans-unit id="label.price">
                 <source>label.price</source>
-                <target>Price:</target>
+                <target>Price [zl]:</target>
             </trans-unit>
 
             <trans-unit id="action.delete">
