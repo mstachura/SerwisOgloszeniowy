@@ -6,7 +6,7 @@
     {% form_theme form with ['bootstrap_3_horizontal_layout.html.twig', 'form/form_errors.html.twig'] %}
 
     <div class="col-md-3">
-        <a href="{{ global.request.headers.get('referer') }}" title="{{ 'label.back'|trans }}" class="btn btn-default">
+        <a class="btn btn-info" href="{{ global.request.headers.get('referer') }}" title="{{ 'label.back'|trans }}" class="btn btn-default">
             <span class="fa fa-mail-reply" aria-hidden="true"></span>
             <i class="glyphicon glyphicon-arrow-left"></i>
             <span aria-hidden="true">&larr;</span>{{ 'label.back'|trans }}

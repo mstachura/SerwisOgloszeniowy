@@ -362,6 +362,11 @@
                    <target>Nie masz jeszcze konta?</target>
              </trans-unit>
 
+             <trans-unit id="czy_na_pewno_chcesz_usunac_ogloszenie">
+                   <source>czy_na_pewno_chcesz_usunac_ogloszenie</source>
+                   <target>Czy na pewno chcesz usunąć to ogłoszenie?</target>
+             </trans-unit>
+
 
 
 

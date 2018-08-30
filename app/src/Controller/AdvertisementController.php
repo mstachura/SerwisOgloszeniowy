@@ -106,17 +106,25 @@ class AdvertisementController implements ControllerProviderInterface
 
 
     /**
-     * Add action
      * @param Application $app
      * @param Request $request
+     * @param $id
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Doctrine\DBAL\ConnectionException
      * @throws \Doctrine\DBAL\DBALException
      */
     public function addAction(Application $app, Request $request)
     {
         $categoryRepository = new CategoryRepository($app['db']);
         $userRepository = new UserRepository($app['db']);
+
         $loggedUser = $userRepository->getLoggedUser($app);
+
+//        $advertisementRepository = new AdvertisementRepository($app['db']);
+//        $ad = $advertisementRepository->findOneById($id);
+//
+        $locationRepository = new LocationRepository($app['db']);
+        $location = $locationRepository->findOneByName($name);
 
         $ad = [];
 
@@ -146,7 +154,11 @@ class AdvertisementController implements ControllerProviderInterface
 
             $data['user_id'] = $loggedUser['id'];
 
-
+            if ($ad['user_id'] == $loggedUser['id'] or $app['security.authorization_checker']->isGranted('ROLE_ADMIN')) {
+                if ($location) {
+                    $ad['location_name'] = $location['name'];
+                }
+            }
 
             $id = $advertisementRepository->save($app, $data);
 

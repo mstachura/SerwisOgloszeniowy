@@ -38,6 +38,7 @@ class UserController implements ControllerProviderInterface
         $controller->match('/{id}/page/{page}', [$this, 'viewAction'])
             ->assert('id', '[1-9]\d*')
             ->method('POST|GET')
+            ->value('page', 1)
             ->bind('user_view');
         $controller->match('/registration', [$this, 'addAction'])
             ->method('POST|GET')
@@ -172,6 +173,15 @@ class UserController implements ControllerProviderInterface
         $user['lastname'] = $user_data['lastname'];
         $user['phone_number'] = $user_data['phone_number'];
 
+        //załączanie lokalizacji
+        $advertisementRepository = new AdvertisementRepository($app['db']);
+        $ad = $advertisementRepository->findOneById($id);
+
+        $locationRepository = new LocationRepository($app['db']);
+        $location = $locationRepository->findOneById($ad['location_id']);
+
+        $user['location_name'] = $location['name'];
+
         if (!$user) {
             $app['session']->getFlashBag()->add(
                 'messages',
@@ -191,7 +201,7 @@ class UserController implements ControllerProviderInterface
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $userRepository->save($form->getData(), $app);
+                $userRepository->save($app, $form->getData());
 
                 $app['session']->getFlashBag()->add(
                     'messages',

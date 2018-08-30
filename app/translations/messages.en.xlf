@@ -347,6 +347,11 @@
                   <target>You don't have an account yet?</target>
             </trans-unit>
 
+            <trans-unit id="czy_na_pewno_chcesz_usunac_ogloszenie">
+                  <source>czy_na_pewno_chcesz_usunac_ogloszenie</source>
+                  <target>Do you really want to delete this ad?</target>
+            </trans-unit>
+
 
 
 
