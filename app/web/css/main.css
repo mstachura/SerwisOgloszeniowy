@@ -1,5 +1,5 @@
 #stopka{
-    bottom: 0;
+    bottom: -50px;
     height: 30px;
     /*margin: 10px 0;*/
     width:100%;
@@ -82,7 +82,7 @@ body{
     font-family: "Roboto", Helvetica, Arial, sans-serif;
     text-decoration: none;
     position: relative;
-    padding-bottom: 100px;
+    padding-bottom: 160px;
 }
 
 img{

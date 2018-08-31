@@ -7,7 +7,8 @@
     {% form_theme form with ['bootstrap_3_horizontal_layout.html.twig', 'form/form_errors.html.twig'] %}
 
     <div class="col-md-3">
-        <a class="btn btn-info" href="{{ global.request.headers.get('referer') }}" title="{{ 'label.back'|trans }}" class="btn btn-default">
+        <a class="btn btn-info" href="{{ global.request.headers.get('referer') }}" title="{{ 'label.back'|trans }}"
+           class="btn btn-default">
             <span class="fa fa-mail-reply" aria-hidden="true"></span>
             <i class="glyphicon glyphicon-arrow-left"></i>
             <span aria-hidden="true">&larr;</span>{{ 'label.back'|trans }}
@@ -17,17 +18,18 @@
     <h1>{{ 'edytuj_ogloszenie'|trans({'%id%': ad.id}) }}</h1>
 
 
+    <div class="form">
+        {{ form_start(form, { method: 'post', action: url('ads_edit', {'id': ad.id}) }) }}
 
-    {{ form_start(form, { method: 'post', action: url('ads_edit', {'id': ad.id}) }) }}
-
-    {{ form_row(form.name) }}
-    {% if photo.source %}
-        <img src="{{  asset('uploads/photos/' ~ photo.source) }}" alt="{{ photo.source }}">
-        <a href ="{{ url ('photo_delete', {'id': photo.id}) }}">
-            <p class="btn btn-danger"> {{ 'action.delete'|trans }}</p>
-        </a>
-    {% endif %}
-    {{ form_widget(form) }}
-    <input type="submit" value="{{ 'action.save'|trans }}" class="btn btn-success" />
-    {{ form_end(form) }}
+        {{ form_row(form.name) }}
+        {% if photo %}
+            <img src="{{ asset('uploads/photos/' ~ photo.source) }}" alt="{{ photo.source }}">
+            <a href="{{ url ('photo_delete', {'id': photo.id}) }}">
+                <p class="btn btn-danger"> {{ 'action.delete'|trans }}</p>
+            </a>
+        {% endif %}
+        {{ form_widget(form) }}
+        <input type="submit" value="{{ 'action.save'|trans }}" class="btn btn-success"/>
+        {{ form_end(form) }}
+    </div>
 {% endblock %}

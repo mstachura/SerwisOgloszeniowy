@@ -354,10 +354,9 @@ class AdvertisementRepository
 
 
     /**
-     * Save
+     * @param Application $app
      * @param $ad
      * @return int|string
-     * @throws \Doctrine\DBAL\ConnectionException
      * @throws \Doctrine\DBAL\DBALException
      */
     public function save(Application $app, $ad)

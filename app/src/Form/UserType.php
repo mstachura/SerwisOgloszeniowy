@@ -136,7 +136,7 @@ class UserType extends AbstractType
             'location_name',
             TextType::class,
             [
-                'required' => false,
+                'required' => true,
                 'label' => 'label.location_name',
                 'attr' => [
                     'max_length' => 128,

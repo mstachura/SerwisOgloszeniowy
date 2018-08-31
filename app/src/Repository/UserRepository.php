@@ -307,14 +307,14 @@ class UserRepository
      */
     public function delete($user)
     {
-        $this->db->beginTransaction();
-        try {
+//        $this->db->beginTransaction();
+//        try {
             return $this->db->delete('user', ['id' => $user['id']]);
-            $this->db->commit();
-        } catch (DBALException $e) {
-            $this->db->rollBack();
-            throw $e;
-        }
+//            $this->db->commit();
+//        } catch (DBALException $e) {
+//            $this->db->rollBack();
+//            throw $e;
+//        }
     }
 
     /**
