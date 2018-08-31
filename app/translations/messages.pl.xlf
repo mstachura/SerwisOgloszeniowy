@@ -287,11 +287,6 @@
                    <target>Poprzednia strona</target>
              </trans-unit>
 
-             <trans-unit id="message.password_not_repeated">
-                   <source>message.password_not_repeated</source>
-                   <target>Hasło nie zostało powtórzone</target>
-             </trans-unit>
-
              <trans-unit id="label.phrase">
                     <source>label.phrase</source>
                     <target>Wpisz szukaną frazę</target>
@@ -366,6 +361,28 @@
                    <source>czy_na_pewno_chcesz_usunac_ogloszenie</source>
                    <target>Czy na pewno chcesz usunąć to ogłoszenie?</target>
              </trans-unit>
+
+             <trans-unit id="Bad credentials.">
+                   <source>Bad credentials.</source>
+                   <target>Wprowadzono niepoprawne dane logowania.</target>
+             </trans-unit>
+
+             <trans-unit id="message.it_is_not_your_profile">
+                   <source>message.it_is_not_your_profile</source>
+                   <target>To nie jest Twój profil.</target>
+             </trans-unit>
+
+             <trans-unit id="message.password_not_repeated">
+                   <source>message.password_not_repeated</source>
+                   <target>Hasło nie zostało powtórzone.</target>
+             </trans-unit>
+
+             <trans-unit id="message.its_not_your_ad">
+                   <source>message.its_not_your_ad</source>
+                   <target>To nie jest Twoje ogłoszenie.</target>
+             </trans-unit>
+
+
 
 
 

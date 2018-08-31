@@ -272,11 +272,6 @@
                   <target>Previous page</target>
             </trans-unit>
 
-            <trans-unit id="message.password_not_repeated">
-                  <source>message.password_not_repeated</source>
-                  <target>Password wasn't repeated</target>
-            </trans-unit>
-
             <trans-unit id="label.phrase">
                   <source>label.phrase</source>
                   <target>Type phrase</target>
@@ -351,6 +346,26 @@
                   <source>czy_na_pewno_chcesz_usunac_ogloszenie</source>
                   <target>Do you really want to delete this ad?</target>
             </trans-unit>
+
+            <trans-unit id="Bad credentials.">
+                  <source>Bad credentials.</source>
+                  <target>Bad credentials.</target>
+            </trans-unit>
+
+            <trans-unit id="message.it_is_not_your_profile">
+                   <source>message.it_is_not_your_profile</source>
+                   <target>It's not your profile.</target>
+             </trans-unit>
+
+             <trans-unit id="message.password_not_repeated">
+                   <source>message.password_not_repeated</source>
+                   <target>Password wasn't repeated.</target>
+             </trans-unit>
+
+             <trans-unit id="message.its_not_your_ad">
+                   <source>message.its_not_your_ad</source>
+                   <target>It's not your ad.</target>
+             </trans-unit>
 
 
 

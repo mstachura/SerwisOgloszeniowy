@@ -10,7 +10,6 @@ use Doctrine\DBAL\DBALException;
 use Silex\Application;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Utils\Paginator;
-use Repository\LocationRepository;
 
 /**
  * Class UserRepository.
@@ -91,7 +90,6 @@ class UserRepository
     }
 
     /**
-     * Query all
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     protected function queryAll()
@@ -146,12 +144,8 @@ class UserRepository
 
 
     /**
-     * Gets user data by login.
-     *
-     * @param string $login User login
-     * @throws \Doctrine\DBAL\DBALException
-     *
-     * @return array Result
+     * @param $login
+     * @return array|mixed
      */
     public function getUserByLogin($login)
     {
@@ -192,12 +186,8 @@ class UserRepository
     }
 
     /**
-     * Gets user roles by User ID.
-     *
-     * @param integer $userId User ID
-     * @throws \Doctrine\DBAL\DBALException
-     *
-     * @return array Result
+     * @param $userId
+     * @return array
      */
     public function getUserRoles($userId)
     {
@@ -288,7 +278,6 @@ class UserRepository
 
                 $this->db->insert('user', $user);
                 $user_data['user_id'] = $this->db->lastInsertId();
-
             }
             $this->db->commit();
         } catch (DBALException $e) {
