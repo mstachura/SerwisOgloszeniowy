@@ -406,8 +406,8 @@ class AdvertisementRepository
                     $photo['ad_id'] = $id; //zdjęcie dostaje numer ogłoszenia
                     $this->db->insert('photo', $photo); //dodajemy zdjęcie do istniejącego już ogłoszenia
                 }
-                return $this->db->update('ad', $ad, ['id' => $id]);
             }
+            return $this->db->update('ad', $ad, ['id' => $id]);
         } else {
             // add new record
 
