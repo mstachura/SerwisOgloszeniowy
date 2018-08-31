@@ -297,11 +297,6 @@
                   <target>Name of photo</target>
             </trans-unit>
 
-            <trans-unit id="zl">
-                  <source>zl</source>
-                  <target>zl</target>
-            </trans-unit>
-
             <trans-unit id="usun_zdjecie">
                   <source>usun_zdjecie</source>
                   <target>Delete photo</target>

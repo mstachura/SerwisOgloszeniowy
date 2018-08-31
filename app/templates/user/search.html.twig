@@ -4,11 +4,7 @@
 
 {% block body %}
 
-{% include 'default/_paginator_search.html.twig' with {
-    paginator: users,
-    route_name: 'user_search',
-}
-%}
+
 
 {% if users %}
 
@@ -21,4 +17,13 @@
         {% endfor %}
 
 {% endif %}
+
+    <div class="paginator container">
+    {% include 'default/_paginator_search.html.twig' with {
+        paginator: users,
+        route_name: 'user_search',
+    }
+    %}
+    </div>
+
 {% endblock %}

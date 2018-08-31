@@ -5,11 +5,7 @@
 {% block body %}
     <h1>{{ 'lista_uzytkownikow'|trans }}</h1>
 
-    {% include 'default/_paginator.html.twig' with {
-        paginator: users,
-        route_name: 'user_index',
-    }
-    %}
+
 
     {% for user in users.data %}
     <a href ="{{ url ('user_view', {'id': user.id}) }}">
@@ -19,5 +15,13 @@
         </p>
     </a>
     {% endfor %}
+
+    <div class="paginator container">
+    {% include 'default/_paginator.html.twig' with {
+        paginator: users,
+        route_name: 'user_index',
+    }
+    %}
+    </div>
 
 {% endblock %}

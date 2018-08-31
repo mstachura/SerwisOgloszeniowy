@@ -312,11 +312,6 @@
                     <target>Nazwa zdjęcia</target>
              </trans-unit>
 
-             <trans-unit id="zl">
-                    <source>zl</source>
-                    <target>zł</target>
-             </trans-unit>
-
              <trans-unit id="usun_zdjecie">
                     <source>usun_zdjecie</source>
                     <target>Usuń zdjęcie</target>
