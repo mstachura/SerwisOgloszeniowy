@@ -237,53 +237,53 @@ class UserRepository
      */
     public function save(Application $app, $user)
     {
-        $this->db->beginTransaction();
-        try {
-            $user_data = [];
-            $user_data['firstname'] = $user['firstname'];
-            $user_data['lastname'] = $user['lastname'];
-            $user_data['phone_number'] = $user['phone_number'];
-            unset($user['firstname']);
-            unset($user['lastname']);
-            unset($user['phone_number']);
+//        $this->db->beginTransaction();
+//        try {
+        $user_data = [];
+        $user_data['firstname'] = $user['firstname'];
+        $user_data['lastname'] = $user['lastname'];
+        $user_data['phone_number'] = $user['phone_number'];
+        unset($user['firstname']);
+        unset($user['lastname']);
+        unset($user['phone_number']);
 
-            //lokalizacja
-            if ($user['location_name']) {
-                $locationRepository = new LocationRepository($app['db']);
-                $location = $locationRepository->findOneByName($user['location_name']);
+        //lokalizacja
+        if ($user['location_name']) {
+            $locationRepository = new LocationRepository($app['db']);
+            $location = $locationRepository->findOneByName($user['location_name']);
 
-                if ($location) {
-                    $user['location_id'] = $location['id'];
-                } else {
-                    $location['name'] = $user['location_name'];
-                    $this->db->insert('location', $location);
-                    $user['location_id'] = $this->db->lastInsertId();
-                }
-            }
-
-            unset($user['location_name']);
-
-            if (isset($user['id']) && ctype_digit((string)$user['id'])) {
-                // update record
-                $id = $user['id'];
-                unset($user['id']);
-
-                $this->db->update('user_data', $user_data, ['user_id' => $id]);
-                return $this->db->update('user', $user, ['id' => $id]);
+            if ($location) {
+                $user['location_id'] = $location['id'];
             } else {
-                // add new record
-
-
-                $user['role_id'] = 2;
-
-                $this->db->insert('user', $user);
-                $user_data['user_id'] = $this->db->lastInsertId();
+                $location['name'] = $user['location_name'];
+                $this->db->insert('location', $location);
+                $user['location_id'] = $this->db->lastInsertId();
             }
-            $this->db->commit();
-        } catch (DBALException $e) {
-            $this->db->rollBack();
-            throw $e;
         }
+
+        unset($user['location_name']);
+
+        if (isset($user['id']) && ctype_digit((string)$user['id'])) {
+            // update record
+            $id = $user['id'];
+            unset($user['id']);
+
+            $this->db->update('user_data', $user_data, ['user_id' => $id]);
+            return $this->db->update('user', $user, ['id' => $id]);
+        } else {
+            // add new record
+
+
+            $user['role_id'] = 2;
+
+            $this->db->insert('user', $user);
+            $user_data['user_id'] = $this->db->lastInsertId();
+        }
+//            $this->db->commit();
+//        } catch (DBALException $e) {
+//            $this->db->rollBack();
+//            throw $e;
+//        }
         return $this->db->insert('user_data', $user_data);
     }
 
@@ -298,7 +298,7 @@ class UserRepository
     {
 //        $this->db->beginTransaction();
 //        try {
-            return $this->db->delete('user', ['id' => $user['id']]);
+        return $this->db->delete('user', ['id' => $user['id']]);
 //            $this->db->commit();
 //        } catch (DBALException $e) {
 //            $this->db->rollBack();

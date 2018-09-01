@@ -116,13 +116,13 @@ class UserController implements ControllerProviderInterface
 
 
         if ($form->isSubmitted() && $form->isValid()) {
-//            $userRepository = new UserRepository($app['db']);
+            $userRepository = new UserRepository($app['db']);
             $user = $form->getData();
 
             $user['password'] = $app['security.encoder.bcrypt']->encodePassword($user['password'], '');
 
 
-//            $data['user_id'] = $loggedUser['id'];
+            $data['user_id'] = $loggedUser['id'];
 
 
             $userRepository->save($app, $user);

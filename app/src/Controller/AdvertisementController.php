@@ -111,9 +111,7 @@ class AdvertisementController implements ControllerProviderInterface
     /**
      * @param Application $app
      * @param Request $request
-     * @param $id
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @throws \Doctrine\DBAL\ConnectionException
      * @throws \Doctrine\DBAL\DBALException
      */
     public function addAction(Application $app, Request $request)
