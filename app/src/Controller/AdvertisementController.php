@@ -94,9 +94,6 @@ class AdvertisementController implements ControllerProviderInterface
         $loggedUser = $userRepository->getLoggedUser($app);
 
 
-
-
-
         return $app['twig']->render(
             'advertisement/index.html.twig',
             [
@@ -241,11 +238,13 @@ class AdvertisementController implements ControllerProviderInterface
             if ($form->isSubmitted() && $form->isValid()) {
                 $data = $form->getData(); //dane advertisement i photo
 
-                if ($data['photo']) {
+                if ($data['photo']) { //jeśli zdjęcie zostało zmienione
                     $fileUploader = new FileUploader($app['config.photos_directory']);
 
                     $fileName = $fileUploader->upload($data['photo']);
                     $data['source'] = $fileName;
+                } elseif ($photo) {  //jeśli zdjęcie już istniało i edytowaliśmy nazwę
+                    $data['source'] = $photo['source'];
                 }
 
                 $advertisementRepository->save($app, $data);

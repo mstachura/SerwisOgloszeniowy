@@ -176,7 +176,7 @@ class UserController implements ControllerProviderInterface
         $ad = $advertisementRepository->findOneById($id);
 
         $locationRepository = new LocationRepository($app['db']);
-        $location = $locationRepository->findOneById($ad['location_id']);
+        $location = $locationRepository->findOneById($user['location_id']);
 
         $user['location_name'] = $location['name'];
 
@@ -199,7 +199,9 @@ class UserController implements ControllerProviderInterface
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $userRepository->save($app, $form->getData());
+                $user = $form->getData();
+                $user['password'] = $app['security.encoder.bcrypt']->encodePassword($user['password'], '');
+                $userRepository->save($app, $user);
 
                 $app['session']->getFlashBag()->add(
                     'messages',

@@ -14,8 +14,9 @@
     </div>
 
 
-    <h1>{{ 'rejestracja'|trans }}</h1>
+
     <div class="form">
+        <h1>{{ 'rejestracja'|trans }}</h1>
     {#{% form_theme form with ['bootstrap_3_horizontal_layout.html.twig', 'form/form_errors.html.twig'] %}#}
     {{ form_start(form, { method: 'post', action: url('user_registration') }) }}
     {{ form_widget(form) }}
