@@ -349,8 +349,11 @@ class AdvertisementRepository
 
         if ($ad['source']) { //jeśli w formularzu dodano plik ze zdjęciem
             $photo = [];
-
-            $photo['name'] = $ad['photo_title'];
+            if ($ad['photo_title']) {
+                $photo['name'] = $ad['photo_title'];
+            } else {
+                $photo['name'] = 'brak nazwy zdjęcia';
+            }
             $photo['source'] = $ad['source']; //source - nazwa pliku/ścieżka
         }
 
@@ -367,7 +370,7 @@ class AdvertisementRepository
         } else {
             $location['name'] = $ad['location_name'];
             $this->db->insert('location', $location);
-            $ad['location_id'] = $this->db->lastInsertId(); //ogłoszenie dostaje id lokalizacji nowo dodanej lokalizacji
+            $ad['location_id'] = $this->db->lastInsertId(); //ogłoszenie dostaje id lokalizacji
         }
         unset($ad['location_name']);
 

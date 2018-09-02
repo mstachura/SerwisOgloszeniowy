@@ -34,7 +34,7 @@ class UserRepository
     /**
      * Location repository.
      *
-     * @var null|\Repository\LocationRepository $tagsRepository
+     * @var null|\Repository\LocationRepository $locationRepository
      */
     protected $locationRepository = null;
 

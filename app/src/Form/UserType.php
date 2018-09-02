@@ -37,7 +37,6 @@ class UserType extends AbstractType
                 'label' => 'label.login',
                 'required'   => true,
                 'attr' => [
-                    'max_length' => 45,
                     'readonly' => (isset($options['data']) && isset($options['data']['id'])),
                     'class' => 'form-control',
                 ],
@@ -45,6 +44,15 @@ class UserType extends AbstractType
                     new Assert\NotBlank(
                         ['groups' => ['user-default']]
                     ),
+
+                    new Assert\Length(
+                        [
+                            'groups' => ['user-default'],
+                            'min' => 8,
+                            'max' => 32,
+                        ]
+                    ),
+
                     new CustomAssert\UniqueLogin(
                         ['groups' => ['user-default'],
                             'repository' => isset($options['user_repository']) ? $options['user_repository'] : null,
@@ -69,7 +77,7 @@ class UserType extends AbstractType
                     new Assert\NotBlank(),
                     new Assert\Length(
                         [
-                            'groups' => ['user-default'],
+                            ['groups' => ['user-default']],
                             'min' => 8,
                             'max' => 255,
                         ]
@@ -91,6 +99,14 @@ class UserType extends AbstractType
                     new Assert\NotBlank(
                         ['groups' => ['user-default']]
                     ),
+
+                    new Assert\Length(
+                        [
+                            'groups' => ['user-default'],
+                            'min' => 10,
+                            'max' => 125,
+                        ]
+                    ),
                 ],
             ]
         );
@@ -101,15 +117,17 @@ class UserType extends AbstractType
             [
                 'label' => 'label.firstname',
                 'required'   => true,
-                'attr' => [
-                    'max_length' => 32,
-                    'class' => 'form-control',
-                ],
                 'constraints' => [
-                    new Assert\NotBlank(
-                        ['groups' => ['user-default']]
+                    new Assert\NotBlank(),
+                    new Assert\Length(
+                        [
+                            ['groups' => ['user-default']],
+                            'min' => 3,
+                            'max' => 32,
+                            'class' => 'form-control',
+                        ]
                     ),
-                ],
+                ]
             ]
         );
 
@@ -119,15 +137,17 @@ class UserType extends AbstractType
             [
                 'label' => 'label.lastname',
                 'required'   => true,
-                'attr' => [
-                    'max_length' => 32,
-                    'class' => 'form-control',
-                ],
                 'constraints' => [
-                    new Assert\NotBlank(
-                        ['groups' => ['user-default']]
+                    new Assert\NotBlank(),
+                    new Assert\Length(
+                        [
+                            ['groups' => ['user-default']],
+                            'min' => 3,
+                            'max' => 32,
+                            'class' => 'form-control',
+                        ]
                     ),
-                ],
+                ]
             ]
         );
 
@@ -137,9 +157,16 @@ class UserType extends AbstractType
             [
                 'required' => true,
                 'label' => 'label.location_name',
-                'attr' => [
-                    'max_length' => 128,
-                ],
+                'constraints' => [
+                    new Assert\NotBlank(),
+                    new Assert\Length(
+                        [
+                            ['groups' => ['user-default']],
+                            'min' => 3,
+                            'max' => 128,
+                        ]
+                    ),
+                ]
             ]
         );
 
@@ -149,16 +176,16 @@ class UserType extends AbstractType
             [
                 'label' => 'label.phone_number',
                 'required'   => true,
-                'attr' => [
-                    'min_length' => 7,
-                    'max_length' => 10,
-                    'class' => 'form-control',
-                ],
                 'constraints' => [
-                    new Assert\NotBlank(
-                        ['groups' => ['user-default']]
+                    new Assert\NotBlank(),
+                    new Assert\Length(
+                        [
+                            ['groups' => ['user-default']],
+                            'min' => 7,
+                            'max' => 10,
+                        ]
                     ),
-                ],
+                ]
             ]
         );
     }
