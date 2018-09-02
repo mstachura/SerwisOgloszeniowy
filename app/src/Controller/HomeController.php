@@ -43,7 +43,6 @@ class HomeController implements ControllerProviderInterface
      * @param Application $app
      * @param Request $request
      * @return mixed
-     * @throws \Doctrine\DBAL\DBALException
      */
     public function indexAction(Application $app, Request $request)
     {
@@ -72,7 +71,6 @@ class HomeController implements ControllerProviderInterface
      * @param Application $app
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @throws \Doctrine\DBAL\DBALException
      */
     public function searchAction(Application $app, Request $request)
     {
@@ -131,10 +129,8 @@ class HomeController implements ControllerProviderInterface
             'home/search.html.twig',
             [
             'loggedUser' => $loggedUser,
-//            'results' => $results,
             'categoriesMenu' => $categoryRepository->findAll(),
             'form' => $form->createView(),
-//            'category_result' => $search['category_search']
             ]
         );
     }

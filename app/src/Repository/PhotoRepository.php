@@ -40,6 +40,7 @@ class PhotoRepository
     }
 
     /**
+     * Find one by id
      * Find one record.
      *
      * @param string $id Element id

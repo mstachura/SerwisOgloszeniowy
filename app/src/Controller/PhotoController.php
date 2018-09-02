@@ -79,7 +79,8 @@ class PhotoController implements ControllerProviderInterface
         }
 
         if ($ad['user_id'] == $loggedUser['id'] or $app['security.authorization_checker']->isGranted('ROLE_ADMIN')) {
-            $form = $app['form.factory']->createBuilder(FormType::class, $photo)->add('id', HiddenType::class)->getForm();
+            $form = $app['form.factory']
+                ->createBuilder(FormType::class, $photo)->add('id', HiddenType::class)->getForm();
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) { //jeśli przesłano dane formularza

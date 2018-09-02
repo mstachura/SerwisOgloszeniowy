@@ -29,6 +29,7 @@ class LocationRepository
     }
 
     /**
+     * Find all
      * Fetch all records.
      *
      * @return array Result
@@ -41,6 +42,7 @@ class LocationRepository
 
 
     /**
+     * Find one by id
      * Find one record.
      *
      * @param string $id Element id
@@ -69,6 +71,7 @@ class LocationRepository
     }
 
     /**
+     * Find one by name
      * Find one record by name.
      *
      * @param string $name Name

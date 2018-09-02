@@ -41,7 +41,6 @@ class AuthController implements ControllerProviderInterface
      * @param Application $app
      * @param Request $request
      * @return mixed
-     * @throws \Doctrine\DBAL\DBALException
      */
     public function loginAction(Application $app, Request $request)
     {

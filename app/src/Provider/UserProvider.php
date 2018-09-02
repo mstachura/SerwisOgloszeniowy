@@ -34,11 +34,9 @@ class UserProvider implements UserProviderInterface
     }
 
     /**
-     * Load user by username.
-     *
-     * @param string $login User login
-     *
-     * @return User Result
+     * Load user by username
+     * @param string $login
+     * @return User|UserInterface
      */
     public function loadUserByUsername($login)
     {
@@ -57,11 +55,9 @@ class UserProvider implements UserProviderInterface
     }
 
     /**
-     * Refresh user.
-     *
-     * @param UserInterface $user User
-     *
-     * @return User Result
+     * Refresh user
+     * @param UserInterface $user
+     * @return User|UserInterface
      */
     public function refreshUser(UserInterface $user)
     {
@@ -78,6 +74,7 @@ class UserProvider implements UserProviderInterface
     }
 
     /**
+     * Supports class
      * Check if supports selected class.
      *
      * @param string $class Class name

@@ -48,7 +48,7 @@ class AdvertisementType extends AbstractType
             ]
         );
 
-//        if (!isset($options['data']) || !isset($options['data']['id'])) {
+
         $builder->add(
             'photo',
             FileType::class,
@@ -72,7 +72,7 @@ class AdvertisementType extends AbstractType
                 ],
             ]
         );
-//        }
+
 
         $builder->add(
             'photo_title',
@@ -209,20 +209,6 @@ class AdvertisementType extends AbstractType
         return $choices;
     }
 
-//    /**
-//     * Prepare Locations For Choices
-//     * @param $locationRepository
-//     * @return array
-//     */
-//    protected function prepareLocationsForChoices($locationRepository)
-//    {
-//        $locations = $locationRepository->findAll();
-//        $choices = [];
-//        foreach ($locations as $location) {
-//            $choices[$location['name']] = $location['id'];
-//        }
-//        return $choices;
-//    }
 
     /**
      * Prepare Types For Choices
@@ -239,15 +225,6 @@ class AdvertisementType extends AbstractType
         return $choices;
     }
 
-//    protected function prepareTypesForChoices()
-//    {
-//
-//        $choices = ['kupno' => 'kupno', 'wymiana' => 'wymiana', 'sprzedaż' => 'sprzedaż'];
-//
-//
-//
-//        return $choices;
-//    }
 
     /**
      * Prepare Province For Choices

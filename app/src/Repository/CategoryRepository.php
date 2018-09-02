@@ -38,6 +38,7 @@ class CategoryRepository
     }
 
     /**
+     * Find all
      * Fetch all records.
      *
      * @return array Result
@@ -50,6 +51,7 @@ class CategoryRepository
 
 
     /**
+     * Find one by id
      * Find one record.
      *
      * @param string $id Element id

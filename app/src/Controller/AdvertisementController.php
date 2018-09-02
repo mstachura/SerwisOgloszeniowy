@@ -106,6 +106,7 @@ class AdvertisementController implements ControllerProviderInterface
 
 
     /**
+     * Add action
      * @param Application $app
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
@@ -363,7 +364,6 @@ class AdvertisementController implements ControllerProviderInterface
      * @param $id
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @throws \Doctrine\DBAL\DBALException
      */
     public function viewAction(Application $app, $id, Request $request)
     {
@@ -400,11 +400,12 @@ class AdvertisementController implements ControllerProviderInterface
 
 
     /**
-     * Search action Paginated
+     * Search action paginated
      * @param Application $app
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @throws \Doctrine\DBAL\DBALException
+     * @param $phrase
+     * @param int $page
+     * @return mixed
      */
     public function searchActionPaginated(Application $app, Request $request, $phrase, $page = 1)
     {

@@ -41,8 +41,8 @@ class CategoryController implements ControllerProviderInterface
      * View action
      * @param Application $app
      * @param $id
+     * @param int $page
      * @return mixed
-     * @throws \Doctrine\DBAL\DBALException
      */
     public function viewAction(Application $app, $id, $page = 1)
     {

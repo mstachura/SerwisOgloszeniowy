@@ -40,6 +40,7 @@ class AdvertisementRepository
     }
 
     /**
+     * Find all
      * Fetch all records.
      *
      * @return array Result
@@ -51,6 +52,7 @@ class AdvertisementRepository
     }
 
     /**
+     * Find all paginated
      * Get records paginated.
      *
      * @param int $page Current page number
@@ -92,32 +94,10 @@ class AdvertisementRepository
             ->from('ad');
     }
 
-//    /**
-//     * Query All Extra
-//     * @return \Doctrine\DBAL\Query\QueryBuilder
-//     */
-//    protected function queryAllExtra()
-//    {
-//        $queryBuilder = $this->db->createQueryBuilder();
-//        return $queryBuilder->select(
-//            'ad.id',
-//            'ad.name',
-//            'ad.price',
-//            'ad.description',
-//            'ad.user_id',
-//            'ad.category_id',
-//            'ad.province',
-//            'ad.type_id',
-//            'ad.location_id',
-//            'l.name'
-//        )
-//            ->from('ad', 'ad')
-//            ->innerjoin('ad', 'location', 'l', 'ad.location_id = l.id');
-//    }
 
 
     /**
-     * Query all extra add photo
+     * Query all full extra
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     protected function queryAllFullExtra()
@@ -178,6 +158,7 @@ class AdvertisementRepository
     }
 
     /**
+     * Find one by id
      * Find one record.
      *
      * @param string $id Element id
@@ -196,6 +177,7 @@ class AdvertisementRepository
     }
 
     /**
+     * Find one by id extra
      * Find one record.
      *
      * @param string $id Element id
@@ -214,8 +196,9 @@ class AdvertisementRepository
     }
 
     /**
-     * Find all by user
+     * Find all by user paginated
      * @param $user_id
+     * @param $page
      * @return array
      */
     public function findAllByUserPaginated($user_id, $page)
@@ -233,8 +216,8 @@ class AdvertisementRepository
 
 
     /**
-     * Query All Filtered
-     * @param $phrase
+     * Query all filtered by user id
+     * @param $user_id
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     protected function queryAllFilteredByUserId($user_id)
@@ -266,6 +249,7 @@ class AdvertisementRepository
 
 
     /**
+     * Query all filtered category
      * @param $category_id
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
@@ -297,8 +281,9 @@ class AdvertisementRepository
     }
 
     /**
-     * Find all by category
+     * Find all by category paginated
      * @param $category_id
+     * @param int $page
      * @return array
      */
     public function findAllByCategoryPaginated($category_id, $page = 1)
@@ -341,8 +326,6 @@ class AdvertisementRepository
 
         $countQueryBuilder = $this->queryAllFiltered($phrase)
             ->select('COUNT(DISTINCT ad.id) AS total_results')
-//            ->where('ad.name LIKE :phrase')
-//            ->setParameter(':phrase', '%' . $phrase . '%')
             ->setMaxResults(1);
 
         $paginator = new Paginator($this->queryAllFiltered($phrase), $countQueryBuilder);
@@ -354,6 +337,7 @@ class AdvertisementRepository
 
 
     /**
+     * Save
      * @param Application $app
      * @param $ad
      * @return int|string
@@ -361,11 +345,7 @@ class AdvertisementRepository
      */
     public function save(Application $app, $ad)
     {
-
-//        $this->db->beginTransaction();
-        // try {
         unset($ad['photo']); //samo zdjęcie (obrazek) nie trafia do bazy danych
-//            unset($ad['photo_source']);
 
         if ($ad['source']) { //jeśli w formularzu dodano plik ze zdjęciem
             $photo = [];

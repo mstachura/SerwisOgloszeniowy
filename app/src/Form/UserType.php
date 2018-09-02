@@ -14,7 +14,6 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Validator\Constraints as CustomAssert;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * Class UserType.
@@ -162,10 +161,6 @@ class UserType extends AbstractType
                 ],
             ]
         );
-
-//        $builder->get('location')->addModelTransformer(
-//            new LocationDataTransformer($options['location_repository'])
-//        );
     }
 
 

@@ -46,11 +46,11 @@ class UserRepository
     public function __construct(Connection $db)
     {
         $this->db = $db;
-//        $this->locationRepository = new LocationRepository($db);
     }
 
 
     /**
+     * Find all
      * Fetch all records.
      *
      * @return array Result
@@ -62,6 +62,7 @@ class UserRepository
     }
 
     /**
+     * Find all extra
      * Fetch all records.
      *
      * @return array Result
@@ -73,6 +74,7 @@ class UserRepository
     }
 
     /**
+     * Find one by id
      * Find one record.
      *
      * @param string $id Element id
@@ -90,6 +92,7 @@ class UserRepository
     }
 
     /**
+     * Query all
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     protected function queryAll()
@@ -101,13 +104,9 @@ class UserRepository
 
 
     /**
-     * Loads user by login.
-     *
-     * @param string $login User login
-     * @throws UsernameNotFoundException
-     * @throws \Doctrine\DBAL\DBALException
-     *
-     * @return array Result
+     * Load user by login
+     * @param $login
+     * @return array
      */
     public function loadUserByLogin($login)
     {
@@ -144,6 +143,7 @@ class UserRepository
 
 
     /**
+     * Get user by login
      * @param $login
      * @return array|mixed
      */
@@ -165,8 +165,7 @@ class UserRepository
     /**
      * Get logged user
      * @param $app
-     * @return array
-     * @throws DBALException
+     * @return array|mixed
      */
     public function getLoggedUser($app)
     {
@@ -186,6 +185,7 @@ class UserRepository
     }
 
     /**
+     * Get user roles
      * @param $userId
      * @return array
      */
@@ -237,8 +237,6 @@ class UserRepository
      */
     public function save(Application $app, $user)
     {
-//        $this->db->beginTransaction();
-//        try {
         $user_data = [];
         $user_data['firstname'] = $user['firstname'];
         $user_data['lastname'] = $user['lastname'];
@@ -279,11 +277,6 @@ class UserRepository
             $this->db->insert('user', $user);
             $user_data['user_id'] = $this->db->lastInsertId();
         }
-//            $this->db->commit();
-//        } catch (DBALException $e) {
-//            $this->db->rollBack();
-//            throw $e;
-//        }
         return $this->db->insert('user_data', $user_data);
     }
 
@@ -296,14 +289,7 @@ class UserRepository
      */
     public function delete($user)
     {
-//        $this->db->beginTransaction();
-//        try {
         return $this->db->delete('user', ['id' => $user['id']]);
-//            $this->db->commit();
-//        } catch (DBALException $e) {
-//            $this->db->rollBack();
-//            throw $e;
-//        }
     }
 
     /**
@@ -326,10 +312,6 @@ class UserRepository
         )
             ->from('user', 'u')
             ->innerjoin('u', 'user_data', 'ud', 'u.id = ud.id');
-
-//        return $queryBuilder->select('u.id', 'u.login', 'u.mail', 'u.password', 'ud.name', 'ud.surname')
-//            ->from('user', 'u')
-//            ->innerJoin('u', 'userdata', 'ud', 'u.id = ud.userId');
     }
 
     /**
@@ -370,6 +352,7 @@ class UserRepository
     }
 
     /**
+     * Find all paginated
      * Get records paginated.
      *
      * @param int $page Current page number

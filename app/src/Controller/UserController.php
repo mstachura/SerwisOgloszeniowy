@@ -70,7 +70,6 @@ class UserController implements ControllerProviderInterface
      * @param Application $app
      * @param int $page
      * @return mixed
-     * @throws \Doctrine\DBAL\DBALException
      */
     public function indexAction(Application $app, $page = 1)
     {
@@ -321,8 +320,8 @@ class UserController implements ControllerProviderInterface
      * View action
      * @param Application $app
      * @param $id
+     * @param int $page
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @throws \Doctrine\DBAL\DBALException
      */
     public function viewAction(Application $app, $id, $page = 1)
     {
@@ -370,11 +369,12 @@ class UserController implements ControllerProviderInterface
     }
 
     /**
-     * Search action Paginated
+     * Search action paginated
      * @param Application $app
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
-     * @throws \Doctrine\DBAL\DBALException
+     * @param $phrase
+     * @param int $page
+     * @return mixed
      */
     public function searchActionPaginated(Application $app, Request $request, $phrase, $page = 1)
     {
