@@ -1,6 +1,6 @@
 <?php
 /**
- * User type.
+ * Registration type.
  */
 namespace Form;
 use Symfony\Component\Form\AbstractType;
@@ -18,11 +18,11 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
- * Class UserType.
+ * Class RegistrationType.
  *
  * @package Form
  */
-class UserType extends AbstractType
+class RegistrationType extends AbstractType
 {
     /**
      * Build Form
@@ -80,6 +80,89 @@ class UserType extends AbstractType
             ]
         );
 
+        $builder->add(
+            'email',
+            EmailType::class,
+            [
+                'label' => 'label.email',
+                'required'   => true,
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'constraints' => [
+                    new Assert\NotBlank(
+                        ['groups' => ['user-default']]
+                    ),
+                ],
+            ]
+        );
+
+        $builder->add(
+            'firstname',
+            TextType::class,
+            [
+                'label' => 'label.firstname',
+                'required'   => true,
+                'attr' => [
+                    'max_length' => 32,
+                    'class' => 'form-control',
+                ],
+                'constraints' => [
+                    new Assert\NotBlank(
+                        ['groups' => ['user-default']]
+                    ),
+                ],
+            ]
+        );
+
+        $builder->add(
+            'lastname',
+            TextType::class,
+            [
+                'label' => 'label.lastname',
+                'required'   => true,
+                'attr' => [
+                    'max_length' => 32,
+                    'class' => 'form-control',
+                ],
+                'constraints' => [
+                    new Assert\NotBlank(
+                        ['groups' => ['user-default']]
+                    ),
+                ],
+            ]
+        );
+
+        $builder->add(
+            'location_name',
+            TextType::class,
+            [
+                'required' => true,
+                'label' => 'label.location',
+                'attr' => [
+                    'max_length' => 128,
+                ],
+            ]
+        );
+
+        $builder->add(
+            'phone_number',
+            NumberType::class,
+            [
+                'label' => 'label.phone_number',
+                'required'   => true,
+                'attr' => [
+                    'min_length' => 7,
+                    'max_length' => 10,
+                    'class' => 'form-control',
+                ],
+                'constraints' => [
+                    new Assert\NotBlank(
+                        ['groups' => ['user-default']]
+                    ),
+                ],
+            ]
+        );
 
         $builder->addEventListener(
             FormEvents::PRE_SUBMIT,
@@ -111,9 +194,26 @@ class UserType extends AbstractType
         $resolver->setDefaults(
             [
                 'validation_groups' => ['user-default'],
-                'user_repository' => null
+                'user_repository' => null,
+                'location_repository' => null
             ]
         );
     }
+
+    /**
+     * Prepare Locations For Choices
+     * @param $locationRepository
+     * @return array
+     */
+    protected function prepareLocationsForChoices($locationRepository)
+    {
+        $locations = $locationRepository->findAll();
+        $choices = [];
+        foreach ($locations as $location) {
+            $choices[$location['name']] = $location['id'];
+        }
+        return $choices;
+    }
+
 
 }

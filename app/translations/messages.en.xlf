@@ -362,6 +362,16 @@
                    <target>It's not your ad.</target>
              </trans-unit>
 
+             <trans-unit id="advertisement">
+                   <source>advertisement</source>
+                   <target>Advertisement</target>
+             </trans-unit>
+
+             <trans-unit id="user">
+                   <source>user</source>
+                   <target>User</target>
+             </trans-unit>
+
 
 
 

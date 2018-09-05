@@ -5,6 +5,7 @@
 namespace Repository;
 
 use Doctrine\DBAL\Connection;
+use Silex\Application;
 use Utils\Paginator;
 
 /**
@@ -78,4 +79,34 @@ class CategoryRepository
         return $queryBuilder->select('id', 'name')
             ->from('category');
     }
+
+    public function save(Application $app, $category)
+    {
+
+        if (isset($category['id']) && ctype_digit((string)$category['id'])) {
+            // update record
+            $id = $category['id'];
+            unset($category['id']);
+
+
+            return $this->db->update('category', $category, ['id' => $id]);
+        } else {
+            // add new record
+
+            return $this->db->insert('category', $category);
+        }
+    }
+
+    /**
+     * Delete
+     * @param $category
+     * @return int
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \Doctrine\DBAL\Exception\InvalidArgumentException
+     */
+    public function delete($category)
+    {
+        return $this->db->delete('category', ['id' => $category['id']]);
+    }
+
 }

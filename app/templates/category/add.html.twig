@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'dodawanie_kategorii'|trans }}{% endblock %}
+
+{% block body %}
+
+    {% form_theme form with ['bootstrap_3_horizontal_layout.html.twig', 'form/form_errors.html.twig'] %}
+
+    <div class="col-md-3">
+        <a class="btn btn-info" href="{{ global.request.headers.get('referer') }}" title="{{ 'label.back'|trans }}" class="btn btn-default">
+            <span class="fa fa-mail-reply" aria-hidden="true"></span>
+            <i class="glyphicon glyphicon-arrow-left"></i>
+            <span aria-hidden="true">&larr;</span>{{ 'label.back'|trans }}
+        </a>
+    </div>
+
+
+    <div class="form">
+        <h1>{{ 'dodawanie_kategorii'|trans }}</h1>
+        {{ form_start(form, { method: 'post', action: url('category_add') }) }}
+        {{ form_widget(form) }}
+        <input type="submit" value="{{ 'action.save'|trans }}" class="btn btn-success" />
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

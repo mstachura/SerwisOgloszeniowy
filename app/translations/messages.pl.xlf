@@ -377,6 +377,16 @@
                    <target>To nie jest Twoje ogłoszenie.</target>
              </trans-unit>
 
+             <trans-unit id="advertisement">
+                   <source>advertisement</source>
+                   <target>Ogłoszenie</target>
+             </trans-unit>
+
+             <trans-unit id="user">
+                   <source>user</source>
+                   <target>Użytkownik</target>
+             </trans-unit>
+
 
 
 

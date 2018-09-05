@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'usun_kategorie'|trans({'%id%': category.id}) }}{% endblock %}
+
+{% block body %}
+
+    <div class="col-md-3">
+        <a class="btn btn-info" href="{{ global.request.headers.get('referer') }}" title="{{ 'label.back'|trans }}" class="btn btn-default">
+            <span class="fa fa-mail-reply" aria-hidden="true"></span>
+            <i class="glyphicon glyphicon-arrow-left"></i>
+            <span aria-hidden="true">&larr;</span>{{ 'label.back'|trans }}
+        </a>
+    </div>
+
+    <h1>{{ 'usun_kategorie'|trans({'%id%': category.id}) }}</h1>
+    {{ 'czy_na_pewno_chcesz_usunac_kategorie'|trans}}
+    {{ form_start(form, { method: 'post', action: url('category_delete', {'id': category.id}) }) }}
+    {{ form_widget(form) }}
+    <input type="submit" value="{{ 'action.delete'|trans }}" class="btn btn-danger" />
+    {{ form_end(form) }}
+{% endblock %}

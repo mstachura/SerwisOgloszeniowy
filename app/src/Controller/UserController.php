@@ -13,10 +13,12 @@ use Repository\UserRepository;
 use Repository\CategoryRepository;
 use Repository\AdvertisementRepository;
 use Repository\DataRepository;
-use Form\UserType;
+use Form\RegistrationType;
 use Repository\LocationRepository;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Form\UserDataType;
+use Form\UserType;
 
 /**
  * Class UserController.
@@ -105,7 +107,7 @@ class UserController implements ControllerProviderInterface
 
         $user = [];
         $form = $app['form.factory']->createBuilder(
-            UserType::class,
+            RegistrationType::class,
             $user,
             [
                 'user_repository' => new UserRepository($app['db']) //unique login
@@ -114,29 +116,40 @@ class UserController implements ControllerProviderInterface
         $form->handleRequest($request);
 
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $userRepository = new UserRepository($app['db']);
+        if ($form->isSubmitted()) {
             $user = $form->getData();
+            if ($user['login'] and $userRepository->findForUniqueness($user['login'])) {
+                $app['session']->getFlashBag()->add(
+                    'messages',
+                    [
+                        'type' => 'warning',
+                        'message' => 'message.not_unique_login',
+                    ]
+                );
+            }
+            if ($form->isValid()) {
+                $userRepository = new UserRepository($app['db']);
 
-            $user['password'] = $app['security.encoder.bcrypt']->encodePassword($user['password'], '');
+
+                $user['password'] = $app['security.encoder.bcrypt']->encodePassword($user['password'], '');
 
 
-            $data['user_id'] = $loggedUser['id'];
+                $data['user_id'] = $loggedUser['id'];
 
 
-            $userRepository->save($app, $user);
+                $userRepository->save($app, $user);
 
-            $app['session']->getFlashBag()->add(
-                'messages',
-                [
-                    'type' => 'success',
-                    'message' => 'message.element_successfully_added',
-                ]
-            );
+                $app['session']->getFlashBag()->add(
+                    'messages',
+                    [
+                        'type' => 'success',
+                        'message' => 'message.element_successfully_added',
+                    ]
+                );
 
-            return $app->redirect($app['url_generator']->generate('home_index', 301));
+                return $app->redirect($app['url_generator']->generate('home_index', 301));
+            }
         }
-
 
         return $app['twig']->render(
             'user/add.html.twig',
@@ -166,18 +179,16 @@ class UserController implements ControllerProviderInterface
         $userDataRepository = new DataRepository($app['db']);
         $user = $userRepository->findOneById($id); //tu ma być findOneByIdWithUserId
         $user_data = $userDataRepository->findOneByUserId($id);
-        $user['firstname'] = $user_data['firstname'];
-        $user['lastname'] = $user_data['lastname'];
-        $user['phone_number'] = $user_data['phone_number'];
+        $user_data['email'] = $user['email'];
+//        $user['lastname'] = $user_data['lastname'];
+//        $user['phone_number'] = $user_data['phone_number'];
 
         //załączanie lokalizacji
-        $advertisementRepository = new AdvertisementRepository($app['db']);
-        $ad = $advertisementRepository->findOneById($id);
 
         $locationRepository = new LocationRepository($app['db']);
         $location = $locationRepository->findOneById($user['location_id']);
 
-        $user['location_name'] = $location['name'];
+        $user_data['location_name'] = $location['name'];
 
         if (!$user) {
             $app['session']->getFlashBag()->add(
@@ -192,7 +203,10 @@ class UserController implements ControllerProviderInterface
             return $app->redirect($app['url_generator']->generate('user_index'));
         }
 
-        if ($loggedUser['id'] == $id or $app['security.authorization_checker']->isGranted('ROLE_ADMIN')) {
+        if ($loggedUser['id'] == $id || $app['security.authorization_checker']->isGranted('ROLE_ADMIN')) {
+
+            //UserType
+
             $form = $app['form.factory']->createBuilder(UserType::class, $user)->getForm();
 
             $form->handleRequest($request);
@@ -200,7 +214,30 @@ class UserController implements ControllerProviderInterface
             if ($form->isSubmitted() && $form->isValid()) {
                 $user = $form->getData();
                 $user['password'] = $app['security.encoder.bcrypt']->encodePassword($user['password'], '');
+
                 $userRepository->save($app, $user);
+
+                $app['session']->getFlashBag()->add(
+                    'messages',
+                    [
+                        'type' => 'success',
+                        'message' => 'message.element_successfully_edited',
+                    ]
+                );
+
+                return $app->redirect($app['url_generator']->generate('user_view', ['id' => $id], 301));
+            }
+
+            //UserDataType
+
+            $formData = $app['form.factory']->createBuilder(UserDataType::class, $user_data)->getForm();
+
+            $formData->handleRequest($request);
+
+            if ($formData->isSubmitted() && $formData->isValid()) {
+                $user_data = $formData->getData();
+//                dump($user_data);
+                $userDataRepository->save($app, $user_data);
 
                 $app['session']->getFlashBag()->add(
                     'messages',
@@ -218,6 +255,7 @@ class UserController implements ControllerProviderInterface
                 [
                     'user' => $user,
                     'form' => $form->createView(),
+                    'formData' => $formData->createView(),
                     'loggedUser' => $loggedUser,
                     'categoriesMenu' => $categoryRepository->findAll()
                 ]
@@ -332,12 +370,8 @@ class UserController implements ControllerProviderInterface
         $user = $userRepository->findOneByIdWithUserData($id);
 
 
-
-
         $categoryRepository = new CategoryRepository($app['db']);
         $loggedUser = $userRepository->getLoggedUser($app);
-
-
 
 
         if ($user) {

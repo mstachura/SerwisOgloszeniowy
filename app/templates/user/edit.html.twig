@@ -22,4 +22,13 @@
         {{ form_end(form) }}
     </div>
 
+    {% form_theme form with ['bootstrap_3_horizontal_layout.html.twig', 'form/form_errors.html.twig'] %}
+    <div class="form">
+        <h1>{{ 'edytuj_uzytkownika'|trans({'%id%': user.id}) }}</h1>
+        {{ form_start(formData, { method: 'post', action: url('user_edit', {'id': user.id}) }) }}
+        {{ form_widget(formData) }}
+        <input type="submit" value="{{ 'action.edit'|trans }}" class="btn btn-warning"/>
+        {{ form_end(formData) }}
+    </div>
+
 {% endblock %}

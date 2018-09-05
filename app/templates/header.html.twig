@@ -8,6 +8,22 @@
 
         <div class="container-fluid">
 
+            {% if is_granted('ROLE_ADMIN') %}
+
+                <a class="btn btn-default" href="{{ url ('user_index') }}">
+                    <button class="btn btn-info">
+                        {{ "lista_uzytkownikow" |trans }}
+                    </button>
+                </a>
+
+                <a class="btn btn-default" href="{{ url ('category_add') }}">
+                    <button class="btn btn-info">
+                        {{ "add" |trans }}
+                    </button>
+                </a>
+
+            {% endif %}
+
             <a class="btn btn-default" href="{{ url ('ads_add') }}">
                 <button class="btn btn-success">
                     {{ "dodaj_ogloszenie" |trans }}
@@ -20,33 +36,35 @@
             </a>
 
             {#<div class="btn-group pull-right" role="group" aria-label="{{ 'label.actions'|trans }}">#}
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                    <a class="btn btn-default" href="{{ url('auth_logout') }}" title="{{ 'auth.logout.label'|trans }}">
-                        <button class="btn btn-info">
-                            {{ 'auth.logout.label'|trans }}
-                        </button>
-                    </a>
-                {% else %}
-                    <a class="btn btn-default" href="{{ url('auth_login') }}" title="{{ 'auth.login.label'|trans }}">
-                        <button class="btn btn-info">
-                            {{ 'auth.login.label'|trans }}
-                        </button>
-                    </a>
+            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <a class="btn btn-default" href="{{ url('auth_logout') }}" title="{{ 'auth.logout.label'|trans }}">
+                    <button class="btn btn-info">
+                        {{ 'auth.logout.label'|trans }}
+                    </button>
+                </a>
+            {% else %}
+                <a class="btn btn-default" href="{{ url('auth_login') }}" title="{{ 'auth.login.label'|trans }}">
+                    <button class="btn btn-info">
+                        {{ 'auth.login.label'|trans }}
+                    </button>
+                </a>
 
-                    <a class="btn btn-default" href="{{ url ('user_registration') }}">
-                        <button class="btn btn-info">{{ 'zarejestruj'|trans }}</button>
-                    </a>
+                <a class="btn btn-default" href="{{ url ('user_registration') }}">
+                    <button class="btn btn-info">{{ 'zarejestruj'|trans }}</button>
+                </a>
 
-                {% endif %}
+            {% endif %}
 
             {% if is_granted('IS_AUTHENTICATED_FULLY' ) %}
                 <div class="btn btn-default">
-                {{ 'zalogowany_jako'|trans }}:<br>
-                <a href="{{ url ('user_view', {'id': loggedUser.id}) }}">
-                    {{ loggedUser.login }}
-                </a>
+                    {{ 'zalogowany_jako'|trans }}:<br>
+                    <a href="{{ url ('user_view', {'id': loggedUser.id}) }}">
+                        {{ loggedUser.login }}
+                    </a>
                 </div>
             {% endif %}
+
+
 
             {#</div>#}
         </div>

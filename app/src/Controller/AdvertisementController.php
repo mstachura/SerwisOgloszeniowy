@@ -36,7 +36,7 @@ class AdvertisementController implements ControllerProviderInterface
         $controller = $app['controllers_factory'];
 //        $controller->match('/', [$this, 'indexAction'])
 //            ->bind('ads_index');
-        $controller->get('/{name}/add', [$this, 'addAction']);
+//        $controller->get('/{name}/add', [$this, 'addAction']);
         $controller->match('/{id}', [$this, 'viewAction'])
             ->assert('id', '[1-9]\d*')
             ->bind('ads_view');

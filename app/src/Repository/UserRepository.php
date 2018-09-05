@@ -237,48 +237,50 @@ class UserRepository
      */
     public function save(Application $app, $user)
     {
-        $user_data = [];
-        $user_data['firstname'] = $user['firstname'];
-        $user_data['lastname'] = $user['lastname'];
-        $user_data['phone_number'] = $user['phone_number'];
-        unset($user['firstname']);
-        unset($user['lastname']);
-        unset($user['phone_number']);
-
-        //lokalizacja
-        if ($user['location_name']) {
-            $locationRepository = new LocationRepository($app['db']);
-            $location = $locationRepository->findOneByName($user['location_name']);
-
-            if ($location) {
-                $user['location_id'] = $location['id'];
-            } else {
-                $location['name'] = $user['location_name'];
-                $this->db->insert('location', $location);
-                $user['location_id'] = $this->db->lastInsertId();
-            }
-        }
-
-        unset($user['location_name']);
 
         if (isset($user['id']) && ctype_digit((string)$user['id'])) {
             // update record
             $id = $user['id'];
             unset($user['id']);
 
-            $this->db->update('user_data', $user_data, ['user_id' => $id]);
+//nie wiadomoczemutylkotu wylogowywuje
             return $this->db->update('user', $user, ['id' => $id]);
         } else {
             // add new record
 
+            $user_data = [];
+            $user_data['firstname'] = $user['firstname'];
+            $user_data['lastname'] = $user['lastname'];
+            $user_data['phone_number'] = $user['phone_number'];
+            unset($user['firstname']);
+            unset($user['lastname']);
+            unset($user['phone_number']);
+
+            //lokalizacja
+
+            if ($user['location_name']) {
+                $locationRepository = new LocationRepository($app['db']);
+                $location = $locationRepository->findOneByName($user['location_name']);
+
+                if ($location) {
+                    $user['location_id'] = $location['id'];
+                } else {
+                    $location['name'] = $user['location_name'];
+                    $this->db->insert('location', $location);
+                    $user['location_id'] = $this->db->lastInsertId();
+                }
+            }
+
+            unset($user['location_name']);
 
             $user['role_id'] = 2;
 
             $this->db->insert('user', $user);
             $user_data['user_id'] = $this->db->lastInsertId();
+            return $this->db->insert('user_data', $user_data);
         }
-        return $this->db->insert('user_data', $user_data);
     }
+
 
     /**
      * Delete
@@ -311,7 +313,7 @@ class UserRepository
             'u.location_id'
         )
             ->from('user', 'u')
-            ->innerjoin('u', 'user_data', 'ud', 'u.id = ud.id');
+            ->innerjoin('u', 'user_data', 'ud', 'u.id = ud.user_id');
     }
 
     /**

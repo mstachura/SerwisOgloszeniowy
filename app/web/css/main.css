@@ -98,6 +98,9 @@ ul li img{
     height: 200px;
 }
 
+.has-error .list-unstyled li{
+display: none;
+}
 
 
 
